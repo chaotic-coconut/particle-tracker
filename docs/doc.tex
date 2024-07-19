@@ -22,8 +22,8 @@ Calculations consist of two parts:
 
 \begin{enumerate}
 \item preparation of the vector fields, which includes reading the data files and reconstruction of the smooth fields in space and time,
-\item  simulation of advection of particles driven by the reconstructed fields. 
-Particles are propagated with explicit Euler method. 
+\item simulation of advection of particles driven by the reconstructed fields. 
+Particles are propagated with explicit Euler method.
 \end{enumerate}
 
 \section{Interpolation of the Spatial Field}
@@ -55,8 +55,8 @@ The position of a particle, referred to as the query point, is used as the origi
 At any given time $t$, the query point $\left(\lambda,\varphi\right)$ is projected to minimize distortions in distances, calculated as Great Circle Distances (in radians):
 
 \begin{equation}
-s_j=\atan{\frac{|\bar{n}\times\bar{n}_j|}{\langle\bar{n}\cdot\bar{n}_j\rangle}}=
-\atan{\frac{\sqrt{1-\left(\sin\varphi\sin\varphi_j+\cos\varphi\cos\varphi_j\cos(\lambda-\lambda_j)\right)^2}}{\sin\varphi\sin\varphi_j+\cos\varphi\cos\varphi_j\cos(\lambda-\lambda_j)}},
+s_j=\tan^{-1}{\frac{|\bar{n}\times\bar{n}_j|}{\langle\bar{n}\cdot\bar{n}_j\rangle}}=
+\tan^{-1}{\frac{\sqrt{1-\left(\sin\varphi\sin\varphi_j+\cos\varphi\cos\varphi_j\cos(\lambda-\lambda_j)\right)^2}}{\sin\varphi\sin\varphi_j+\cos\varphi\cos\varphi_j\cos(\lambda-\lambda_j)}},
 \end{equation}
 where $s_j$ is the Great Circle Distance between the query point $\left(\lambda,\varphi\right)$ and a grid point $j$ with lat-lon coordinates $\left(\lambda_j,\varphi_j\right)$, $\bar{n}$ and $\bar{n}_j$ are normal unit vectors at these points. 
 %%$|\bar{n}\times\bar{n}_j|$ and $\langle\bar{n}\cdot\bar{n}_j\rangle$ are the sine and cosine of $s_j$, which provide insight into deriving the equation.
@@ -90,6 +90,43 @@ The interpolated values of the eastward and northward components of the vector f
 u(\lambda,\varphi,t)=\sum_{s_j<R} \rho_j u_j (t), \quad v(\lambda,\varphi,t)=\sum_{s_j<R} \rho_j v_j (t).
 \end{equation}
 
+\section{Numerical solution for tracers}
 
+
+Let's wrap it up: we have grids of velocity components $u_j (t)$ and $v_j (t)$ (in $m/s$), but the grid itself is on a sphere, the coordinates of grid points are in degrees of latitude and longitude. 
+We have tracer equations on a flat surface, with coordinates in meters:
+
+\begin{equation}
+\begin{aligned}
+\dot{x}&=u(x,y,t),\\
+\dot{y}&=v(x,y,t).
+\end{aligned}
+\end{equation}
+
+Now we describe the simulation for one tracer particle.
+We get the spherical coordinates of the tracer -- the query point: $\lambda$ and $\varphi$, search for its nearest neighbors and interpolate the values $u(\lambda,\varphi,t)$ and $v(\lambda,\varphi,t)$.
+We construct the tangent plane at the query point, it becomes the origin of Euclidian frame: $(x=0,y=0)$.
+
+We perform an explicit Euler step:
+\begin{equation}
+\begin{aligned}
+\Delta x&=\Delta t \cdot u(\lambda,\varphi,t),\\
+\Delta y&=\Delta t \cdot v(\lambda,\varphi,t),
+\end{aligned}
+\end{equation}
+
+New coordinates of the tracer become $(x^{\prime}=\Delta x,y^{\prime}=\Delta y)$ in meters on the tangent plane at $t^{\prime}=t+\Delta t$.
+We project them back to the spherical coordinates:
+\begin{equation}
+\begin{aligned}
+\lambda^{\prime}&=\lambda+\tan^{-1}{\frac{\Delta x\cdot\sin{\Delta s}}{R\Delta s\cdot\cos{\varphi}\cos{\Delta s}-\Delta y\cdot\sin{\varphi}\sin{\Delta s}}},\\
+\varphi^{\prime}&=\sin^{-1}{\left(\sin{\varphi}\cos{\Delta s}+\frac{\Delta y}{R\Delta s}\cos{\varphi}\sin{\Delta s}\right)},
+\end{aligned}
+\end{equation}
+where $R=6378000m$ is the Earth radius,
+\begin{equation}
+\Delta s=\frac{\sqrt{(\Delta x)^2+(\Delta y)^2}}{R}
+\end{equation}
+is Great Circle Distance between the previous and the new position of the tracer.
 
 \end{document}
