@@ -1,43 +1,72 @@
 #include <array>
 #include <cmath>
 
-double GCD(const double& lon1,const double& lat1,const double& lon2,const double& lat2)
+// Utility: clamp a value between lo and hi.
+template<typename DataType>
+DataType clamp(DataType val,DataType lo,DataType hi)
 {
-	double cn=std::sin(lat1)*std::sin(lat2)+std::cos(lat1)*std::cos(lat2)*std::cos(lon1-lon2);
-	double sn=std::sqrt(1.-cn*cn);
+	return std::max(lo,std::min(val,hi));
+}
+
+// Computes the great circle distance (central angle) between two points on a sphere,
+// given their longitudes and latitudes (in radians).
+//
+// The formula uses the spherical law of cosines to compute the cosine of the central angle,
+// then derives the sine of the angle and returns the angle via atan2 for better numerical stability.
+template<typename DataType>
+DataType GCD(const DataType& lon1,const DataType& lat1,const DataType& lon2,const DataType& lat2)
+{
+	DataType cn=std::sin(lat1)*std::sin(lat2)+std::cos(lat1)*std::cos(lat2)*std::cos(lon1-lon2);
+	cn=clamp(cn,static_cast<DataType>(-1),static_cast<DataType>(1));
+	DataType sn=std::sqrt(1.-cn*cn);
 	return std::atan2(sn,cn);
 }
 
-// Computes the Great Circle Distance and its partial derivatives with respect to lat1 and lon1.
-// Params: lat1, lon1 - latitude and longitude of the first point in radians.
-//         lat2, lon2 - latitude and longitude of the second point in radians.
-// Returns: std::array containing [central angle, partial derivative w.r.t. lat1, partial derivative w.r.t. lon1]
-std::array<double,3> GCD_deriv(const double& lon1,const double& lat1,const double& lon2,const double& lat2)
+// Computes the great circle distance (central angle) and its partial derivatives with respect to the first point's
+// latitude (lat1) and longitude (lon1). All angles are in radians.
+// Returns an array containing three values:
+//   [0] - The central angle (great circle distance) between the two points,
+//   [1] - The partial derivative of the central angle with respect to lon1,
+//   [2] - The partial derivative of the central angle with respect to lat1.
+template<typename DataType>
+std::array<DataType,3> GCD_deriv(const DataType& lon1,const DataType& lat1,const DataType& lon2,const DataType& lat2)
 {
-	double cn=std::sin(lat1)*std::sin(lat2)+std::cos(lat1)*std::cos(lat2)*std::cos(lon1-lon2);
-	double sn=std::sqrt(1.-cn*cn);
-	double tn=std::atan2(sn,cn);
-	double dx=std::cos(lat1)*std::cos(lat2)*std::sin(lon1-lon2)/sn;
-	double dy=(std::sin(lat1)*std::cos(lat2)*std::cos(lon1-lon2)-std::cos(lat1)*std::sin(lat2))/sn;
+	DataType cn=std::sin(lat1)*std::sin(lat2)+std::cos(lat1)*std::cos(lat2)*std::cos(lon1-lon2);
+	cn=clamp(cn,static_cast<DataType>(-1),static_cast<DataType>(1));
+	DataType sn=std::sqrt(1.-cn*cn);
+	DataType tn=std::atan2(sn,cn);
+	// Compute the partial derivative with respect to longitude (lon1).
+	// This derivative quantifies how a small change in lon1 affects the central angle.
+	DataType dx=tn*std::cos(lat2)*std::sin(lon2-lon1)/sn;
+	// Compute the partial derivative with respect to latitude (lat1).
+	// This derivative quantifies how a small change in lat1 affects the central angle.
+	DataType dy=tn*(std::cos(lat1)*std::sin(lat2)-std::sin(lat1)*std::cos(lat2)*std::cos(lon2-lon1))/sn;
 	return {tn,dx,dy};
 }
 
 // Given an offset (x,y) from a reference point with latitude and longitude, this function computes the new geographic coordinates after applying the offset.
 // Params: x, y - offsets in meters.
 //         lat, lon - reference latitude and longitude in radians. These are modified in-place.
-void inverseTransform(const double& x,const double& y,double& lon,double& lat)
+template<typename DataType>
+void inverseTransform(const DataType& x,const DataType& y,DataType& lon,DataType& lat)
 {
-    constexpr double EARTH_RADIUS=6378000.; // Radius of the Earth in meters.
+	constexpr DataType EARTH_RADIUS=6378000.; // Radius of the Earth in meters.
 
-    double nrm=std::sqrt(x*x+y*y);
-    double gcd=nrm/EARTH_RADIUS;
-    double cn=std::cos(gcd);
-    double sn=std::sin(gcd);
-    double cl=std::cos(lat);
-    double sl=std::sin(lat);
-    double lat_prime=std::asin(sl*cn+y/nrm*cl*sn);
-    double lon_prime=lon+std::atan2(x*sn,nrm*cl*cn-y*sl*sn);
+	DataType nrm=std::sqrt(x*x+y*y);
+	const DataType eps=1.e-10;
+	// If the displacement is negligible, do nothing.
+	if (nrm<eps) return;
 
-    lat=lat_prime;
-    lon=lon_prime;
+	DataType gcd=nrm/EARTH_RADIUS;
+	DataType cn=std::cos(gcd);
+	DataType sn=std::sin(gcd);
+	DataType cl=std::cos(lat);
+	DataType sl=std::sin(lat);
+	DataType arg=sl*cn+(y/nrm)*cl*sn;
+	arg=clamp(arg,static_cast<DataType>(-1),static_cast<DataType>(1));
+	DataType lat_prime=std::asin(arg);
+	DataType lon_prime=lon+std::atan2(x*sn,nrm*cl*cn-y*sl*sn);
+
+	lat=lat_prime;
+	lon=lon_prime;
 }
