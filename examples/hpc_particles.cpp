@@ -19,15 +19,15 @@
 #include <map>
 #include <iterator>
 #include <filesystem>
-#include "datetime_utils.hpp"
-#include "data_prep_utils.hpp"       // Provides grid, time series, splines, etc.
+#include "particle_tracker/datetime_utils.hpp"
+#include "particle_tracker/data_prep_utils.hpp"       // Provides grid, time series, splines, etc.
 #include "oneapi/tbb/parallel_for.h" // TBB parallel_for
 #include "oneapi/tbb/blocked_range.h"
 #include "oneapi/tbb/global_control.h"
 
 #define PK_IO_USE_ZLIB
-#include "fixed_point_core.hpp"      // the fixed-point pack/unpack
-#include "fixed_point_io_codec.hpp"  // the gzip helpers: write_records_gzip/read_records_gzip
+#include "particle_tracker/fixed_point/fixed_point_core.hpp"      // the fixed-point pack/unpack
+#include "particle_tracker/fixed_point/fixed_point_io_codec.hpp"  // the gzip helpers: write_records_gzip/read_records_gzip
 
 using DataType=float;
 using TimeType=double;
