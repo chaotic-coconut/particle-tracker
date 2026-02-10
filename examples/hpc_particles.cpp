@@ -19,7 +19,7 @@
 #include <map>
 #include <iterator>
 #include <filesystem>
-#include "particle_tracker/datetime_utils.hpp"
+#include "particle_tracker/detail/datetime_utils.hpp"
 #include "particle_tracker/data_prep_utils.hpp"       // Provides grid, time series, splines, etc.
 #include "oneapi/tbb/parallel_for.h" // TBB parallel_for
 #include "oneapi/tbb/blocked_range.h"
