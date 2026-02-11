@@ -27,18 +27,18 @@
 #include <cctype>
 #include <stdexcept>
 
-#include "datetime_utils.hpp"
-#include "data_prep_utils.hpp"
-#include "seed_loader_v2.hpp"
+#include "particle_tracker/detail/datetime_utils.hpp"
+#include "particle_tracker/data_prep_utils.hpp"
+#include "particle_tracker/seed_loader_v2.hpp"
 #include "oneapi/tbb/parallel_for.h"
 #include "oneapi/tbb/blocked_range.h"
 #include "oneapi/tbb/global_control.h"
 #include "oneapi/tbb/enumerable_thread_specific.h"
 
 #define PK_IO_USE_ZLIB
-#include "fixed_point_core.hpp"
-#include "fixed_point_io_codec.hpp"
-#include "fixed_point_pkd2.hpp"
+#include "particle_tracker/fixed_point/fixed_point_core.hpp"
+#include "particle_tracker/fixed_point/fixed_point_io_codec.hpp"
+#include "particle_tracker/fixed_point/fixed_point_pkd2.hpp"
 
 using DataType=float;
 using TimeType=double;
