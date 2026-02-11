@@ -14,6 +14,7 @@ endif()
 add_library(particle_tracker INTERFACE)
 target_include_directories(particle_tracker INTERFACE
   ${CMAKE_CURRENT_SOURCE_DIR}/include
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/third_party/nanoflann
 )
 
 if(PK_USE_ZLIB)

@@ -136,7 +136,7 @@ inline constexpr double dtt = 10800.0;
 // Supported include layouts:
 //  - <nanoflann.hpp>                                  (system installs)
 //  - <nanoflann/nanoflann.hpp>                        (some packagers)
-//  - <particle_tracker/third_party/nanoflann/nanoflann.hpp> (vendored under include/third_party)
+//  - <third_party/nanoflann/nanoflann.hpp> (vendored under include/third_party)
 //------------------------------------------------------------------------------
 
 #if PARTICLE_TRACKER_HAS_NANOFLANN
@@ -144,10 +144,10 @@ inline constexpr double dtt = 10800.0;
     #include <nanoflann.hpp>
   #elif __has_include(<nanoflann/nanoflann.hpp>)
     #include <nanoflann/nanoflann.hpp>
-  #elif __has_include(<particle_tracker/third_party/nanoflann/nanoflann.hpp>)
-    #include <particle_tracker/third_party/nanoflann/nanoflann.hpp>
+  #elif __has_include(<third_party/nanoflann/nanoflann.hpp>)
+    #include <third_party/nanoflann/nanoflann.hpp>
   #else
-    #error "particle_tracker: nanoflann enabled (PARTICLE_TRACKER_HAS_NANOFLANN=1) but nanoflann header not found. Install nanoflann or vendor it under include/third_party/nanoflann and include it as <particle_tracker/third_party/nanoflann/nanoflann.hpp>."
+    #error "particle_tracker: nanoflann enabled (PARTICLE_TRACKER_HAS_NANOFLANN=1) but nanoflann header not found. Install nanoflann or vendor it under include/third_party/nanoflann and include it as <third_party/nanoflann/nanoflann.hpp>."
   #endif
 
   namespace nf = nanoflann;
