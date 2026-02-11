@@ -30,6 +30,9 @@ if(NOT TBB_FOUND)
   message(STATUS "TBB package not found; linking with -ltbb fallback")
 endif()
 
+find_package(Boost REQUIRED)
+target_link_libraries(particle_tracker INTERFACE Boost::boost)
+
 find_package(netCDF QUIET)
 
 # ---- Helper to link common deps ----
