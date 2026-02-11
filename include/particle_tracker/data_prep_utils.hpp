@@ -13,9 +13,9 @@
 
 #include <oneapi/tbb/parallel_for.h>
 
-#include "particle-tracker/detail/ncdf_utils.hpp"
-#include "particle-tracker/fixed_point/fixed_point_core.hpp"
-#include "particle-tracker/interpolation_utils.hpp"
+#include "particle_tracker/detail/ncdf_utils.hpp"
+#include "particle_tracker/fixed_point/fixed_point_core.hpp"
+#include "particle_tracker/interpolation_utils.hpp"
 
 // Ensure C++17 or higher for filesystem support
 #if __cplusplus < 201703L
