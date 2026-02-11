@@ -38,6 +38,7 @@ find_package(netCDF QUIET)
 # ---- Helper to link common deps ----
 function(link_common_deps tgt)
   target_link_libraries(${tgt} PRIVATE particle_tracker ZLIB::ZLIB)
+  target_link_libraries(${tgt} PRIVATE Boost::boost)
 
   if(TBB_FOUND)
     target_link_libraries(${tgt} PRIVATE TBB::tbb)
