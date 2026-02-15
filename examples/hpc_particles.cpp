@@ -427,7 +427,7 @@ MonthData loadOneMonth(
 
     m.spl.clear();
     joinSplines<DataType>(std::move(m.spl_1),m.spl_2,m.spl);
-    m.spl_2.clear(); // we moved spl_1; spl_2 was copied into m.spl (shared_ptr),
+    m.spl_2.clear(); // we moved spl_1; spl_2 was copied into m.spl
     m.spl_2={}; // drop its map/vector overhead
 
     // Optional sanity check (debug builds)
@@ -708,7 +708,7 @@ void propagateWindow(const Date& win_beg,
     const TimeType dt_sec=dt_seconds;
 
     DataType search_radius=static_cast<DataType>(.08*1.1/180.*pi);
-    DataType shape_param  =search_radius/(1.1*1.1);
+    DataType shape_param  =search_radius*search_radius/(1.1*1.1);
 
     // Build neighbor structures for both buffers (no static: rebuild each window)
     auto nb_old=makeNeighborsData(older_m,search_radius,shape_param);

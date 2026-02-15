@@ -10,6 +10,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <cmath>
+#include <numbers>      // std::numbers::pi_v
 
 #include <oneapi/tbb/parallel_for.h>
 
@@ -21,6 +22,8 @@
 #if __cplusplus < 201703L
 #error "C++17 or higher is required"
 #endif
+
+inline constexpr double number_pi = std::numbers::pi_v<double>;
 
 // ---------------------------------------------------------------------------
 // Optional debug logging (compile-time gated)
@@ -119,7 +122,7 @@ Grid<DataType> initializeGrid(const std::string& file_path,const std::vector<std
     grid.in_the_sea.resize(grid.num_points);
 
     // Convert 'lon' and 'lat' to radians
-    const DataType grad_to_rad_factor=DataType(pi/180.);
+    const DataType grad_to_rad_factor=DataType(number_pi/180.);
     std::vector<DataType> lon_rad_1d(n_lon);
     std::vector<DataType> lat_rad_1d(n_lat);
 

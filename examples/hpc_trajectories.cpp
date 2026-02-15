@@ -455,7 +455,7 @@ void propagateWindow(const Date& win_beg,
     const int64_t t_beg_idx = t_beg_s / static_cast<int64_t>(base_dt_s);
 
     const DataType search_radius=static_cast<DataType>(.08*1.1/180.*pi);
-    const DataType shape_param  =search_radius/(1.1*1.1);
+    const DataType shape_param  =search_radius*search_radius/(1.1*1.1);
 
     auto nb_old=makeNeighborsData(older_m,search_radius,shape_param);
     auto nb_new=makeNeighborsData(newer_m,search_radius,shape_param);

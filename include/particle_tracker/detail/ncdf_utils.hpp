@@ -617,10 +617,36 @@ class NetCDFProcessor
         return data_loader_.getVariableData(variable_name);
     }
 
-    std::vector<DataType> getVariableDataAtTime(const std::string& var_name, TimeType time_value)
+    /*std::vector<DataType> getVariableDataAtTime(const std::string& var_name, TimeType time_value)
     {
         std::size_t time_index = getTimeIndex(time_value);
         return data_loader_.getVariableDataAtIndex(var_name, time_index);
+    }*/
+
+    std::vector<DataType> getVariableDataAtTime(const std::string& var_name, TimeType time_value)
+    {
+        const auto& var_data = data_loader_.getVariableData(var_name);
+    
+        const TimeType key = static_cast<TimeType>(std::llround(static_cast<double>(time_value)));
+    
+        auto it = var_data.find(key);
+        if (it == var_data.end())
+            throw std::runtime_error("NetCDFProcessor: requested time slice not loaded for variable '" +
+                                     var_name + "' at time=" + std::to_string(static_cast<long long>(key)));
+    
+        return it->second; // returns a copy (your current API returns by value anyway)
+    }
+
+    const std::vector<DataType>& getVariableDataAtTimeRef(const std::string& var_name, TimeType time_value) const
+    {
+        const auto& var_data = data_loader_.getVariableData(var_name);
+        const TimeType key = static_cast<TimeType>(std::llround(static_cast<double>(time_value)));
+    
+        auto it = var_data.find(key);
+        if (it == var_data.end())
+            throw std::runtime_error("NetCDFProcessor: requested time slice not loaded...");
+    
+        return it->second;
     }
 
     private:
