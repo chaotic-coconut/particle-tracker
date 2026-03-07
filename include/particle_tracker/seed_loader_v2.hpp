@@ -13,9 +13,11 @@
 
 #include <zlib.h>
 
-#define PK_IO_USE_ZLIB
-#include "fixed_point_core.hpp"   // wrap_lon(), pi
-#include "fixed_point_pkd2.hpp"   // pkd2::{Header,TocEntry,BlockHeader}
+#if !defined(PK_IO_USE_ZSTD) && !defined(PK_IO_USE_ZLIB)
+#  define PK_IO_USE_ZLIB
+#endif
+#include "particle_tracker/fixed_point/fixed_point_core.hpp"   // wrap_lon(), pi
+#include "particle_tracker/fixed_point/fixed_point_pkd2.hpp"   // pkd2::{Header,TocEntry,BlockHeader}
 
 // =======================
 // Public API
