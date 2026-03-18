@@ -1,17 +1,33 @@
 # particle-transport-framework
 
-This repository shows the interfaces and overall structure of a C++ simulation framework
-I use for long-running numerical experiments on particle dispersal in the ocean.
-At the moment, the public version mainly contains header files that define the main components,
-data flow, and validation logic in the code.
+C++ framework for large-scale particle transport simulation and ocean flow data processing.
 
-The implementation itself is currently being cleaned up and documented.
+The framework is designed for long-running simulations based on gridded environmental velocity fields (e.g., HYCOM NetCDF data), with emphasis on performance, modular architecture, and reproducibility.
 
-The headers provide C++ wrappers for reading HYCOM NetCDF data and reorganizing gridded flow fields.
-They include utilities for geometric transformations, in particular the construction of local
-tangent planes using an equidistant azimuthal projection.
-The code supports kd-tree–based spatial searches (via nanoflann) at fixed depth levels,
-nearest-neighbour queries, and Gaussian-weighted reconstruction of field values.
-It also contains experimental routines for estimating first spatial derivatives and wrappers
-for spline-based time interpolation using Boost.
+It provides building blocks for constructing simulation pipelines that operate on structured flow fields and track particle trajectories over time in complex spatial domains.
+
+## Features
+
+- Modular architecture for simulation workflows and data processing pipelines  
+- Efficient handling and reorganization of gridded flow data (NetCDF, HYCOM)  
+- Spatial indexing using kd-trees (nanoflann) for fast nearest-neighbor queries  
+- Local geometric transformations and coordinate handling  
+- Interpolation and reconstruction of physical fields (Gaussian weighting, spline-based methods)  
+- Parallel processing using Intel TBB for efficient handling of large datasets and simulation workloads
+- Support for long-duration simulations and repeated runs
+
+## Tech Stack
+
+- C++
+- CMake
+- Boost
+- NetCDF
+- Intel TBB
+- Linux
+
+## Status
+
+The repository exposes the core structure and interfaces of the framework.  
+Implementation is being actively cleaned, modularized, and documented.
+
 
