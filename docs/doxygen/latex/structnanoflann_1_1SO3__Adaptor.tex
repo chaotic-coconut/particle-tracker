@@ -1,0 +1,155 @@
+\doxysection{nanoflann::\+SO3\+\_\+\+Adaptor\texorpdfstring{$<$}{<} T, Data\+Source, \+\_\+\+Distance\+Type, Index\+Type \texorpdfstring{$>$}{>} Struct Template Reference}
+\hypertarget{structnanoflann_1_1SO3__Adaptor}{}\label{structnanoflann_1_1SO3__Adaptor}\index{nanoflann::SO3\_Adaptor$<$ T, DataSource, \_DistanceType, IndexType $>$@{nanoflann::SO3\_Adaptor$<$ T, DataSource, \_DistanceType, IndexType $>$}}
+
+
+SO3 distance functor (Uses L2\+\_\+\+Simple) Corresponding distance traits:\+ \doxylink{structnanoflann_1_1metric__SO3}{nanoflann::\+metric\+\_\+\+SO3}.  
+
+
+
+
+{\ttfamily \+\#include $<$nanoflann.\+hpp$>$}
+
+
+
+Collaboration diagram for nanoflann::\+SO3\+\_\+\+Adaptor\texorpdfstring{$<$}{<} T, Data\+Source, \+\_\+\+Distance\+Type, Index\+Type \texorpdfstring{$>$}{>}:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=255pt]{structnanoflann_1_1SO3__Adaptor__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+using \doxymbox{\hyperlink{structnanoflann_1_1SO3__Adaptor_a3c27a6b8faf39f15584ced1bccb7c009}{Element\+Type}} = T
+\item 
+using \doxymbox{\hyperlink{structnanoflann_1_1SO3__Adaptor_a1d49435540e029c927f1d5f765b2330a}{Distance\+Type}} = \+\_\+\+Distance\+Type
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{structnanoflann_1_1SO3__Adaptor_abdb002a84604f0f986d80b6b99a7aed4}{SO3\+\_\+\+Adaptor}} (const Data\+Source \&\+\_\+data\+\_\+source)
+\item 
+Distance\+Type \doxymbox{\hyperlink{structnanoflann_1_1SO3__Adaptor_aa45f6f6d7d3644a2a9fc9b40ad98beb4}{eval\+Metric}} (const T \texorpdfstring{$\ast$}{*}a, const Index\+Type b\+\_\+idx, size\+\_\+t size) const
+\item 
+{\footnotesize template$<$typename U, typename V$>$ }\\Distance\+Type \doxymbox{\hyperlink{structnanoflann_1_1SO3__Adaptor_afaf6a90479934882a28fa292d1ef2b10}{accum\+\_\+dist}} (const U a, const V b, const size\+\_\+t idx) const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{structnanoflann_1_1L2__Simple__Adaptor}{L2\+\_\+\+Simple\+\_\+\+Adaptor}}$<$ T, Data\+Source, Distance\+Type, Index\+Type $>$ \doxymbox{\hyperlink{structnanoflann_1_1SO3__Adaptor_a1eda8692746d89e24e5ce0269ab2ac69}{distance\+\_\+\+L2\+\_\+\+Simple}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$class T, class Data\+Source, typename \+\_\+\+Distance\+Type = T, typename Index\+Type = size\+\_\+t$>$\newline
+struct nanoflann::\+\+SO3\+\_\+\+Adaptor$<$ T, Data\+Source, \+\_\+\+Distance\+Type, Index\+Type $>$}
+SO3 distance functor (Uses L2\+\_\+\+Simple) Corresponding distance traits:\+ \doxylink{structnanoflann_1_1metric__SO3}{nanoflann::\+metric\+\_\+\+SO3}. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Type of the elements (e.\+g. double, float, uint8\+\_\+t) \\
+\hline
+{\em Data\+Source} & Source of the data, i.\+e. where the vectors are stored \\
+\hline
+{\em \+\_\+\+Distance\+Type} & Type of distance variables (must be signed) (e.\+g. float, double) \\
+\hline
+{\em Index\+Type} & Type of the arguments with which the data can be accessed (e.\+g. float, double, int64\+\_\+t, T\texorpdfstring{$\ast$}{*}) \\
+\hline
+\end{DoxyTemplParams}
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l00755}{755}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+
+
+\label{doc-typedef-members}
+\Hypertarget{structnanoflann_1_1SO3__Adaptor_doc-typedef-members}
+\doxysubsection{Member Typedef Documentation}
+\Hypertarget{structnanoflann_1_1SO3__Adaptor_a1d49435540e029c927f1d5f765b2330a}\index{nanoflann::SO3\_Adaptor$<$ T, DataSource, \_DistanceType, IndexType $>$@{nanoflann::SO3\_Adaptor$<$ T, DataSource, \_DistanceType, IndexType $>$}!DistanceType@{DistanceType}}
+\index{DistanceType@{DistanceType}!nanoflann::SO3\_Adaptor$<$ T, DataSource, \_DistanceType, IndexType $>$@{nanoflann::SO3\_Adaptor$<$ T, DataSource, \_DistanceType, IndexType $>$}}
+\doxysubsubsection{\texorpdfstring{DistanceType}{DistanceType}}
+{\footnotesize\ttfamily \label{structnanoflann_1_1SO3__Adaptor_a1d49435540e029c927f1d5f765b2330a} 
+template$<$class T, class Data\+Source, typename \+\_\+\+Distance\+Type = T, typename Index\+Type = size\+\_\+t$>$ \\
+using \doxymbox{\hyperlink{structnanoflann_1_1SO3__Adaptor}{nanoflann::\+\+SO3\+\_\+\+Adaptor}}$<$ T, Data\+Source, \+\_\+\+Distance\+Type, Index\+Type $>$::\+\+Distance\+Type = \+\_\+\+Distance\+Type}
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l00758}{758}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+\Hypertarget{structnanoflann_1_1SO3__Adaptor_a3c27a6b8faf39f15584ced1bccb7c009}\index{nanoflann::SO3\_Adaptor$<$ T, DataSource, \_DistanceType, IndexType $>$@{nanoflann::SO3\_Adaptor$<$ T, DataSource, \_DistanceType, IndexType $>$}!ElementType@{ElementType}}
+\index{ElementType@{ElementType}!nanoflann::SO3\_Adaptor$<$ T, DataSource, \_DistanceType, IndexType $>$@{nanoflann::SO3\_Adaptor$<$ T, DataSource, \_DistanceType, IndexType $>$}}
+\doxysubsubsection{\texorpdfstring{ElementType}{ElementType}}
+{\footnotesize\ttfamily \label{structnanoflann_1_1SO3__Adaptor_a3c27a6b8faf39f15584ced1bccb7c009} 
+template$<$class T, class Data\+Source, typename \+\_\+\+Distance\+Type = T, typename Index\+Type = size\+\_\+t$>$ \\
+using \doxymbox{\hyperlink{structnanoflann_1_1SO3__Adaptor}{nanoflann::\+\+SO3\+\_\+\+Adaptor}}$<$ T, Data\+Source, \+\_\+\+Distance\+Type, Index\+Type $>$::\+\+Element\+Type = T}
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l00757}{757}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+
+
+\label{doc-constructors}
+\Hypertarget{structnanoflann_1_1SO3__Adaptor_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{structnanoflann_1_1SO3__Adaptor_abdb002a84604f0f986d80b6b99a7aed4}\index{nanoflann::SO3\_Adaptor$<$ T, DataSource, \_DistanceType, IndexType $>$@{nanoflann::SO3\_Adaptor$<$ T, DataSource, \_DistanceType, IndexType $>$}!SO3\_Adaptor@{SO3\_Adaptor}}
+\index{SO3\_Adaptor@{SO3\_Adaptor}!nanoflann::SO3\_Adaptor$<$ T, DataSource, \_DistanceType, IndexType $>$@{nanoflann::SO3\_Adaptor$<$ T, DataSource, \_DistanceType, IndexType $>$}}
+\doxysubsubsection{\texorpdfstring{SO3\_Adaptor()}{SO3\_Adaptor()}}
+{\footnotesize\ttfamily \label{structnanoflann_1_1SO3__Adaptor_abdb002a84604f0f986d80b6b99a7aed4} 
+template$<$class T, class Data\+Source, typename \+\_\+\+Distance\+Type = T, typename Index\+Type = size\+\_\+t$>$ \\
+\doxymbox{\hyperlink{structnanoflann_1_1SO3__Adaptor}{nanoflann::\+\+SO3\+\_\+\+Adaptor}}$<$ T, Data\+Source, \+\_\+\+Distance\+Type, Index\+Type $>$::\+\+SO3\+\_\+\+Adaptor (\begin{DoxyParamCaption}\item[{const Data\+Source \&}]{\+\_\+data\+\_\+source}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l00762}{762}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+
+
+\label{doc-func-members}
+\Hypertarget{structnanoflann_1_1SO3__Adaptor_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{structnanoflann_1_1SO3__Adaptor_afaf6a90479934882a28fa292d1ef2b10}\index{nanoflann::SO3\_Adaptor$<$ T, DataSource, \_DistanceType, IndexType $>$@{nanoflann::SO3\_Adaptor$<$ T, DataSource, \_DistanceType, IndexType $>$}!accum\_dist@{accum\_dist}}
+\index{accum\_dist@{accum\_dist}!nanoflann::SO3\_Adaptor$<$ T, DataSource, \_DistanceType, IndexType $>$@{nanoflann::SO3\_Adaptor$<$ T, DataSource, \_DistanceType, IndexType $>$}}
+\doxysubsubsection{\texorpdfstring{accum\_dist()}{accum\_dist()}}
+{\footnotesize\ttfamily \label{structnanoflann_1_1SO3__Adaptor_afaf6a90479934882a28fa292d1ef2b10} 
+template$<$class T, class Data\+Source, typename \+\_\+\+Distance\+Type = T, typename Index\+Type = size\+\_\+t$>$ \\
+template$<$typename U, typename V$>$ \\
+Distance\+Type \doxymbox{\hyperlink{structnanoflann_1_1SO3__Adaptor}{nanoflann::\+\+SO3\+\_\+\+Adaptor}}$<$ T, Data\+Source, \+\_\+\+Distance\+Type, Index\+Type $>$::\+accum\+\_\+dist (\begin{DoxyParamCaption}\item[{const U}]{a}{, }\item[{const V}]{b}{, }\item[{const size\+\_\+t}]{idx}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l00770}{770}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+\Hypertarget{structnanoflann_1_1SO3__Adaptor_aa45f6f6d7d3644a2a9fc9b40ad98beb4}\index{nanoflann::SO3\_Adaptor$<$ T, DataSource, \_DistanceType, IndexType $>$@{nanoflann::SO3\_Adaptor$<$ T, DataSource, \_DistanceType, IndexType $>$}!evalMetric@{evalMetric}}
+\index{evalMetric@{evalMetric}!nanoflann::SO3\_Adaptor$<$ T, DataSource, \_DistanceType, IndexType $>$@{nanoflann::SO3\_Adaptor$<$ T, DataSource, \_DistanceType, IndexType $>$}}
+\doxysubsubsection{\texorpdfstring{evalMetric()}{evalMetric()}}
+{\footnotesize\ttfamily \label{structnanoflann_1_1SO3__Adaptor_aa45f6f6d7d3644a2a9fc9b40ad98beb4} 
+template$<$class T, class Data\+Source, typename \+\_\+\+Distance\+Type = T, typename Index\+Type = size\+\_\+t$>$ \\
+Distance\+Type \doxymbox{\hyperlink{structnanoflann_1_1SO3__Adaptor}{nanoflann::\+\+SO3\+\_\+\+Adaptor}}$<$ T, Data\+Source, \+\_\+\+Distance\+Type, Index\+Type $>$::\+eval\+Metric (\begin{DoxyParamCaption}\item[{const T \texorpdfstring{$\ast$}{*}}]{a}{, }\item[{const Index\+Type}]{b\+\_\+idx}{, }\item[{size\+\_\+t}]{size}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l00764}{764}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+
+
+\label{doc-variable-members}
+\Hypertarget{structnanoflann_1_1SO3__Adaptor_doc-variable-members}
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structnanoflann_1_1SO3__Adaptor_a1eda8692746d89e24e5ce0269ab2ac69}\index{nanoflann::SO3\_Adaptor$<$ T, DataSource, \_DistanceType, IndexType $>$@{nanoflann::SO3\_Adaptor$<$ T, DataSource, \_DistanceType, IndexType $>$}!distance\_L2\_Simple@{distance\_L2\_Simple}}
+\index{distance\_L2\_Simple@{distance\_L2\_Simple}!nanoflann::SO3\_Adaptor$<$ T, DataSource, \_DistanceType, IndexType $>$@{nanoflann::SO3\_Adaptor$<$ T, DataSource, \_DistanceType, IndexType $>$}}
+\doxysubsubsection{\texorpdfstring{distance\_L2\_Simple}{distance\_L2\_Simple}}
+{\footnotesize\ttfamily \label{structnanoflann_1_1SO3__Adaptor_a1eda8692746d89e24e5ce0269ab2ac69} 
+template$<$class T, class Data\+Source, typename \+\_\+\+Distance\+Type = T, typename Index\+Type = size\+\_\+t$>$ \\
+\doxymbox{\hyperlink{structnanoflann_1_1L2__Simple__Adaptor}{L2\+\_\+\+Simple\+\_\+\+Adaptor}}$<$T, Data\+Source, Distance\+Type, Index\+Type$>$ \doxymbox{\hyperlink{structnanoflann_1_1SO3__Adaptor}{nanoflann::\+\+SO3\+\_\+\+Adaptor}}$<$ T, Data\+Source, \+\_\+\+Distance\+Type, Index\+Type $>$::\+distance\+\_\+\+L2\+\_\+\+Simple}
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l00760}{760}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+
+
+The documentation for this struct was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+include/\+third\+\_\+party/\+nanoflann/\+nanoflann.\+hpp\end{DoxyCompactItemize}

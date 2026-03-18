@@ -1,0 +1,268 @@
+\doxysection{include/\+particle\+\_\+tracker/\+interpolation\+\_\+utils.hpp File Reference}
+\hypertarget{interpolation__utils_8hpp}{}\label{interpolation__utils_8hpp}\index{include/particle\_tracker/interpolation\_utils.hpp@{include/particle\_tracker/interpolation\_utils.hpp}}
+
+
+Time and spherical (lon/\+lat) interpolation utilities, including an experimental "{}neighbors-\/of-\/neighbors"{} spatial derivative estimator.  
+
+
+{\ttfamily \+\#include $<$array$>$}\newline
+{\ttfamily \+\#include $<$cmath$>$}\newline
+{\ttfamily \+\#include $<$cstddef$>$}\newline
+{\ttfamily \+\#include $<$map$>$}\newline
+{\ttfamily \+\#include $<$numbers$>$}\newline
+{\ttfamily \+\#include $<$stdexcept$>$}\newline
+{\ttfamily \+\#include $<$string$>$}\newline
+{\ttfamily \+\#include $<$type\+\_\+traits$>$}\newline
+{\ttfamily \+\#include $<$vector$>$}\newline
+{\ttfamily \+\#include $<$particle\+\_\+tracker/\+geography\+\_\+utils.\+hpp$>$}\newline
+Include dependency graph for interpolation\+\_\+utils.\+hpp:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{interpolation__utils_8hpp__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{interpolation__utils_8hpp__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \doxymbox{\hyperlink{classparticle__tracker_1_1TimeSpline}{particle\+\_\+tracker::\+\+Time\+Spline$<$ Data\+Type, Time\+Type $>$}}
+\begin{DoxyCompactList}\small\item\em Wrapper around a Boost cubic spline interpolator for uniformly spaced samples. \end{DoxyCompactList}\item 
+struct \doxymbox{\hyperlink{structparticle__tracker_1_1PointCloud}{particle\+\_\+tracker::\+\+Point\+Cloud$<$ Data\+Type $>$}}
+\begin{DoxyCompactList}\small\item\em Minimal dataset adaptor for nanoflann storing (lon, lat) in a flat array. \end{DoxyCompactList}\item 
+struct \doxymbox{\hyperlink{structparticle__tracker_1_1LonLatDistanceAdaptor}{particle\+\_\+tracker::\+\+Lon\+Lat\+Distance\+Adaptor$<$ Data\+Type, Dataset\+Adaptor $>$}}
+\begin{DoxyCompactList}\small\item\em Approximate metric for KD-\/tree pruning in (lon, lat). \end{DoxyCompactList}\item 
+struct \doxymbox{\hyperlink{structparticle__tracker_1_1Neighbor}{particle\+\_\+tracker::\+\+Neighbor$<$ Data\+Type $>$}}
+\begin{DoxyCompactList}\small\item\em One spatial neighbor (grid node) used in interpolation. \end{DoxyCompactList}\item 
+class \doxymbox{\hyperlink{classparticle__tracker_1_1NeighborsData}{particle\+\_\+tracker::\+\+Neighbors\+Data$<$ Data\+Type, Time\+Type $>$}}
+\begin{DoxyCompactList}\small\item\em Spatial neighbor query + Gaussian weighting + multi-\/variable interpolation. \end{DoxyCompactList}\item 
+struct \doxymbox{\hyperlink{structparticle__tracker_1_1NeighborPrime}{particle\+\_\+tracker::\+\+Neighbor\+Prime$<$ Data\+Type $>$}}
+\begin{DoxyCompactList}\small\item\em A "{}secondary neighbor"{} (neighbor of a primary neighbor). \end{DoxyCompactList}\item 
+struct \doxymbox{\hyperlink{structparticle__tracker_1_1NeighborWithNeighbors}{particle\+\_\+tracker::\+\+Neighbor\+With\+Neighbors$<$ Data\+Type $>$}}
+\begin{DoxyCompactList}\small\item\em A primary \doxylink{structparticle__tracker_1_1Neighbor}{Neighbor} plus a list of its secondary neighbors. \end{DoxyCompactList}\item 
+struct \doxymbox{\hyperlink{structparticle__tracker_1_1VariableDerivatives}{particle\+\_\+tracker::\+\+Variable\+Derivatives$<$ Data\+Type $>$}}
+\begin{DoxyCompactList}\small\item\em Output container:\+ value + time derivative + (heuristic) spatial derivatives. \end{DoxyCompactList}\item 
+class \doxymbox{\hyperlink{classparticle__tracker_1_1NeighborWithNeighborsData}{particle\+\_\+tracker::\+\+Neighbor\+With\+Neighbors\+Data$<$ Data\+Type, Time\+Type $>$}}
+\begin{DoxyCompactList}\small\item\em Two-\/level neighborhood builder + heuristic spatial derivative estimator. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{interpolation__utils_8hpp_a34e9dc80820374139ca1d853a290a930}{PARTICLE\+\_\+\+TRACKER\+\_\+\+HAS\+\_\+\+NANOFLANN}}~1
+\begin{DoxyCompactList}\small\item\em Set to 1 to enable nanoflann-\/backed KD-\/tree functionality. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename Data\+Type$>$ }\\using \doxymbox{\hyperlink{interpolation__utils_8hpp_a0d833449b7f72cc49846a914f8e12df4}{particle\+\_\+tracker::\+point}} = std::\+array$<$Data\+Type, 2$>$
+\begin{DoxyCompactList}\small\item\em 2D point type used for (lon, lat). \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Data\+Type$>$ }\\using \doxymbox{\hyperlink{interpolation__utils_8hpp_adb23c22c8f78daf6587652bf18e33cad}{particle\+\_\+tracker::\+\+KDTree}}
+\begin{DoxyCompactList}\small\item\em KD-\/tree alias used throughout this header when nanoflann is enabled. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename T$>$ }\\T \doxymbox{\hyperlink{interpolation__utils_8hpp_a136b718333060b8bfdc7ae9219c6f656}{particle\+\_\+tracker::\+pt\+\_\+wrap\+\_\+lon}} (T lon)
+\begin{DoxyCompactList}\small\item\em Wrap longitude into (-\/pi, pi]\+. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+constexpr double \doxymbox{\hyperlink{interpolation__utils_8hpp_a10c261012940fc076254f392610a7cf7}{particle\+\_\+tracker::\+pt\+\_\+pi}} = std::\+numbers::\+pi\+\_\+v$<$double$>$
+\begin{DoxyCompactList}\small\item\em pi in double precision (radians). \end{DoxyCompactList}\item 
+constexpr double \doxymbox{\hyperlink{interpolation__utils_8hpp_abfe8363f844f56fdb956998d7bad0d63}{particle\+\_\+tracker::\+pt\+\_\+two\+\_\+pi}} = 2. \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{interpolation__utils_8hpp_a10c261012940fc076254f392610a7cf7}{pt\+\_\+pi}}
+\begin{DoxyCompactList}\small\item\em 2\texorpdfstring{$\ast$}{*}pi in double precision (radians). \end{DoxyCompactList}\item 
+constexpr double \doxymbox{\hyperlink{interpolation__utils_8hpp_a90d297931b5622acd8866dc811a899ad}{particle\+\_\+tracker::\+dtt}} = 10800.\+0
+\begin{DoxyCompactList}\small\item\em Default time spacing used in some HYCOM-\/style datasets (3 hours). \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Time and spherical (lon/\+lat) interpolation utilities, including an experimental "{}neighbors-\/of-\/neighbors"{} spatial derivative estimator. 
+
+\hypertarget{interpolation__utils_8hpp_autotoc_md11}{}\doxysubsubsection{\texorpdfstring{What this header provides}{What this header provides}}\label{interpolation__utils_8hpp_autotoc_md11}
+
+\begin{DoxyItemize}
+\item {\bfseries{Time interpolation}} of scalar fields using a cubic B-\/spline (Boost).
+\item {\bfseries{Spatial neighbor queries}} on a sphere (lon/\+lat) via a KD-\/tree (nanoflann) using a fast approximate metric suitable for KD-\/tree pruning.
+\item {\bfseries{Spatial interpolation}} using Gaussian weights derived from {\itshape true} great-\/circle distance.
+\item {\bfseries{Experimental}} spatial derivative estimation using a two-\/level neighborhood ("{}neighbors of neighbors"{}) and distance-\/derivative information.
+\end{DoxyItemize}\hypertarget{interpolation__utils_8hpp_autotoc_md12}{}\doxysubsubsection{\texorpdfstring{Coordinate conventions}{Coordinate conventions}}\label{interpolation__utils_8hpp_autotoc_md12}
+
+\begin{DoxyItemize}
+\item Coordinates are in radians:\+
+\begin{DoxyItemize}
+\item longitude {\ttfamily lon} in (-\/pi, pi]\+
+\item latitude {\ttfamily lat} in \+[-\/pi/\+2, pi/\+2]\+
+\end{DoxyItemize}
+\end{DoxyItemize}\hypertarget{interpolation__utils_8hpp_autotoc_md13}{}\doxysubsubsection{\texorpdfstring{Dependencies}{Dependencies}}\label{interpolation__utils_8hpp_autotoc_md13}
+
+\begin{DoxyItemize}
+\item Boost (either:\+
+\begin{DoxyItemize}
+\item {\ttfamily \texorpdfstring{$<$}{<}boost/\+math/\+interpolators/\+cardinal\+\_\+cubic\+\_\+b\+\_\+spline.\+hpp\texorpdfstring{$>$}{>}} (newer)
+\item or {\ttfamily \texorpdfstring{$<$}{<}boost/\+math/\+interpolators/\+cubic\+\_\+b\+\_\+spline.\+hpp\texorpdfstring{$>$}{>}} (older /\+ deprecated in some newer Boost)
+\end{DoxyItemize}
+\item nanoflann (header-\/only) for KD-\/tree support.
+\end{DoxyItemize}\hypertarget{interpolation__utils_8hpp_autotoc_md14}{}\doxysubsubsection{\texorpdfstring{Error policy}{Error policy}}\label{interpolation__utils_8hpp_autotoc_md14}
+This header prefers {\bfseries{loud failures}} over silent bad behavior:\+
+\begin{DoxyItemize}
+\item If enable nanoflann support and the header cannot be found:\+ {\bfseries{compile-\/time error}}.
+\item If disable nanoflann support but try to instantiate KD-\/tree dependent types:\+ {\bfseries{compile-\/time error}}.
+\end{DoxyItemize}\hypertarget{interpolation__utils_8hpp_autotoc_md15}{}\doxysubsubsection{\texorpdfstring{Threading}{Threading}}\label{interpolation__utils_8hpp_autotoc_md15}
+
+\begin{DoxyItemize}
+\item No internal synchronization is provided.
+\item Reads are safe if underlying data structures are immutable.
+\item The caller must protect shared mutable structures. 
+\end{DoxyItemize}
+
+Definition in file \doxymbox{\hyperlink{interpolation__utils_8hpp_source}{interpolation\+\_\+utils.\+hpp}}.
+
+
+
+\label{doc-define-members}
+\Hypertarget{interpolation__utils_8hpp_doc-define-members}
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{interpolation__utils_8hpp_a34e9dc80820374139ca1d853a290a930}\index{interpolation\_utils.hpp@{interpolation\_utils.hpp}!PARTICLE\_TRACKER\_HAS\_NANOFLANN@{PARTICLE\_TRACKER\_HAS\_NANOFLANN}}
+\index{PARTICLE\_TRACKER\_HAS\_NANOFLANN@{PARTICLE\_TRACKER\_HAS\_NANOFLANN}!interpolation\_utils.hpp@{interpolation\_utils.hpp}}
+\doxysubsubsection{\texorpdfstring{PARTICLE\_TRACKER\_HAS\_NANOFLANN}{PARTICLE\_TRACKER\_HAS\_NANOFLANN}}
+{\footnotesize\ttfamily \label{interpolation__utils_8hpp_a34e9dc80820374139ca1d853a290a930} 
+\+\#define PARTICLE\+\_\+\+TRACKER\+\_\+\+HAS\+\_\+\+NANOFLANN~1}
+
+
+
+Set to 1 to enable nanoflann-\/backed KD-\/tree functionality. 
+
+If set to 0, KD-\/tree dependent classes/\+types in this header become unavailable and will produce a compile-\/time error if instantiated. 
+
+Definition at line \doxymbox{\hyperlink{interpolation__utils_8hpp_source_l00066}{66}} of file \doxymbox{\hyperlink{interpolation__utils_8hpp_source}{interpolation\+\_\+utils.\+hpp}}.
+
+
+
+\label{doc-typedef-members}
+\Hypertarget{interpolation__utils_8hpp_doc-typedef-members}
+\doxysubsection{Typedef Documentation}
+\Hypertarget{interpolation__utils_8hpp_adb23c22c8f78daf6587652bf18e33cad}\index{interpolation\_utils.hpp@{interpolation\_utils.hpp}!KDTree@{KDTree}}
+\index{KDTree@{KDTree}!interpolation\_utils.hpp@{interpolation\_utils.hpp}}
+\doxysubsubsection{\texorpdfstring{KDTree}{KDTree}}
+{\footnotesize\ttfamily \label{interpolation__utils_8hpp_adb23c22c8f78daf6587652bf18e33cad} 
+template$<$typename Data\+Type$>$ \\
+using \doxymbox{\hyperlink{interpolation__utils_8hpp_adb23c22c8f78daf6587652bf18e33cad}{particle\+\_\+tracker::\+\+KDTree}}}
+
+{\bfseries Initial value:\+}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{nf::KDTreeSingleIndexAdaptor<}
+\DoxyCodeLine{\ \ \ \doxymbox{\hyperlink{structparticle__tracker_1_1LonLatDistanceAdaptor}{LonLatDistanceAdaptor<DataType,\ PointCloud<DataType>}}>,\ \doxymbox{\hyperlink{structparticle__tracker_1_1PointCloud}{PointCloud<DataType>}},}
+\DoxyCodeLine{\ \ \ 2>}
+
+\end{DoxyCode}
+
+
+KD-\/tree alias used throughout this header when nanoflann is enabled. 
+
+
+
+Definition at line \doxymbox{\hyperlink{interpolation__utils_8hpp_source_l00368}{368}} of file \doxymbox{\hyperlink{interpolation__utils_8hpp_source}{interpolation\+\_\+utils.\+hpp}}.
+
+\Hypertarget{interpolation__utils_8hpp_a0d833449b7f72cc49846a914f8e12df4}\index{interpolation\_utils.hpp@{interpolation\_utils.hpp}!point@{point}}
+\index{point@{point}!interpolation\_utils.hpp@{interpolation\_utils.hpp}}
+\doxysubsubsection{\texorpdfstring{point}{point}}
+{\footnotesize\ttfamily \label{interpolation__utils_8hpp_a0d833449b7f72cc49846a914f8e12df4} 
+template$<$typename Data\+Type$>$ \\
+using \doxymbox{\hyperlink{interpolation__utils_8hpp_a0d833449b7f72cc49846a914f8e12df4}{particle\+\_\+tracker::\+point}} = std::\+array$<$Data\+Type, 2$>$}
+
+
+
+2D point type used for (lon, lat). 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Data\+Type} & numeric type \\
+\hline
+\end{DoxyTemplParams}
+
+
+Definition at line \doxymbox{\hyperlink{interpolation__utils_8hpp_source_l00153}{153}} of file \doxymbox{\hyperlink{interpolation__utils_8hpp_source}{interpolation\+\_\+utils.\+hpp}}.
+
+
+
+\label{doc-func-members}
+\Hypertarget{interpolation__utils_8hpp_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{interpolation__utils_8hpp_a136b718333060b8bfdc7ae9219c6f656}\index{interpolation\_utils.hpp@{interpolation\_utils.hpp}!pt\_wrap\_lon@{pt\_wrap\_lon}}
+\index{pt\_wrap\_lon@{pt\_wrap\_lon}!interpolation\_utils.hpp@{interpolation\_utils.hpp}}
+\doxysubsubsection{\texorpdfstring{pt\_wrap\_lon()}{pt\_wrap\_lon()}}
+{\footnotesize\ttfamily \label{interpolation__utils_8hpp_a136b718333060b8bfdc7ae9219c6f656} 
+template$<$typename T$>$ \\
+T particle\+\_\+tracker::\+pt\+\_\+wrap\+\_\+lon (\begin{DoxyParamCaption}\item[{T}]{lon}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Wrap longitude into (-\/pi, pi]\+. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Floating-\/point type. \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em lon} & Longitude in radians. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Wrapped longitude in (-\/pi, pi]\+.
+\end{DoxyReturn}
+This is used to avoid discontinuities across the dateline. 
+
+Definition at line \doxymbox{\hyperlink{interpolation__utils_8hpp_source_l00137}{137}} of file \doxymbox{\hyperlink{interpolation__utils_8hpp_source}{interpolation\+\_\+utils.\+hpp}}.
+
+
+
+\label{doc-var-members}
+\Hypertarget{interpolation__utils_8hpp_doc-var-members}
+\doxysubsection{Variable Documentation}
+\Hypertarget{interpolation__utils_8hpp_a90d297931b5622acd8866dc811a899ad}\index{interpolation\_utils.hpp@{interpolation\_utils.hpp}!dtt@{dtt}}
+\index{dtt@{dtt}!interpolation\_utils.hpp@{interpolation\_utils.hpp}}
+\doxysubsubsection{\texorpdfstring{dtt}{dtt}}
+{\footnotesize\ttfamily \label{interpolation__utils_8hpp_a90d297931b5622acd8866dc811a899ad} 
+double particle\+\_\+tracker::\+dtt = 10800.\+0\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Default time spacing used in some HYCOM-\/style datasets (3 hours). 
+
+This constant is not required by the classes but is useful as a conventional default. 
+
+Definition at line \doxymbox{\hyperlink{interpolation__utils_8hpp_source_l00161}{161}} of file \doxymbox{\hyperlink{interpolation__utils_8hpp_source}{interpolation\+\_\+utils.\+hpp}}.
+
+\Hypertarget{interpolation__utils_8hpp_a10c261012940fc076254f392610a7cf7}\index{interpolation\_utils.hpp@{interpolation\_utils.hpp}!pt\_pi@{pt\_pi}}
+\index{pt\_pi@{pt\_pi}!interpolation\_utils.hpp@{interpolation\_utils.hpp}}
+\doxysubsubsection{\texorpdfstring{pt\_pi}{pt\_pi}}
+{\footnotesize\ttfamily \label{interpolation__utils_8hpp_a10c261012940fc076254f392610a7cf7} 
+double particle\+\_\+tracker::\+pt\+\_\+pi = std::\+numbers::\+pi\+\_\+v$<$double$>$\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+pi in double precision (radians). 
+
+
+
+Definition at line \doxymbox{\hyperlink{interpolation__utils_8hpp_source_l00125}{125}} of file \doxymbox{\hyperlink{interpolation__utils_8hpp_source}{interpolation\+\_\+utils.\+hpp}}.
+
+\Hypertarget{interpolation__utils_8hpp_abfe8363f844f56fdb956998d7bad0d63}\index{interpolation\_utils.hpp@{interpolation\_utils.hpp}!pt\_two\_pi@{pt\_two\_pi}}
+\index{pt\_two\_pi@{pt\_two\_pi}!interpolation\_utils.hpp@{interpolation\_utils.hpp}}
+\doxysubsubsection{\texorpdfstring{pt\_two\_pi}{pt\_two\_pi}}
+{\footnotesize\ttfamily \label{interpolation__utils_8hpp_abfe8363f844f56fdb956998d7bad0d63} 
+double particle\+\_\+tracker::\+pt\+\_\+two\+\_\+pi = 2. \texorpdfstring{$\ast$}{*} pt\+\_\+pi\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+2\texorpdfstring{$\ast$}{*}pi in double precision (radians). 
+
+
+
+Definition at line \doxymbox{\hyperlink{interpolation__utils_8hpp_source_l00127}{127}} of file \doxymbox{\hyperlink{interpolation__utils_8hpp_source}{interpolation\+\_\+utils.\+hpp}}.
+

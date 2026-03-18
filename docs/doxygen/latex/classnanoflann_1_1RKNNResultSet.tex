@@ -1,0 +1,200 @@
+\doxysection{nanoflann::\+RKNNResult\+Set\texorpdfstring{$<$}{<} \+\_\+\+Distance\+Type, \+\_\+\+Index\+Type, \+\_\+\+Count\+Type \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classnanoflann_1_1RKNNResultSet}{}\label{classnanoflann_1_1RKNNResultSet}\index{nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$@{nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$}}
+
+
+Result set for RKNN searches (N-\/closest neighbors with a maximum radius).  
+
+
+
+
+{\ttfamily \+\#include $<$nanoflann.\+hpp$>$}
+
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+using \doxymbox{\hyperlink{classnanoflann_1_1RKNNResultSet_ac3edb2d75f374f134c30956578fc1373}{Distance\+Type}} = \+\_\+\+Distance\+Type
+\item 
+using \doxymbox{\hyperlink{classnanoflann_1_1RKNNResultSet_ac2de3e1aecdd7fde00e139110c169004}{Index\+Type}} = \+\_\+\+Index\+Type
+\item 
+using \doxymbox{\hyperlink{classnanoflann_1_1RKNNResultSet_ab564e85cdd52a721a148d104169cd5fc}{Count\+Type}} = \+\_\+\+Count\+Type
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{classnanoflann_1_1RKNNResultSet_a6c48044ca99b9b9dd2d04bf9e764a0df}{RKNNResult\+Set}} (Count\+Type capacity\+\_\+, Distance\+Type maximum\+Search\+Distance\+Squared\+\_\+)
+\item 
+void \doxymbox{\hyperlink{classnanoflann_1_1RKNNResultSet_a5ddef701a8d5f8801c181572e091b47a}{init}} (Index\+Type \texorpdfstring{$\ast$}{*}indices\+\_\+, Distance\+Type \texorpdfstring{$\ast$}{*}dists\+\_\+)
+\item 
+Count\+Type \doxymbox{\hyperlink{classnanoflann_1_1RKNNResultSet_ae855df1ef5e0d0e78df6631226b72f68}{size}} () const noexcept
+\item 
+bool \doxymbox{\hyperlink{classnanoflann_1_1RKNNResultSet_a21d9552406e978dd2c0f9cbff507ea58}{empty}} () const noexcept
+\item 
+bool \doxymbox{\hyperlink{classnanoflann_1_1RKNNResultSet_aee5facaefd108f872bff78c6b2b8ce88}{full}} () const noexcept
+\item 
+bool \doxymbox{\hyperlink{classnanoflann_1_1RKNNResultSet_a4305602186ab8585e24b0d56185053c5}{add\+Point}} (Distance\+Type dist, Index\+Type index)
+\begin{DoxyCompactList}\small\item\em Called during search to add an element matching the criteria. \end{DoxyCompactList}\item 
+Distance\+Type \doxymbox{\hyperlink{classnanoflann_1_1RKNNResultSet_aea0617f40d1ff6d4d48aeca5772e8751}{worst\+Dist}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns the worst distance among found solutions if the search result is full, or the maximum possible distance, if not full yet. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{classnanoflann_1_1RKNNResultSet_a8afa81880aa3ce93c999fcd3a6132f65}{sort}} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename \+\_\+\+Distance\+Type, typename \+\_\+\+Index\+Type = size\+\_\+t, typename \+\_\+\+Count\+Type = size\+\_\+t$>$\newline
+class nanoflann::\+\+RKNNResult\+Set$<$ \+\_\+\+Distance\+Type, \+\_\+\+Index\+Type, \+\_\+\+Count\+Type $>$}
+Result set for RKNN searches (N-\/closest neighbors with a maximum radius). 
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l00298}{298}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+
+
+\label{doc-typedef-members}
+\Hypertarget{classnanoflann_1_1RKNNResultSet_doc-typedef-members}
+\doxysubsection{Member Typedef Documentation}
+\Hypertarget{classnanoflann_1_1RKNNResultSet_ab564e85cdd52a721a148d104169cd5fc}\index{nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$@{nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$}!CountType@{CountType}}
+\index{CountType@{CountType}!nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$@{nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$}}
+\doxysubsubsection{\texorpdfstring{CountType}{CountType}}
+{\footnotesize\ttfamily \label{classnanoflann_1_1RKNNResultSet_ab564e85cdd52a721a148d104169cd5fc} 
+template$<$typename \+\_\+\+Distance\+Type, typename \+\_\+\+Index\+Type = size\+\_\+t, typename \+\_\+\+Count\+Type = size\+\_\+t$>$ \\
+using \doxymbox{\hyperlink{classnanoflann_1_1RKNNResultSet}{nanoflann::\+\+RKNNResult\+Set}}$<$ \+\_\+\+Distance\+Type, \+\_\+\+Index\+Type, \+\_\+\+Count\+Type $>$::\+\+Count\+Type = \+\_\+\+Count\+Type}
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l00303}{303}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+\Hypertarget{classnanoflann_1_1RKNNResultSet_ac3edb2d75f374f134c30956578fc1373}\index{nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$@{nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$}!DistanceType@{DistanceType}}
+\index{DistanceType@{DistanceType}!nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$@{nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$}}
+\doxysubsubsection{\texorpdfstring{DistanceType}{DistanceType}}
+{\footnotesize\ttfamily \label{classnanoflann_1_1RKNNResultSet_ac3edb2d75f374f134c30956578fc1373} 
+template$<$typename \+\_\+\+Distance\+Type, typename \+\_\+\+Index\+Type = size\+\_\+t, typename \+\_\+\+Count\+Type = size\+\_\+t$>$ \\
+using \doxymbox{\hyperlink{classnanoflann_1_1RKNNResultSet}{nanoflann::\+\+RKNNResult\+Set}}$<$ \+\_\+\+Distance\+Type, \+\_\+\+Index\+Type, \+\_\+\+Count\+Type $>$::\+\+Distance\+Type = \+\_\+\+Distance\+Type}
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l00301}{301}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+\Hypertarget{classnanoflann_1_1RKNNResultSet_ac2de3e1aecdd7fde00e139110c169004}\index{nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$@{nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$}!IndexType@{IndexType}}
+\index{IndexType@{IndexType}!nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$@{nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$}}
+\doxysubsubsection{\texorpdfstring{IndexType}{IndexType}}
+{\footnotesize\ttfamily \label{classnanoflann_1_1RKNNResultSet_ac2de3e1aecdd7fde00e139110c169004} 
+template$<$typename \+\_\+\+Distance\+Type, typename \+\_\+\+Index\+Type = size\+\_\+t, typename \+\_\+\+Count\+Type = size\+\_\+t$>$ \\
+using \doxymbox{\hyperlink{classnanoflann_1_1RKNNResultSet}{nanoflann::\+\+RKNNResult\+Set}}$<$ \+\_\+\+Distance\+Type, \+\_\+\+Index\+Type, \+\_\+\+Count\+Type $>$::\+\+Index\+Type = \+\_\+\+Index\+Type}
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l00302}{302}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+
+
+\label{doc-constructors}
+\Hypertarget{classnanoflann_1_1RKNNResultSet_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classnanoflann_1_1RKNNResultSet_a6c48044ca99b9b9dd2d04bf9e764a0df}\index{nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$@{nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$}!RKNNResultSet@{RKNNResultSet}}
+\index{RKNNResultSet@{RKNNResultSet}!nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$@{nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$}}
+\doxysubsubsection{\texorpdfstring{RKNNResultSet()}{RKNNResultSet()}}
+{\footnotesize\ttfamily \label{classnanoflann_1_1RKNNResultSet_a6c48044ca99b9b9dd2d04bf9e764a0df} 
+template$<$typename \+\_\+\+Distance\+Type, typename \+\_\+\+Index\+Type = size\+\_\+t, typename \+\_\+\+Count\+Type = size\+\_\+t$>$ \\
+\doxymbox{\hyperlink{classnanoflann_1_1RKNNResultSet}{nanoflann::\+\+RKNNResult\+Set}}$<$ \+\_\+\+Distance\+Type, \+\_\+\+Index\+Type, \+\_\+\+Count\+Type $>$::\+\+RKNNResult\+Set (\begin{DoxyParamCaption}\item[{Count\+Type}]{capacity\+\_\+}{, }\item[{Distance\+Type}]{maximum\+Search\+Distance\+Squared\+\_\+}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l00313}{313}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+
+
+\label{doc-func-members}
+\Hypertarget{classnanoflann_1_1RKNNResultSet_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classnanoflann_1_1RKNNResultSet_a4305602186ab8585e24b0d56185053c5}\index{nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$@{nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$}!addPoint@{addPoint}}
+\index{addPoint@{addPoint}!nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$@{nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$}}
+\doxysubsubsection{\texorpdfstring{addPoint()}{addPoint()}}
+{\footnotesize\ttfamily \label{classnanoflann_1_1RKNNResultSet_a4305602186ab8585e24b0d56185053c5} 
+template$<$typename \+\_\+\+Distance\+Type, typename \+\_\+\+Index\+Type = size\+\_\+t, typename \+\_\+\+Count\+Type = size\+\_\+t$>$ \\
+bool \doxymbox{\hyperlink{classnanoflann_1_1RKNNResultSet}{nanoflann::\+\+RKNNResult\+Set}}$<$ \+\_\+\+Distance\+Type, \+\_\+\+Index\+Type, \+\_\+\+Count\+Type $>$::\+add\+Point (\begin{DoxyParamCaption}\item[{Distance\+Type}]{dist}{, }\item[{Index\+Type}]{index}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Called during search to add an element matching the criteria. 
+
+\begin{DoxyReturn}{Returns}
+true if the search should be continued, false if the results are sufficient 
+\end{DoxyReturn}
+If defined and two points have the same distance, the one with the lowest-\/index will be returned first.
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l00339}{339}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+\Hypertarget{classnanoflann_1_1RKNNResultSet_a21d9552406e978dd2c0f9cbff507ea58}\index{nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$@{nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$}!empty@{empty}}
+\index{empty@{empty}!nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$@{nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$}}
+\doxysubsubsection{\texorpdfstring{empty()}{empty()}}
+{\footnotesize\ttfamily \label{classnanoflann_1_1RKNNResultSet_a21d9552406e978dd2c0f9cbff507ea58} 
+template$<$typename \+\_\+\+Distance\+Type, typename \+\_\+\+Index\+Type = size\+\_\+t, typename \+\_\+\+Count\+Type = size\+\_\+t$>$ \\
+bool \doxymbox{\hyperlink{classnanoflann_1_1RKNNResultSet}{nanoflann::\+\+RKNNResult\+Set}}$<$ \+\_\+\+Distance\+Type, \+\_\+\+Index\+Type, \+\_\+\+Count\+Type $>$::\+empty (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l00331}{331}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+\Hypertarget{classnanoflann_1_1RKNNResultSet_aee5facaefd108f872bff78c6b2b8ce88}\index{nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$@{nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$}!full@{full}}
+\index{full@{full}!nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$@{nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$}}
+\doxysubsubsection{\texorpdfstring{full()}{full()}}
+{\footnotesize\ttfamily \label{classnanoflann_1_1RKNNResultSet_aee5facaefd108f872bff78c6b2b8ce88} 
+template$<$typename \+\_\+\+Distance\+Type, typename \+\_\+\+Index\+Type = size\+\_\+t, typename \+\_\+\+Count\+Type = size\+\_\+t$>$ \\
+bool \doxymbox{\hyperlink{classnanoflann_1_1RKNNResultSet}{nanoflann::\+\+RKNNResult\+Set}}$<$ \+\_\+\+Distance\+Type, \+\_\+\+Index\+Type, \+\_\+\+Count\+Type $>$::\+full (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l00332}{332}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+\Hypertarget{classnanoflann_1_1RKNNResultSet_a5ddef701a8d5f8801c181572e091b47a}\index{nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$@{nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$}!init@{init}}
+\index{init@{init}!nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$@{nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$}}
+\doxysubsubsection{\texorpdfstring{init()}{init()}}
+{\footnotesize\ttfamily \label{classnanoflann_1_1RKNNResultSet_a5ddef701a8d5f8801c181572e091b47a} 
+template$<$typename \+\_\+\+Distance\+Type, typename \+\_\+\+Index\+Type = size\+\_\+t, typename \+\_\+\+Count\+Type = size\+\_\+t$>$ \\
+void \doxymbox{\hyperlink{classnanoflann_1_1RKNNResultSet}{nanoflann::\+\+RKNNResult\+Set}}$<$ \+\_\+\+Distance\+Type, \+\_\+\+Index\+Type, \+\_\+\+Count\+Type $>$::\+init (\begin{DoxyParamCaption}\item[{Index\+Type \texorpdfstring{$\ast$}{*}}]{indices\+\_\+}{, }\item[{Distance\+Type \texorpdfstring{$\ast$}{*}}]{dists\+\_\+}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l00322}{322}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+\Hypertarget{classnanoflann_1_1RKNNResultSet_ae855df1ef5e0d0e78df6631226b72f68}\index{nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$@{nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$}!size@{size}}
+\index{size@{size}!nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$@{nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$}}
+\doxysubsubsection{\texorpdfstring{size()}{size()}}
+{\footnotesize\ttfamily \label{classnanoflann_1_1RKNNResultSet_ae855df1ef5e0d0e78df6631226b72f68} 
+template$<$typename \+\_\+\+Distance\+Type, typename \+\_\+\+Index\+Type = size\+\_\+t, typename \+\_\+\+Count\+Type = size\+\_\+t$>$ \\
+Count\+Type \doxymbox{\hyperlink{classnanoflann_1_1RKNNResultSet}{nanoflann::\+\+RKNNResult\+Set}}$<$ \+\_\+\+Distance\+Type, \+\_\+\+Index\+Type, \+\_\+\+Count\+Type $>$::\+size (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l00330}{330}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+\Hypertarget{classnanoflann_1_1RKNNResultSet_a8afa81880aa3ce93c999fcd3a6132f65}\index{nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$@{nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$}!sort@{sort}}
+\index{sort@{sort}!nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$@{nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$}}
+\doxysubsubsection{\texorpdfstring{sort()}{sort()}}
+{\footnotesize\ttfamily \label{classnanoflann_1_1RKNNResultSet_a8afa81880aa3ce93c999fcd3a6132f65} 
+template$<$typename \+\_\+\+Distance\+Type, typename \+\_\+\+Index\+Type = size\+\_\+t, typename \+\_\+\+Count\+Type = size\+\_\+t$>$ \\
+void \doxymbox{\hyperlink{classnanoflann_1_1RKNNResultSet}{nanoflann::\+\+RKNNResult\+Set}}$<$ \+\_\+\+Distance\+Type, \+\_\+\+Index\+Type, \+\_\+\+Count\+Type $>$::\+sort (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l00380}{380}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+\Hypertarget{classnanoflann_1_1RKNNResultSet_aea0617f40d1ff6d4d48aeca5772e8751}\index{nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$@{nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$}!worstDist@{worstDist}}
+\index{worstDist@{worstDist}!nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$@{nanoflann::RKNNResultSet$<$ \_DistanceType, \_IndexType, \_CountType $>$}}
+\doxysubsubsection{\texorpdfstring{worstDist()}{worstDist()}}
+{\footnotesize\ttfamily \label{classnanoflann_1_1RKNNResultSet_aea0617f40d1ff6d4d48aeca5772e8751} 
+template$<$typename \+\_\+\+Distance\+Type, typename \+\_\+\+Index\+Type = size\+\_\+t, typename \+\_\+\+Count\+Type = size\+\_\+t$>$ \\
+Distance\+Type \doxymbox{\hyperlink{classnanoflann_1_1RKNNResultSet}{nanoflann::\+\+RKNNResult\+Set}}$<$ \+\_\+\+Distance\+Type, \+\_\+\+Index\+Type, \+\_\+\+Count\+Type $>$::\+worst\+Dist (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the worst distance among found solutions if the search result is full, or the maximum possible distance, if not full yet. 
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l00375}{375}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+
+
+The documentation for this class was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+include/\+third\+\_\+party/\+nanoflann/\+nanoflann.\+hpp\end{DoxyCompactItemize}

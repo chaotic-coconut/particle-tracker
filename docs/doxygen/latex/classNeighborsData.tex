@@ -1,0 +1,186 @@
+\doxysection{Neighbors\+Data\texorpdfstring{$<$}{<} Data\+Type, Time\+Type \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classNeighborsData}{}\label{classNeighborsData}\index{NeighborsData$<$ DataType, TimeType $>$@{NeighborsData$<$ DataType, TimeType $>$}}
+
+
+Spatial neighbor query + Gaussian weighting + multi-\/variable interpolation.  
+
+
+
+
+{\ttfamily \+\#include $<$interpolation\+\_\+utils.\+hpp$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{classNeighborsData_a9d33537d1083ac4c88b05093fcc5af00}{Neighbors\+Data}} (const \doxymbox{\hyperlink{interpolation__utils_8hpp_adb23c22c8f78daf6587652bf18e33cad}{KDTree}}$<$ Data\+Type $>$ \&idx, const std::\+vector$<$ Data\+Type $>$ \&xxs, const std::\+vector$<$ Data\+Type $>$ \&yys, Data\+Type r2, Data\+Type shape\+\_\+param)
+\item 
+void \doxymbox{\hyperlink{classNeighborsData_a9c835659cba1b4b06e702f99c419f4de}{compute\+Neighbors}} (std::\+vector$<$ \doxymbox{\hyperlink{structNeighbor}{Neighbor}}$<$ Data\+Type $>$ $>$ \&neighbors, Data\+Type x, Data\+Type y)
+\begin{DoxyCompactList}\small\item\em Compute neighbor list around query point (x,y). \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{classNeighborsData_a9ec6be55a9069562e007040429ef0c9e}{update\+Neighbor\+Weights}} (std::\+vector$<$ \doxymbox{\hyperlink{structNeighbor}{Neighbor}}$<$ Data\+Type $>$ $>$ \&neighbors, Data\+Type x, Data\+Type y)
+\begin{DoxyCompactList}\small\item\em Recompute dist/\+weight for an existing neighbor list without changing indices. \end{DoxyCompactList}\item 
+std::\+map$<$ std::\+string, Data\+Type $>$ \doxymbox{\hyperlink{classNeighborsData_a69428278a20e7957647bd4433710ce13}{interpolate\+Variables}} (Time\+Type t, const std::\+vector$<$ \doxymbox{\hyperlink{structNeighbor}{Neighbor}}$<$ Data\+Type $>$ $>$ \&neighbors, const std::\+map$<$ std::\+string, std::\+vector$<$ \doxymbox{\hyperlink{classTimeSpline}{Time\+Spline}}$<$ Data\+Type, Time\+Type $>$ $>$ $>$ \&variable\+\_\+splines, const std::\+vector$<$ std::\+string $>$ \&variable\+\_\+names)
+\begin{DoxyCompactList}\small\item\em Weighted spatial interpolation for multiple variables at time t. \end{DoxyCompactList}\item 
+std::\+map$<$ std::\+string, Data\+Type $>$ \doxymbox{\hyperlink{classNeighborsData_ad415366a2285eaa667ec33e25214058c}{calculate\+Variables}} (Time\+Type t, std::\+vector$<$ \doxymbox{\hyperlink{structNeighbor}{Neighbor}}$<$ Data\+Type $>$ $>$ \&neighbors, const std::\+map$<$ std::\+string, std::\+vector$<$ \doxymbox{\hyperlink{classTimeSpline}{Time\+Spline}}$<$ Data\+Type, Time\+Type $>$ $>$ $>$ \&variable\+\_\+splines, const std::\+vector$<$ std::\+string $>$ \&variable\+\_\+names, Data\+Type x, Data\+Type y)
+\begin{DoxyCompactList}\small\item\em Convenience:\+ compute\+Neighbors + interpolate\+Variables. \end{DoxyCompactList}\item 
+std::\+map$<$ std::\+string, Data\+Type $>$ \doxymbox{\hyperlink{classNeighborsData_aa258b33d6ebb7fafda0b9047a93066d0}{calculate\+Variables\+Update}} (Time\+Type t, std::\+vector$<$ \doxymbox{\hyperlink{structNeighbor}{Neighbor}}$<$ Data\+Type $>$ $>$ \&neighbors, const std::\+map$<$ std::\+string, std::\+vector$<$ \doxymbox{\hyperlink{classTimeSpline}{Time\+Spline}}$<$ Data\+Type, Time\+Type $>$ $>$ $>$ \&variable\+\_\+splines, const std::\+vector$<$ std::\+string $>$ \&variable\+\_\+names, Data\+Type x, Data\+Type y)
+\begin{DoxyCompactList}\small\item\em Convenience:\+ update\+Neighbor\+Weights + interpolate\+Variables. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename Data\+Type, typename Time\+Type = double$>$\newline
+class Neighbors\+Data$<$ Data\+Type, Time\+Type $>$}
+Spatial neighbor query + Gaussian weighting + multi-\/variable interpolation. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Data\+Type} & numeric type. \\
+\hline
+{\em Time\+Type} & time type.\\
+\hline
+\end{DoxyTemplParams}
+This class holds references to:\+
+\begin{DoxyItemize}
+\item a pre-\/built \doxylink{interpolation__utils_8hpp_adb23c22c8f78daf6587652bf18e33cad}{KDTree}
+\item grid longitudes and latitudes ({\ttfamily xx\+\_\+sparse}, {\ttfamily yy\+\_\+sparse}) and parameters:\+
+\item {\ttfamily rad2} :\+ squared KD-\/tree search radius (approximate metric)
+\item {\ttfamily shape} :\+ Gaussian length scale for weights in terms of {\bfseries{great-\/circle distance}}
+\end{DoxyItemize}\hypertarget{classparticle__tracker_1_1NeighborsData_autotoc_md20}{}\doxysubsubsubsection{\texorpdfstring{Dateline policy}{Dateline policy}}\label{classparticle__tracker_1_1NeighborsData_autotoc_md20}
+
+\begin{DoxyItemize}
+\item Query longitude is wrapped into (-\/pi, pi]\+ before search.
+\item Grid longitudes are wrapped before calling GCD() to avoid discontinuities if your GCD() implementation expects normalized longitudes. 
+\end{DoxyItemize}
+
+Definition at line \doxymbox{\hyperlink{interpolation__utils_8hpp_source_l00450}{450}} of file \doxymbox{\hyperlink{interpolation__utils_8hpp_source}{interpolation\+\_\+utils.\+hpp}}.
+
+
+
+\label{doc-constructors}
+\Hypertarget{classNeighborsData_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classNeighborsData_a9d33537d1083ac4c88b05093fcc5af00}\index{NeighborsData$<$ DataType, TimeType $>$@{NeighborsData$<$ DataType, TimeType $>$}!NeighborsData@{NeighborsData}}
+\index{NeighborsData@{NeighborsData}!NeighborsData$<$ DataType, TimeType $>$@{NeighborsData$<$ DataType, TimeType $>$}}
+\doxysubsubsection{\texorpdfstring{NeighborsData()}{NeighborsData()}}
+{\footnotesize\ttfamily \label{classNeighborsData_a9d33537d1083ac4c88b05093fcc5af00} 
+template$<$typename Data\+Type, typename Time\+Type = double$>$ \\
+\doxymbox{\hyperlink{classparticle__tracker_1_1NeighborsData}{particle\+\_\+tracker::\+\+Neighbors\+Data}}$<$ Data\+Type, Time\+Type $>$::\+\+Neighbors\+Data (\begin{DoxyParamCaption}\item[{const \doxymbox{\hyperlink{interpolation__utils_8hpp_adb23c22c8f78daf6587652bf18e33cad}{KDTree}}$<$ Data\+Type $>$ \&}]{idx}{, }\item[{const std::\+vector$<$ Data\+Type $>$ \&}]{xxs}{, }\item[{const std::\+vector$<$ Data\+Type $>$ \&}]{yys}{, }\item[{Data\+Type}]{r2}{, }\item[{Data\+Type}]{shape\+\_\+param}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \doxymbox{\hyperlink{interpolation__utils_8hpp_source_l00459}{459}} of file \doxymbox{\hyperlink{interpolation__utils_8hpp_source}{interpolation\+\_\+utils.\+hpp}}.
+
+
+
+\label{doc-func-members}
+\Hypertarget{classNeighborsData_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classNeighborsData_ad415366a2285eaa667ec33e25214058c}\index{NeighborsData$<$ DataType, TimeType $>$@{NeighborsData$<$ DataType, TimeType $>$}!calculateVariables@{calculateVariables}}
+\index{calculateVariables@{calculateVariables}!NeighborsData$<$ DataType, TimeType $>$@{NeighborsData$<$ DataType, TimeType $>$}}
+\doxysubsubsection{\texorpdfstring{calculateVariables()}{calculateVariables()}}
+{\footnotesize\ttfamily \label{classNeighborsData_ad415366a2285eaa667ec33e25214058c} 
+template$<$typename Data\+Type, typename Time\+Type = double$>$ \\
+std::\+map$<$ std::\+string, Data\+Type $>$ \doxymbox{\hyperlink{classparticle__tracker_1_1NeighborsData}{particle\+\_\+tracker::\+\+Neighbors\+Data}}$<$ Data\+Type, Time\+Type $>$::\+calculate\+Variables (\begin{DoxyParamCaption}\item[{Time\+Type}]{t}{, }\item[{std::\+vector$<$ \doxymbox{\hyperlink{structNeighbor}{Neighbor}}$<$ Data\+Type $>$ $>$ \&}]{neighbors}{, }\item[{const std::\+map$<$ std::\+string, std::\+vector$<$ \doxymbox{\hyperlink{classTimeSpline}{Time\+Spline}}$<$ Data\+Type, Time\+Type $>$ $>$ $>$ \&}]{variable\+\_\+splines}{, }\item[{const std::\+vector$<$ std::\+string $>$ \&}]{variable\+\_\+names}{, }\item[{Data\+Type}]{x}{, }\item[{Data\+Type}]{y}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Convenience:\+ compute\+Neighbors + interpolate\+Variables. 
+
+
+
+Definition at line \doxymbox{\hyperlink{interpolation__utils_8hpp_source_l00581}{581}} of file \doxymbox{\hyperlink{interpolation__utils_8hpp_source}{interpolation\+\_\+utils.\+hpp}}.
+
+\Hypertarget{classNeighborsData_aa258b33d6ebb7fafda0b9047a93066d0}\index{NeighborsData$<$ DataType, TimeType $>$@{NeighborsData$<$ DataType, TimeType $>$}!calculateVariablesUpdate@{calculateVariablesUpdate}}
+\index{calculateVariablesUpdate@{calculateVariablesUpdate}!NeighborsData$<$ DataType, TimeType $>$@{NeighborsData$<$ DataType, TimeType $>$}}
+\doxysubsubsection{\texorpdfstring{calculateVariablesUpdate()}{calculateVariablesUpdate()}}
+{\footnotesize\ttfamily \label{classNeighborsData_aa258b33d6ebb7fafda0b9047a93066d0} 
+template$<$typename Data\+Type, typename Time\+Type = double$>$ \\
+std::\+map$<$ std::\+string, Data\+Type $>$ \doxymbox{\hyperlink{classparticle__tracker_1_1NeighborsData}{particle\+\_\+tracker::\+\+Neighbors\+Data}}$<$ Data\+Type, Time\+Type $>$::\+calculate\+Variables\+Update (\begin{DoxyParamCaption}\item[{Time\+Type}]{t}{, }\item[{std::\+vector$<$ \doxymbox{\hyperlink{structNeighbor}{Neighbor}}$<$ Data\+Type $>$ $>$ \&}]{neighbors}{, }\item[{const std::\+map$<$ std::\+string, std::\+vector$<$ \doxymbox{\hyperlink{classTimeSpline}{Time\+Spline}}$<$ Data\+Type, Time\+Type $>$ $>$ $>$ \&}]{variable\+\_\+splines}{, }\item[{const std::\+vector$<$ std::\+string $>$ \&}]{variable\+\_\+names}{, }\item[{Data\+Type}]{x}{, }\item[{Data\+Type}]{y}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Convenience:\+ update\+Neighbor\+Weights + interpolate\+Variables. 
+
+
+
+Definition at line \doxymbox{\hyperlink{interpolation__utils_8hpp_source_l00593}{593}} of file \doxymbox{\hyperlink{interpolation__utils_8hpp_source}{interpolation\+\_\+utils.\+hpp}}.
+
+\Hypertarget{classNeighborsData_a9c835659cba1b4b06e702f99c419f4de}\index{NeighborsData$<$ DataType, TimeType $>$@{NeighborsData$<$ DataType, TimeType $>$}!computeNeighbors@{computeNeighbors}}
+\index{computeNeighbors@{computeNeighbors}!NeighborsData$<$ DataType, TimeType $>$@{NeighborsData$<$ DataType, TimeType $>$}}
+\doxysubsubsection{\texorpdfstring{computeNeighbors()}{computeNeighbors()}}
+{\footnotesize\ttfamily \label{classNeighborsData_a9c835659cba1b4b06e702f99c419f4de} 
+template$<$typename Data\+Type, typename Time\+Type = double$>$ \\
+void \doxymbox{\hyperlink{classparticle__tracker_1_1NeighborsData}{particle\+\_\+tracker::\+\+Neighbors\+Data}}$<$ Data\+Type, Time\+Type $>$::\+compute\+Neighbors (\begin{DoxyParamCaption}\item[{std::\+vector$<$ \doxymbox{\hyperlink{structNeighbor}{Neighbor}}$<$ Data\+Type $>$ $>$ \&}]{neighbors}{, }\item[{Data\+Type}]{x}{, }\item[{Data\+Type}]{y}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Compute neighbor list around query point (x,y). 
+
+
+\begin{DoxyItemize}
+\item Uses KD-\/tree radius search with {\ttfamily rad2} (approx metric).
+\item Computes true great-\/circle distance via {\ttfamily GCD} for each candidate.
+\item Computes Gaussian weights from true distance.
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parameters}
+{\em neighbors} & output vector cleared and filled. \\
+\hline
+{\em x} & query longitude (radians) \\
+\hline
+{\em y} & query latitude (radians) \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \doxymbox{\hyperlink{interpolation__utils_8hpp_source_l00476}{476}} of file \doxymbox{\hyperlink{interpolation__utils_8hpp_source}{interpolation\+\_\+utils.\+hpp}}.
+
+\Hypertarget{classNeighborsData_a69428278a20e7957647bd4433710ce13}\index{NeighborsData$<$ DataType, TimeType $>$@{NeighborsData$<$ DataType, TimeType $>$}!interpolateVariables@{interpolateVariables}}
+\index{interpolateVariables@{interpolateVariables}!NeighborsData$<$ DataType, TimeType $>$@{NeighborsData$<$ DataType, TimeType $>$}}
+\doxysubsubsection{\texorpdfstring{interpolateVariables()}{interpolateVariables()}}
+{\footnotesize\ttfamily \label{classNeighborsData_a69428278a20e7957647bd4433710ce13} 
+template$<$typename Data\+Type, typename Time\+Type = double$>$ \\
+std::\+map$<$ std::\+string, Data\+Type $>$ \doxymbox{\hyperlink{classparticle__tracker_1_1NeighborsData}{particle\+\_\+tracker::\+\+Neighbors\+Data}}$<$ Data\+Type, Time\+Type $>$::\+interpolate\+Variables (\begin{DoxyParamCaption}\item[{Time\+Type}]{t}{, }\item[{const std::\+vector$<$ \doxymbox{\hyperlink{structNeighbor}{Neighbor}}$<$ Data\+Type $>$ $>$ \&}]{neighbors}{, }\item[{const std::\+map$<$ std::\+string, std::\+vector$<$ \doxymbox{\hyperlink{classTimeSpline}{Time\+Spline}}$<$ Data\+Type, Time\+Type $>$ $>$ $>$ \&}]{variable\+\_\+splines}{, }\item[{const std::\+vector$<$ std::\+string $>$ \&}]{variable\+\_\+names}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Weighted spatial interpolation for multiple variables at time t. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em t} & evaluation time \\
+\hline
+{\em neighbors} & neighbor list produced by compute\+Neighbors/\+update\+Neighbor\+Weights \\
+\hline
+{\em variable\+\_\+splines} & map(var\+\_\+name -\/\texorpdfstring{$>$}{>} spline-\/per-\/gridpoint) \\
+\hline
+{\em variable\+\_\+names} & variables to evaluate \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+map(var\+\_\+name -\/\texorpdfstring{$>$}{>} interpolated value) 
+\end{DoxyReturn}
+
+
+Definition at line \doxymbox{\hyperlink{interpolation__utils_8hpp_source_l00539}{539}} of file \doxymbox{\hyperlink{interpolation__utils_8hpp_source}{interpolation\+\_\+utils.\+hpp}}.
+
+\Hypertarget{classNeighborsData_a9ec6be55a9069562e007040429ef0c9e}\index{NeighborsData$<$ DataType, TimeType $>$@{NeighborsData$<$ DataType, TimeType $>$}!updateNeighborWeights@{updateNeighborWeights}}
+\index{updateNeighborWeights@{updateNeighborWeights}!NeighborsData$<$ DataType, TimeType $>$@{NeighborsData$<$ DataType, TimeType $>$}}
+\doxysubsubsection{\texorpdfstring{updateNeighborWeights()}{updateNeighborWeights()}}
+{\footnotesize\ttfamily \label{classNeighborsData_a9ec6be55a9069562e007040429ef0c9e} 
+template$<$typename Data\+Type, typename Time\+Type = double$>$ \\
+void \doxymbox{\hyperlink{classparticle__tracker_1_1NeighborsData}{particle\+\_\+tracker::\+\+Neighbors\+Data}}$<$ Data\+Type, Time\+Type $>$::\+update\+Neighbor\+Weights (\begin{DoxyParamCaption}\item[{std::\+vector$<$ \doxymbox{\hyperlink{structNeighbor}{Neighbor}}$<$ Data\+Type $>$ $>$ \&}]{neighbors}{, }\item[{Data\+Type}]{x}{, }\item[{Data\+Type}]{y}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Recompute dist/\+weight for an existing neighbor list without changing indices. 
+
+Use this only if the query point moved {\itshape slightly} the neighbor identity may no longer be optimal. For larger moves, call \doxylink{classNeighborsData_a9c835659cba1b4b06e702f99c419f4de}{compute\+Neighbors} again. 
+
+Definition at line \doxymbox{\hyperlink{interpolation__utils_8hpp_source_l00515}{515}} of file \doxymbox{\hyperlink{interpolation__utils_8hpp_source}{interpolation\+\_\+utils.\+hpp}}.
+
+
+
+The documentation for this class was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+include/\+particle\+\_\+tracker/\+\doxymbox{\hyperlink{interpolation__utils_8hpp}{interpolation\+\_\+utils.\+hpp}}\end{DoxyCompactItemize}

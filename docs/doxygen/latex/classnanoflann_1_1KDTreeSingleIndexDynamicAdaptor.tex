@@ -1,0 +1,472 @@
+\doxysection{nanoflann::\+KDTree\+Single\+Index\+Dynamic\+Adaptor\texorpdfstring{$<$}{<} Distance, Dataset\+Adaptor, DIM, Index\+Type \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor}{}\label{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor}\index{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}}
+
+
+kd-\/tree dynaimic index  
+
+
+
+
+{\ttfamily \+\#include $<$nanoflann.\+hpp$>$}
+
+
+
+Collaboration diagram for nanoflann::\+KDTree\+Single\+Index\+Dynamic\+Adaptor\texorpdfstring{$<$}{<} Distance, Dataset\+Adaptor, DIM, Index\+Type \texorpdfstring{$>$}{>}:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+using \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_a1c93592565a4c8e8545d20aacdf1543d}{Element\+Type}} = typename Distance::\+\+Element\+Type
+\item 
+using \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_a3a7dff36dfcca247383cecad1b4c9282}{Distance\+Type}} = typename Distance::\+\+Distance\+Type
+\item 
+using \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_a9c4d62d5355d08726b2a54540a49e5ea}{Offset}} = typename \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor__}{KDTree\+Single\+Index\+Dynamic\+Adaptor\+\_\+}}$<$Distance, Dataset\+Adaptor, DIM$>$::\+\+Offset
+\item 
+using \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_af1c560bbddd44950ce767548922faa91}{Size}} = typename \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor__}{KDTree\+Single\+Index\+Dynamic\+Adaptor\+\_\+}}$<$Distance, Dataset\+Adaptor, DIM$>$::\+\+Size
+\item 
+using \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_a17ce6c6594c63304b0295bcfad6f35ac}{Dimension}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+const std::\+vector$<$ index\+\_\+container\+\_\+t $>$ \& \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_ac24cdabb366af7fd69a5a8b9e3e2cdcc}{get\+All\+Indices}} () const
+\begin{DoxyCompactList}\small\item\em Get a const ref to the internal list of indices; the number of indices is adapted dynamically as the dataset grows in size. \end{DoxyCompactList}\item 
+\doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_ab5782069ba53f63e6a1bb3179b76b582}{KDTree\+Single\+Index\+Dynamic\+Adaptor}} (const int dimensionality, const Dataset\+Adaptor \&input\+Data, const \doxymbox{\hyperlink{structnanoflann_1_1KDTreeSingleIndexAdaptorParams}{KDTree\+Single\+Index\+Adaptor\+Params}} \&params=\doxymbox{\hyperlink{structnanoflann_1_1KDTreeSingleIndexAdaptorParams}{KDTree\+Single\+Index\+Adaptor\+Params}}(), const size\+\_\+t maximum\+Point\+Count=1000000000U)
+\begin{DoxyCompactList}\small\item\em KDTree constructor. \end{DoxyCompactList}\item 
+\Hypertarget{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_aed425d8a99cd4d170e7135b35e414c0b}\label{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_aed425d8a99cd4d170e7135b35e414c0b} 
+{\bfseries KDTree\+Single\+Index\+Dynamic\+Adaptor} (const KDTree\+Single\+Index\+Dynamic\+Adaptor$<$ Distance, Dataset\+Adaptor, DIM, Index\+Type $>$ \&)=delete
+\begin{DoxyCompactList}\small\item\em Deleted copy constructor. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_ab056d39ec787e1888561c0d30ca67e4d}{add\+Points}} (Index\+Type start, Index\+Type end)
+\begin{DoxyCompactList}\small\item\em Add points to the set, Inserts all points from \+[start, end]\+. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_a6049f74d0f445f4e52b1153f23f5cd2e}{remove\+Point}} (size\+\_\+t idx)
+\begin{DoxyCompactList}\small\item\em Remove a point from the set (Lazy Deletion). \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename RESULTSET$>$ }\\bool \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_a333db6fd01d59765876c9aaab5f9a1a6}{find\+Neighbors}} (RESULTSET \&result, const Element\+Type \texorpdfstring{$\ast$}{*}vec, const \doxymbox{\hyperlink{structnanoflann_1_1SearchParameters}{Search\+Parameters}} \&search\+Params=\{\}) const
+\begin{DoxyCompactList}\small\item\em Find set of nearest neighbors to vec\+[0:\+dim-\/1]\+. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+Distance \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_a3db73f40c0c5f598d19a7fdbf53b5197}{distance\+\_\+}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Types}
+\begin{DoxyCompactItemize}
+\item 
+using \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_a18d5b85ce96e28e7cc8bc60b7fb431a1}{index\+\_\+container\+\_\+t}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+Size \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_a3b3f1b748c483716bc9b8cf3f2aaf287}{leaf\+\_\+max\+\_\+size\+\_\+}}
+\item 
+Size \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_a2f805b760e60bd0ff24fd1fafe05e7fe}{tree\+Count\+\_\+}}
+\item 
+Size \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_a72d8c6a11c6839cc6e54d115c2fcfb53}{point\+Count\+\_\+}}
+\item 
+const Dataset\+Adaptor \& \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_a578a31c35dae687d538df2fc3902fb46}{dataset\+\_\+}}
+\begin{DoxyCompactList}\small\item\em The dataset used by this index. \end{DoxyCompactList}\item 
+std::\+vector$<$ int $>$ \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_ab74708de8276edf76d46c7cdf4bed18f}{tree\+Index\+\_\+}}
+\begin{DoxyCompactList}\small\item\em tree\+Index\+[idx]\+ is the index of tree in which point at idx is stored. \end{DoxyCompactList}\item 
+std::\+unordered\+\_\+set$<$ int $>$ \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_a61dbbca97a882ebcfbb0e18d33033386}{removed\+Points\+\_\+}}
+\item 
+\doxymbox{\hyperlink{structnanoflann_1_1KDTreeSingleIndexAdaptorParams}{KDTree\+Single\+Index\+Adaptor\+Params}} \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_aea28bbb9c7917bc30cdc218d3e58990b}{index\+\_\+params\+\_\+}}
+\item 
+Dimension \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_aeac3ba772379276594368815dc604a40}{dim\+\_\+}}
+\begin{DoxyCompactList}\small\item\em Dimensionality of each data point. \end{DoxyCompactList}\item 
+std::\+vector$<$ index\+\_\+container\+\_\+t $>$ \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_ab1699edfb13ef3ae5560dc12582c3782}{index\+\_\+}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename Distance, class Dataset\+Adaptor, int32\+\_\+t DIM = -\/1, typename Index\+Type = uint32\+\_\+t$>$\newline
+class nanoflann::\+\+KDTree\+Single\+Index\+Dynamic\+Adaptor$<$ Distance, Dataset\+Adaptor, DIM, Index\+Type $>$}
+kd-\/tree dynaimic index 
+
+class to create multiple static index and merge their results to behave as single dynamic index as proposed in Logarithmic Approach.
+
+Example of usage:\+ examples/\+dynamic\+\_\+pointcloud\+\_\+example.\+cpp
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Dataset\+Adaptor} & The user-\/provided adaptor (see comments above). \\
+\hline
+{\em Distance} & The distance metric to use:\+ \doxylink{structnanoflann_1_1metric__L1}{nanoflann::\+metric\+\_\+\+L1}, \doxylink{structnanoflann_1_1metric__L2}{nanoflann::\+metric\+\_\+\+L2}, \doxylink{structnanoflann_1_1metric__L2__Simple}{nanoflann::\+metric\+\_\+\+L2\+\_\+\+Simple}, etc. \\
+\hline
+{\em DIM} & Dimensionality of data points (e.\+g. 3 for 3D points) \\
+\hline
+{\em Index\+Type} & Will be typically size\+\_\+t or int \\
+\hline
+\end{DoxyTemplParams}
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l02499}{2499}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+
+
+\label{doc-typedef-members}
+\Hypertarget{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_doc-typedef-members}
+\doxysubsection{Member Typedef Documentation}
+\Hypertarget{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_a17ce6c6594c63304b0295bcfad6f35ac}\index{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}!Dimension@{Dimension}}
+\index{Dimension@{Dimension}!nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}}
+\doxysubsubsection{\texorpdfstring{Dimension}{Dimension}}
+{\footnotesize\ttfamily \label{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_a17ce6c6594c63304b0295bcfad6f35ac} 
+template$<$typename Distance, class Dataset\+Adaptor, int32\+\_\+t DIM = -\/1, typename Index\+Type = uint32\+\_\+t$>$ \\
+using \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor}{nanoflann::\+\+KDTree\+Single\+Index\+Dynamic\+Adaptor}}$<$ Distance, Dataset\+Adaptor, DIM, Index\+Type $>$::\+\+Dimension}
+
+{\bfseries Initial value:\+}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keyword}{typename}\ KDTreeSingleIndexDynamicAdaptor\_<Distance,\ DatasetAdaptor,\ DIM>::Dimension}
+
+\end{DoxyCode}
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l02507}{2507}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+\Hypertarget{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_a3a7dff36dfcca247383cecad1b4c9282}\index{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}!DistanceType@{DistanceType}}
+\index{DistanceType@{DistanceType}!nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}}
+\doxysubsubsection{\texorpdfstring{DistanceType}{DistanceType}}
+{\footnotesize\ttfamily \label{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_a3a7dff36dfcca247383cecad1b4c9282} 
+template$<$typename Distance, class Dataset\+Adaptor, int32\+\_\+t DIM = -\/1, typename Index\+Type = uint32\+\_\+t$>$ \\
+using \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor}{nanoflann::\+\+KDTree\+Single\+Index\+Dynamic\+Adaptor}}$<$ Distance, Dataset\+Adaptor, DIM, Index\+Type $>$::\+\+Distance\+Type = typename Distance::\+\+Distance\+Type}
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l02503}{2503}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+\Hypertarget{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_a1c93592565a4c8e8545d20aacdf1543d}\index{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}!ElementType@{ElementType}}
+\index{ElementType@{ElementType}!nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}}
+\doxysubsubsection{\texorpdfstring{ElementType}{ElementType}}
+{\footnotesize\ttfamily \label{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_a1c93592565a4c8e8545d20aacdf1543d} 
+template$<$typename Distance, class Dataset\+Adaptor, int32\+\_\+t DIM = -\/1, typename Index\+Type = uint32\+\_\+t$>$ \\
+using \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor}{nanoflann::\+\+KDTree\+Single\+Index\+Dynamic\+Adaptor}}$<$ Distance, Dataset\+Adaptor, DIM, Index\+Type $>$::\+\+Element\+Type = typename Distance::\+\+Element\+Type}
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l02502}{2502}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+\Hypertarget{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_a18d5b85ce96e28e7cc8bc60b7fb431a1}\index{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}!index\_container\_t@{index\_container\_t}}
+\index{index\_container\_t@{index\_container\_t}!nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}}
+\doxysubsubsection{\texorpdfstring{index\_container\_t}{index\_container\_t}}
+{\footnotesize\ttfamily \label{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_a18d5b85ce96e28e7cc8bc60b7fb431a1} 
+template$<$typename Distance, class Dataset\+Adaptor, int32\+\_\+t DIM = -\/1, typename Index\+Type = uint32\+\_\+t$>$ \\
+using \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor}{nanoflann::\+\+KDTree\+Single\+Index\+Dynamic\+Adaptor}}$<$ Distance, Dataset\+Adaptor, DIM, Index\+Type $>$::\+index\+\_\+container\+\_\+t\hspace{0.3cm}{\ttfamily [protected]}}
+
+{\bfseries Initial value:\+}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{}
+\DoxyCodeLine{\doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor__}{KDTreeSingleIndexDynamicAdaptor\_<Distance,\ DatasetAdaptor,\ DIM,\ IndexType>}}}
+
+\end{DoxyCode}
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l02529}{2529}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+\Hypertarget{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_a9c4d62d5355d08726b2a54540a49e5ea}\index{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}!Offset@{Offset}}
+\index{Offset@{Offset}!nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}}
+\doxysubsubsection{\texorpdfstring{Offset}{Offset}}
+{\footnotesize\ttfamily \label{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_a9c4d62d5355d08726b2a54540a49e5ea} 
+template$<$typename Distance, class Dataset\+Adaptor, int32\+\_\+t DIM = -\/1, typename Index\+Type = uint32\+\_\+t$>$ \\
+using \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor}{nanoflann::\+\+KDTree\+Single\+Index\+Dynamic\+Adaptor}}$<$ Distance, Dataset\+Adaptor, DIM, Index\+Type $>$::\+\+Offset = typename \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor__}{KDTree\+Single\+Index\+Dynamic\+Adaptor\+\_\+}}$<$Distance, Dataset\+Adaptor, DIM$>$::\+\+Offset}
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l02505}{2505}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+\Hypertarget{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_af1c560bbddd44950ce767548922faa91}\index{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}!Size@{Size}}
+\index{Size@{Size}!nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}}
+\doxysubsubsection{\texorpdfstring{Size}{Size}}
+{\footnotesize\ttfamily \label{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_af1c560bbddd44950ce767548922faa91} 
+template$<$typename Distance, class Dataset\+Adaptor, int32\+\_\+t DIM = -\/1, typename Index\+Type = uint32\+\_\+t$>$ \\
+using \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor}{nanoflann::\+\+KDTree\+Single\+Index\+Dynamic\+Adaptor}}$<$ Distance, Dataset\+Adaptor, DIM, Index\+Type $>$::\+\+Size = typename \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor__}{KDTree\+Single\+Index\+Dynamic\+Adaptor\+\_\+}}$<$Distance, Dataset\+Adaptor, DIM$>$::\+\+Size}
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l02506}{2506}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+
+
+\label{doc-constructors}
+\Hypertarget{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_ab5782069ba53f63e6a1bb3179b76b582}\index{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}!KDTreeSingleIndexDynamicAdaptor@{KDTreeSingleIndexDynamicAdaptor}}
+\index{KDTreeSingleIndexDynamicAdaptor@{KDTreeSingleIndexDynamicAdaptor}!nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}}
+\doxysubsubsection{\texorpdfstring{KDTreeSingleIndexDynamicAdaptor()}{KDTreeSingleIndexDynamicAdaptor()}}
+{\footnotesize\ttfamily \label{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_ab5782069ba53f63e6a1bb3179b76b582} 
+template$<$typename Distance, class Dataset\+Adaptor, int32\+\_\+t DIM = -\/1, typename Index\+Type = uint32\+\_\+t$>$ \\
+\doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor}{nanoflann::\+\+KDTree\+Single\+Index\+Dynamic\+Adaptor}}$<$ Distance, Dataset\+Adaptor, DIM, Index\+Type $>$::\+\+KDTree\+Single\+Index\+Dynamic\+Adaptor (\begin{DoxyParamCaption}\item[{const int}]{dimensionality}{, }\item[{const Dataset\+Adaptor \&}]{input\+Data}{, }\item[{const \doxymbox{\hyperlink{structnanoflann_1_1KDTreeSingleIndexAdaptorParams}{KDTree\+Single\+Index\+Adaptor\+Params}} \&}]{params}{ = {\ttfamily \doxymbox{\hyperlink{structnanoflann_1_1KDTreeSingleIndexAdaptorParams}{KDTree\+Single\+Index\+Adaptor\+Params}}()}, }\item[{const size\+\_\+t}]{maximum\+Point\+Count}{ = {\ttfamily 1000000000U}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}
+
+
+
+KDTree constructor. 
+
+Refer to docs in README.\+md or online in \href{https://github.com/jlblancoc/nanoflann}{\texttt{https:\+/\+/\+github.\+com/\+jlblancoc/\+nanoflann}}
+
+The KD-\/\+Tree point dimension (the length of each point in the datase, e.\+g. 3 for 3D points) is determined by means of:\+
+\begin{DoxyItemize}
+\item The {\itshape DIM} template parameter if \texorpdfstring{$>$}{>}0 (highest priority)
+\item Otherwise, the {\itshape dimensionality} parameter of this constructor.
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parameters}
+{\em input\+Data} & Dataset with the input features. Its lifetime must be equal or longer than that of the instance of this class. \\
+\hline
+{\em params} & Basically, the maximum leaf node size \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l02579}{2579}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+
+
+References \doxymbox{\hyperlink{nanoflann_8hpp_source_l02604}{add\+Points()}}, \doxymbox{\hyperlink{nanoflann_8hpp_source_l02518}{dataset\+\_\+}}, \doxymbox{\hyperlink{nanoflann_8hpp_source_l02527}{dim\+\_\+}}, and \doxymbox{\hyperlink{nanoflann_8hpp_source_l02522}{tree\+Index\+\_\+}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_aed425d8a99cd4d170e7135b35e414c0b}{KDTree\+Single\+Index\+Dynamic\+Adaptor()}}.
+
+
+
+\label{doc-func-members}
+\Hypertarget{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_ab056d39ec787e1888561c0d30ca67e4d}\index{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}!addPoints@{addPoints}}
+\index{addPoints@{addPoints}!nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}}
+\doxysubsubsection{\texorpdfstring{addPoints()}{addPoints()}}
+{\footnotesize\ttfamily \label{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_ab056d39ec787e1888561c0d30ca67e4d} 
+template$<$typename Distance, class Dataset\+Adaptor, int32\+\_\+t DIM = -\/1, typename Index\+Type = uint32\+\_\+t$>$ \\
+void \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor}{nanoflann::\+\+KDTree\+Single\+Index\+Dynamic\+Adaptor}}$<$ Distance, Dataset\+Adaptor, DIM, Index\+Type $>$::\+add\+Points (\begin{DoxyParamCaption}\item[{Index\+Type}]{start}{, }\item[{Index\+Type}]{end}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Add points to the set, Inserts all points from \+[start, end]\+. 
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l02604}{2604}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+
+
+References \doxymbox{\hyperlink{nanoflann_8hpp_source_l02522}{tree\+Index\+\_\+}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{nanoflann_8hpp_source_l02579}{KDTree\+Single\+Index\+Dynamic\+Adaptor()}}.
+
+\Hypertarget{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_a333db6fd01d59765876c9aaab5f9a1a6}\index{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}!findNeighbors@{findNeighbors}}
+\index{findNeighbors@{findNeighbors}!nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}}
+\doxysubsubsection{\texorpdfstring{findNeighbors()}{findNeighbors()}}
+{\footnotesize\ttfamily \label{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_a333db6fd01d59765876c9aaab5f9a1a6} 
+template$<$typename Distance, class Dataset\+Adaptor, int32\+\_\+t DIM = -\/1, typename Index\+Type = uint32\+\_\+t$>$ \\
+template$<$typename RESULTSET$>$ \\
+bool \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor}{nanoflann::\+\+KDTree\+Single\+Index\+Dynamic\+Adaptor}}$<$ Distance, Dataset\+Adaptor, DIM, Index\+Type $>$::\+find\+Neighbors (\begin{DoxyParamCaption}\item[{RESULTSET \&}]{result}{, }\item[{const Element\+Type \texorpdfstring{$\ast$}{*}}]{vec}{, }\item[{const \doxymbox{\hyperlink{structnanoflann_1_1SearchParameters}{Search\+Parameters}} \&}]{search\+Params}{ = {\ttfamily \{\}}}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Find set of nearest neighbors to vec\+[0:\+dim-\/1]\+. 
+
+Their indices are stored inside the result object.
+
+Params:\+ result = the result object in which the indices of the nearest-\/neighbors are stored vec = the vector for which to search the nearest neighbors
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em RESULTSET} & Should be any Result\+Set$<$\+Distance\+Type$>$ \\
+\hline
+\end{DoxyTemplParams}
+\begin{DoxyReturn}{Returns}
+True if the requested neighbors could be found. 
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+knn\+Search, radius\+Search
+\end{DoxySeeAlso}
+\begin{DoxyNote}{Note}
+If L2 norms are used, all returned distances are actually squared distances. 
+\end{DoxyNote}
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l02667}{2667}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+\Hypertarget{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_ac24cdabb366af7fd69a5a8b9e3e2cdcc}\index{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}!getAllIndices@{getAllIndices}}
+\index{getAllIndices@{getAllIndices}!nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}}
+\doxysubsubsection{\texorpdfstring{getAllIndices()}{getAllIndices()}}
+{\footnotesize\ttfamily \label{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_ac24cdabb366af7fd69a5a8b9e3e2cdcc} 
+template$<$typename Distance, class Dataset\+Adaptor, int32\+\_\+t DIM = -\/1, typename Index\+Type = uint32\+\_\+t$>$ \\
+const std::\+vector$<$ index\+\_\+container\+\_\+t $>$ \& \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor}{nanoflann::\+\+KDTree\+Single\+Index\+Dynamic\+Adaptor}}$<$ Distance, Dataset\+Adaptor, DIM, Index\+Type $>$::\+get\+All\+Indices (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get a const ref to the internal list of indices; the number of indices is adapted dynamically as the dataset grows in size. 
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l02536}{2536}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+\Hypertarget{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_a6049f74d0f445f4e52b1153f23f5cd2e}\index{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}!removePoint@{removePoint}}
+\index{removePoint@{removePoint}!nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}}
+\doxysubsubsection{\texorpdfstring{removePoint()}{removePoint()}}
+{\footnotesize\ttfamily \label{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_a6049f74d0f445f4e52b1153f23f5cd2e} 
+template$<$typename Distance, class Dataset\+Adaptor, int32\+\_\+t DIM = -\/1, typename Index\+Type = uint32\+\_\+t$>$ \\
+void \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor}{nanoflann::\+\+KDTree\+Single\+Index\+Dynamic\+Adaptor}}$<$ Distance, Dataset\+Adaptor, DIM, Index\+Type $>$::\+remove\+Point (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{idx}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Remove a point from the set (Lazy Deletion). 
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l02643}{2643}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+
+
+References \doxymbox{\hyperlink{nanoflann_8hpp_source_l02522}{tree\+Index\+\_\+}}.
+
+
+
+\label{doc-variable-members}
+\Hypertarget{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_doc-variable-members}
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_a578a31c35dae687d538df2fc3902fb46}\index{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}!dataset\_@{dataset\_}}
+\index{dataset\_@{dataset\_}!nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}}
+\doxysubsubsection{\texorpdfstring{dataset\_}{dataset\_}}
+{\footnotesize\ttfamily \label{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_a578a31c35dae687d538df2fc3902fb46} 
+template$<$typename Distance, class Dataset\+Adaptor, int32\+\_\+t DIM = -\/1, typename Index\+Type = uint32\+\_\+t$>$ \\
+const Dataset\+Adaptor\& \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor}{nanoflann::\+\+KDTree\+Single\+Index\+Dynamic\+Adaptor}}$<$ Distance, Dataset\+Adaptor, DIM, Index\+Type $>$::\+dataset\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+The dataset used by this index. 
+
+The source of our data 
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l02518}{2518}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{nanoflann_8hpp_source_l02579}{KDTree\+Single\+Index\+Dynamic\+Adaptor()}}.
+
+\Hypertarget{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_aeac3ba772379276594368815dc604a40}\index{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}!dim\_@{dim\_}}
+\index{dim\_@{dim\_}!nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}}
+\doxysubsubsection{\texorpdfstring{dim\_}{dim\_}}
+{\footnotesize\ttfamily \label{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_aeac3ba772379276594368815dc604a40} 
+template$<$typename Distance, class Dataset\+Adaptor, int32\+\_\+t DIM = -\/1, typename Index\+Type = uint32\+\_\+t$>$ \\
+Dimension \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor}{nanoflann::\+\+KDTree\+Single\+Index\+Dynamic\+Adaptor}}$<$ Distance, Dataset\+Adaptor, DIM, Index\+Type $>$::\+dim\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Dimensionality of each data point. 
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l02527}{2527}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{nanoflann_8hpp_source_l02579}{KDTree\+Single\+Index\+Dynamic\+Adaptor()}}.
+
+\Hypertarget{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_a3db73f40c0c5f598d19a7fdbf53b5197}\index{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}!distance\_@{distance\_}}
+\index{distance\_@{distance\_}!nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}}
+\doxysubsubsection{\texorpdfstring{distance\_}{distance\_}}
+{\footnotesize\ttfamily \label{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_a3db73f40c0c5f598d19a7fdbf53b5197} 
+template$<$typename Distance, class Dataset\+Adaptor, int32\+\_\+t DIM = -\/1, typename Index\+Type = uint32\+\_\+t$>$ \\
+Distance \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor}{nanoflann::\+\+KDTree\+Single\+Index\+Dynamic\+Adaptor}}$<$ Distance, Dataset\+Adaptor, DIM, Index\+Type $>$::\+distance\+\_\+}
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l02562}{2562}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+\Hypertarget{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_ab1699edfb13ef3ae5560dc12582c3782}\index{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}!index\_@{index\_}}
+\index{index\_@{index\_}!nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}}
+\doxysubsubsection{\texorpdfstring{index\_}{index\_}}
+{\footnotesize\ttfamily \label{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_ab1699edfb13ef3ae5560dc12582c3782} 
+template$<$typename Distance, class Dataset\+Adaptor, int32\+\_\+t DIM = -\/1, typename Index\+Type = uint32\+\_\+t$>$ \\
+std::\+vector$<$index\+\_\+container\+\_\+t$>$ \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor}{nanoflann::\+\+KDTree\+Single\+Index\+Dynamic\+Adaptor}}$<$ Distance, Dataset\+Adaptor, DIM, Index\+Type $>$::\+index\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l02531}{2531}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+\Hypertarget{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_aea28bbb9c7917bc30cdc218d3e58990b}\index{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}!index\_params\_@{index\_params\_}}
+\index{index\_params\_@{index\_params\_}!nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}}
+\doxysubsubsection{\texorpdfstring{index\_params\_}{index\_params\_}}
+{\footnotesize\ttfamily \label{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_aea28bbb9c7917bc30cdc218d3e58990b} 
+template$<$typename Distance, class Dataset\+Adaptor, int32\+\_\+t DIM = -\/1, typename Index\+Type = uint32\+\_\+t$>$ \\
+\doxymbox{\hyperlink{structnanoflann_1_1KDTreeSingleIndexAdaptorParams}{KDTree\+Single\+Index\+Adaptor\+Params}} \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor}{nanoflann::\+\+KDTree\+Single\+Index\+Dynamic\+Adaptor}}$<$ Distance, Dataset\+Adaptor, DIM, Index\+Type $>$::\+index\+\_\+params\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l02525}{2525}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+\Hypertarget{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_a3b3f1b748c483716bc9b8cf3f2aaf287}\index{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}!leaf\_max\_size\_@{leaf\_max\_size\_}}
+\index{leaf\_max\_size\_@{leaf\_max\_size\_}!nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}}
+\doxysubsubsection{\texorpdfstring{leaf\_max\_size\_}{leaf\_max\_size\_}}
+{\footnotesize\ttfamily \label{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_a3b3f1b748c483716bc9b8cf3f2aaf287} 
+template$<$typename Distance, class Dataset\+Adaptor, int32\+\_\+t DIM = -\/1, typename Index\+Type = uint32\+\_\+t$>$ \\
+Size \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor}{nanoflann::\+\+KDTree\+Single\+Index\+Dynamic\+Adaptor}}$<$ Distance, Dataset\+Adaptor, DIM, Index\+Type $>$::\+leaf\+\_\+max\+\_\+size\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l02511}{2511}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+\Hypertarget{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_a72d8c6a11c6839cc6e54d115c2fcfb53}\index{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}!pointCount\_@{pointCount\_}}
+\index{pointCount\_@{pointCount\_}!nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}}
+\doxysubsubsection{\texorpdfstring{pointCount\_}{pointCount\_}}
+{\footnotesize\ttfamily \label{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_a72d8c6a11c6839cc6e54d115c2fcfb53} 
+template$<$typename Distance, class Dataset\+Adaptor, int32\+\_\+t DIM = -\/1, typename Index\+Type = uint32\+\_\+t$>$ \\
+Size \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor}{nanoflann::\+\+KDTree\+Single\+Index\+Dynamic\+Adaptor}}$<$ Distance, Dataset\+Adaptor, DIM, Index\+Type $>$::\+point\+Count\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l02513}{2513}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+\Hypertarget{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_a61dbbca97a882ebcfbb0e18d33033386}\index{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}!removedPoints\_@{removedPoints\_}}
+\index{removedPoints\_@{removedPoints\_}!nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}}
+\doxysubsubsection{\texorpdfstring{removedPoints\_}{removedPoints\_}}
+{\footnotesize\ttfamily \label{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_a61dbbca97a882ebcfbb0e18d33033386} 
+template$<$typename Distance, class Dataset\+Adaptor, int32\+\_\+t DIM = -\/1, typename Index\+Type = uint32\+\_\+t$>$ \\
+std::\+unordered\+\_\+set$<$int$>$ \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor}{nanoflann::\+\+KDTree\+Single\+Index\+Dynamic\+Adaptor}}$<$ Distance, Dataset\+Adaptor, DIM, Index\+Type $>$::\+removed\+Points\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l02523}{2523}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+\Hypertarget{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_a2f805b760e60bd0ff24fd1fafe05e7fe}\index{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}!treeCount\_@{treeCount\_}}
+\index{treeCount\_@{treeCount\_}!nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}}
+\doxysubsubsection{\texorpdfstring{treeCount\_}{treeCount\_}}
+{\footnotesize\ttfamily \label{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_a2f805b760e60bd0ff24fd1fafe05e7fe} 
+template$<$typename Distance, class Dataset\+Adaptor, int32\+\_\+t DIM = -\/1, typename Index\+Type = uint32\+\_\+t$>$ \\
+Size \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor}{nanoflann::\+\+KDTree\+Single\+Index\+Dynamic\+Adaptor}}$<$ Distance, Dataset\+Adaptor, DIM, Index\+Type $>$::\+tree\+Count\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l02512}{2512}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+\Hypertarget{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_ab74708de8276edf76d46c7cdf4bed18f}\index{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}!treeIndex\_@{treeIndex\_}}
+\index{treeIndex\_@{treeIndex\_}!nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$@{nanoflann::KDTreeSingleIndexDynamicAdaptor$<$ Distance, DatasetAdaptor, DIM, IndexType $>$}}
+\doxysubsubsection{\texorpdfstring{treeIndex\_}{treeIndex\_}}
+{\footnotesize\ttfamily \label{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor_ab74708de8276edf76d46c7cdf4bed18f} 
+template$<$typename Distance, class Dataset\+Adaptor, int32\+\_\+t DIM = -\/1, typename Index\+Type = uint32\+\_\+t$>$ \\
+std::\+vector$<$int$>$ \doxymbox{\hyperlink{classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor}{nanoflann::\+\+KDTree\+Single\+Index\+Dynamic\+Adaptor}}$<$ Distance, Dataset\+Adaptor, DIM, Index\+Type $>$::\+tree\+Index\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+tree\+Index\+[idx]\+ is the index of tree in which point at idx is stored. 
+
+tree\+Index\+[idx]\+=-\/1 means that point has been removed. 
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l02522}{2522}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{nanoflann_8hpp_source_l02604}{add\+Points()}}, \doxymbox{\hyperlink{nanoflann_8hpp_source_l02579}{KDTree\+Single\+Index\+Dynamic\+Adaptor()}}, and \doxymbox{\hyperlink{nanoflann_8hpp_source_l02643}{remove\+Point()}}.
+
+
+
+The documentation for this class was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+include/\+third\+\_\+party/\+nanoflann/\+nanoflann.\+hpp\end{DoxyCompactItemize}

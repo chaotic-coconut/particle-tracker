@@ -1,0 +1,90 @@
+\doxysection{nanoflann::\+Result\+Item\texorpdfstring{$<$}{<} Index\+Type, Distance\+Type \texorpdfstring{$>$}{>} Struct Template Reference}
+\hypertarget{structnanoflann_1_1ResultItem}{}\label{structnanoflann_1_1ResultItem}\index{nanoflann::ResultItem$<$ IndexType, DistanceType $>$@{nanoflann::ResultItem$<$ IndexType, DistanceType $>$}}
+
+
+Each result element in \doxylink{classnanoflann_1_1RadiusResultSet}{Radius\+Result\+Set}.  
+
+
+
+
+{\ttfamily \+\#include $<$nanoflann.\+hpp$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{structnanoflann_1_1ResultItem_a41ff8a6fce5409ff8ac55cedfba3c0e3}{Result\+Item}} (const Index\+Type index, const Distance\+Type distance)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+Index\+Type \doxymbox{\hyperlink{structnanoflann_1_1ResultItem_af0bde6901f6c26b99a8c67212cc41ddc}{first}}
+\begin{DoxyCompactList}\small\item\em Index of the sample in the dataset. \end{DoxyCompactList}\item 
+Distance\+Type \doxymbox{\hyperlink{structnanoflann_1_1ResultItem_a131d4fc59d80dc1bd0a509f6258889df}{second}}
+\begin{DoxyCompactList}\small\item\em Distance from sample to query point. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename Index\+Type = size\+\_\+t, typename Distance\+Type = double$>$\newline
+struct nanoflann::\+\+Result\+Item$<$ Index\+Type, Distance\+Type $>$}
+Each result element in \doxylink{classnanoflann_1_1RadiusResultSet}{Radius\+Result\+Set}. 
+
+Note that distances and indices are named {\ttfamily \doxylink{structnanoflann_1_1ResultItem_af0bde6901f6c26b99a8c67212cc41ddc}{first}} and {\ttfamily \doxylink{structnanoflann_1_1ResultItem_a131d4fc59d80dc1bd0a509f6258889df}{second}} to keep backward-\/compatibility with the {\ttfamily std::\+pair\texorpdfstring{$<$}{<}\texorpdfstring{$>$}{>}} type used in the past. In contrast, this structure is ensured to be {\ttfamily std::\+is\+\_\+standard\+\_\+layout} so it can be used in wrappers to other languages. See:\+ \href{https://github.com/jlblancoc/nanoflann/issues/166}{\texttt{https:\+/\+/\+github.\+com/\+jlblancoc/\+nanoflann/\+issues/\+166}} 
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l00197}{197}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+
+
+\label{doc-constructors}
+\Hypertarget{structnanoflann_1_1ResultItem_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{structnanoflann_1_1ResultItem_a41ff8a6fce5409ff8ac55cedfba3c0e3}\index{nanoflann::ResultItem$<$ IndexType, DistanceType $>$@{nanoflann::ResultItem$<$ IndexType, DistanceType $>$}!ResultItem@{ResultItem}}
+\index{ResultItem@{ResultItem}!nanoflann::ResultItem$<$ IndexType, DistanceType $>$@{nanoflann::ResultItem$<$ IndexType, DistanceType $>$}}
+\doxysubsubsection{\texorpdfstring{ResultItem()}{ResultItem()}}
+{\footnotesize\ttfamily \label{structnanoflann_1_1ResultItem_a41ff8a6fce5409ff8ac55cedfba3c0e3} 
+template$<$typename Index\+Type = size\+\_\+t, typename Distance\+Type = double$>$ \\
+\doxymbox{\hyperlink{structnanoflann_1_1ResultItem}{nanoflann::\+\+Result\+Item}}$<$ Index\+Type, Distance\+Type $>$::\+\+Result\+Item (\begin{DoxyParamCaption}\item[{const Index\+Type}]{index}{, }\item[{const Distance\+Type}]{distance}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l00200}{200}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+
+
+\label{doc-variable-members}
+\Hypertarget{structnanoflann_1_1ResultItem_doc-variable-members}
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structnanoflann_1_1ResultItem_af0bde6901f6c26b99a8c67212cc41ddc}\index{nanoflann::ResultItem$<$ IndexType, DistanceType $>$@{nanoflann::ResultItem$<$ IndexType, DistanceType $>$}!first@{first}}
+\index{first@{first}!nanoflann::ResultItem$<$ IndexType, DistanceType $>$@{nanoflann::ResultItem$<$ IndexType, DistanceType $>$}}
+\doxysubsubsection{\texorpdfstring{first}{first}}
+{\footnotesize\ttfamily \label{structnanoflann_1_1ResultItem_af0bde6901f6c26b99a8c67212cc41ddc} 
+template$<$typename Index\+Type = size\+\_\+t, typename Distance\+Type = double$>$ \\
+Index\+Type \doxymbox{\hyperlink{structnanoflann_1_1ResultItem}{nanoflann::\+\+Result\+Item}}$<$ Index\+Type, Distance\+Type $>$::\+first}
+
+
+
+Index of the sample in the dataset. 
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l00204}{204}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+\Hypertarget{structnanoflann_1_1ResultItem_a131d4fc59d80dc1bd0a509f6258889df}\index{nanoflann::ResultItem$<$ IndexType, DistanceType $>$@{nanoflann::ResultItem$<$ IndexType, DistanceType $>$}!second@{second}}
+\index{second@{second}!nanoflann::ResultItem$<$ IndexType, DistanceType $>$@{nanoflann::ResultItem$<$ IndexType, DistanceType $>$}}
+\doxysubsubsection{\texorpdfstring{second}{second}}
+{\footnotesize\ttfamily \label{structnanoflann_1_1ResultItem_a131d4fc59d80dc1bd0a509f6258889df} 
+template$<$typename Index\+Type = size\+\_\+t, typename Distance\+Type = double$>$ \\
+Distance\+Type \doxymbox{\hyperlink{structnanoflann_1_1ResultItem}{nanoflann::\+\+Result\+Item}}$<$ Index\+Type, Distance\+Type $>$::\+second}
+
+
+
+Distance from sample to query point. 
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l00205}{205}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+
+
+The documentation for this struct was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+include/\+third\+\_\+party/\+nanoflann/\+nanoflann.\+hpp\end{DoxyCompactItemize}

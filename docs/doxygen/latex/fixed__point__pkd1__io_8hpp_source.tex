@@ -1,0 +1,90 @@
+\doxysection{fixed\+\_\+point\+\_\+pkd1\+\_\+io.\+hpp}
+\hypertarget{fixed__point__pkd1__io_8hpp_source}{}\label{fixed__point__pkd1__io_8hpp_source}\index{include/particle\_tracker/fixed\_point/fixed\_point\_pkd1\_io.hpp@{include/particle\_tracker/fixed\_point/fixed\_point\_pkd1\_io.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00001}00001\ \textcolor{comment}{//\ fixed\_point\_pkd1\_io.hpp}}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00002}00002\ \textcolor{comment}{//\ PKD1\ plain\ (uncompressed)\ file\ I/O\ kept\ out\ of\ fixed\_point\_core.hpp.}}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00003}00003\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00004}00004\ \textcolor{preprocessor}{\#include\ <fstream>}}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00005}00005\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00006}00006\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00007}00007\ \textcolor{preprocessor}{\#include\ <stdexcept>}}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00008}00008\ \textcolor{preprocessor}{\#include\ <cstring>}}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00009}00009\ \textcolor{preprocessor}{\#include\ "{}fixed\_point\_core.hpp"{}}\ \textcolor{comment}{//\ FileHeaderPKD1,\ PackedParticle}}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00010}00010\ }
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00011}00011\ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ safe\ read/write\ bytes\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00012}00012\ \textcolor{keyword}{template}\ <\textcolor{keyword}{class}\ T>}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00013}00013\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ write\_all(std::ostream\&\ os,\ \textcolor{keyword}{const}\ T*\ ptr,\ std::size\_t\ count\ =\ 1)}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00014}00014\ \{}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00015}00015\ \ \ \ \ os.write(\textcolor{keyword}{reinterpret\_cast<}\textcolor{keyword}{const\ }\textcolor{keywordtype}{char}*\textcolor{keyword}{>}(ptr),\ \textcolor{keyword}{sizeof}(T)*count);}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00016}00016\ \ \ \ \ \textcolor{keywordflow}{if}\ (!os)\ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}write\_all:\ write\ failed"{}});}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00017}00017\ \}}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00018}00018\ }
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00019}00019\ \textcolor{keyword}{template}\ <\textcolor{keyword}{class}\ T>}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00020}00020\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ read\_all(std::istream\&\ is,\ T*\ ptr,\ std::size\_t\ count\ =\ 1)}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00021}00021\ \{}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00022}00022\ \ \ \ \ is.read(\textcolor{keyword}{reinterpret\_cast<}\textcolor{keywordtype}{char}*\textcolor{keyword}{>}(ptr),\ \textcolor{keyword}{sizeof}(T)\ *\ count);}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00023}00023\ \ \ \ \ \textcolor{keywordflow}{if}\ (!is)\ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}read\_all:\ read\ failed"{}});}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00024}00024\ \}}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00025}00025\ }
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00026}00026\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ write\_header(std::ostream\&\ os,\ \textcolor{keyword}{const}\ \doxymbox{\hyperlink{structFileHeaderPKD1}{FileHeaderPKD1}}\&\ h)}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00027}00027\ \{}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00028}00028\ \ \ \ \ write\_all(os,\ \&h);}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00029}00029\ \}}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00030}00030\ }
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00031}00031\ \textcolor{keyword}{inline}\ \doxymbox{\hyperlink{structFileHeaderPKD1}{FileHeaderPKD1}}\ read\_header(std::istream\&\ is)}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00032}00032\ \{}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00033}00033\ \ \ \ \ \doxymbox{\hyperlink{structFileHeaderPKD1}{FileHeaderPKD1}}\ h\{\};}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00034}00034\ \ \ \ \ read\_all(is,\ \&h);}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00035}00035\ }
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00036}00036\ \ \ \ \ \textcolor{keywordflow}{if}\ (h.magic[0]\ !=\ \textcolor{charliteral}{'P'}\ ||\ h.magic[1]\ !=\ \textcolor{charliteral}{'K'}\ ||\ h.magic[2]\ !=\ \textcolor{charliteral}{'D'}\ ||\ h.magic[3]\ !=\ \textcolor{charliteral}{'1'})}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00037}00037\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}read\_header:\ bad\ magic\ (expected\ PKD1)"{}});}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00038}00038\ \ \ \ \ \textcolor{keywordflow}{if}\ (h.version\ !=\ 1)}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00039}00039\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}read\_header:\ unsupported\ PKD1\ version"{}});}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00040}00040\ }
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00041}00041\ \ \ \ \ \textcolor{keywordflow}{return}\ h;}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00042}00042\ \}}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00043}00043\ }
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00044}00044\ \textcolor{comment}{/*\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ plain\ (uncompressed)\ I/O\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ */}}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00045}00045\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ write\_records\_binary(\textcolor{keyword}{const}\ std::string\&\ path,}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00046}00046\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<PackedParticle>\&\ rec,}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00047}00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ append\ =\ \textcolor{keyword}{false})}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00048}00048\ \{}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00049}00049\ \ \ \ \ std::ios::openmode\ mode\ =\ std::ios::binary\ |\ std::ios::out;}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00050}00050\ \ \ \ \ \textcolor{keywordflow}{if}\ (append)\ mode\ |=\ std::ios::app;}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00051}00051\ }
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00052}00052\ \ \ \ \ std::ofstream\ os(path,\ mode);}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00053}00053\ \ \ \ \ \textcolor{keywordflow}{if}\ (!os)\ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}cannot\ open\ "{}}\ +\ path);}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00054}00054\ }
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00055}00055\ \ \ \ \ \textcolor{keywordflow}{if}\ (!append)}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00056}00056\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00057}00057\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{structFileHeaderPKD1}{FileHeaderPKD1}}\ h\{\};}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00058}00058\ \ \ \ \ \ \ \ \ write\_header(os,\ h);}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00059}00059\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00060}00060\ }
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00061}00061\ \ \ \ \ \textcolor{keywordflow}{if}\ (!rec.empty())\ write\_all(os,\ rec.data(),\ rec.size());}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00062}00062\ \}}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00063}00063\ }
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00064}00064\ \textcolor{keyword}{inline}\ std::vector<PackedParticle>\ read\_records\_binary(\textcolor{keyword}{const}\ std::string\&\ path)}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00065}00065\ \{}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00066}00066\ \ \ \ \ std::ifstream\ is(path,\ std::ios::binary);}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00067}00067\ \ \ \ \ \textcolor{keywordflow}{if}\ (!is)\ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}read\_records\_binary:\ cannot\ open\ file\ "{}}\ +\ path);}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00068}00068\ }
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00069}00069\ \ \ \ \ (void)read\_header(is);}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00070}00070\ }
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00071}00071\ \ \ \ \ is.seekg(0,\ std::ios::end);}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00072}00072\ \ \ \ \ std::streamoff\ end\ =\ is.tellg();}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00073}00073\ \ \ \ \ is.seekg(\textcolor{keyword}{static\_cast<}std::streamoff\textcolor{keyword}{>}(\textcolor{keyword}{sizeof}(\doxymbox{\hyperlink{structFileHeaderPKD1}{FileHeaderPKD1}})),\ std::ios::beg);}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00074}00074\ \ \ \ \ std::streamoff\ bytes\ =\ end\ -\/\ \textcolor{keyword}{static\_cast<}std::streamoff\textcolor{keyword}{>}(\textcolor{keyword}{sizeof}(\doxymbox{\hyperlink{structFileHeaderPKD1}{FileHeaderPKD1}}));}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00075}00075\ }
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00076}00076\ \ \ \ \ \textcolor{keywordflow}{if}\ (bytes\ <\ 0\ ||\ bytes\ \%\ \textcolor{keyword}{static\_cast<}std::streamoff\textcolor{keyword}{>}(\textcolor{keyword}{sizeof}(\doxymbox{\hyperlink{structPackedParticle}{PackedParticle}}))\ !=\ 0)}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00077}00077\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}read\_records\_binary:\ file\ size\ mismatch"{}});}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00078}00078\ }
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00079}00079\ \ \ \ \ std::size\_t\ n\ =\ \textcolor{keyword}{static\_cast<}std::size\_t\textcolor{keyword}{>}(bytes\ /\ \textcolor{keyword}{sizeof}(\doxymbox{\hyperlink{structPackedParticle}{PackedParticle}}));}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00080}00080\ \ \ \ \ std::vector<PackedParticle>\ rec(n);}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00081}00081\ \ \ \ \ \textcolor{keywordflow}{if}\ (n)\ read\_all(is,\ rec.data(),\ n);}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00082}00082\ \ \ \ \ \textcolor{keywordflow}{return}\ rec;}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00083}00083\ \}}
+\DoxyCodeLine{\Hypertarget{fixed__point__pkd1__io_8hpp_source_l00084}00084\ }
+
+\end{DoxyCode}

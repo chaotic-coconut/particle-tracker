@@ -1,0 +1,171 @@
+\doxysection{nanoflann::\+Pooled\+Allocator Class Reference}
+\hypertarget{classnanoflann_1_1PooledAllocator}{}\label{classnanoflann_1_1PooledAllocator}\index{nanoflann::PooledAllocator@{nanoflann::PooledAllocator}}
+
+
+Pooled storage allocator.  
+
+
+
+
+{\ttfamily \+\#include $<$nanoflann.\+hpp$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{classnanoflann_1_1PooledAllocator_ad193b067b17cd5015f4d5bf3e9573fc7}{Pooled\+Allocator}} ()
+\begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
+\doxymbox{\hyperlink{classnanoflann_1_1PooledAllocator_a39c53213bc49d0f08fb8e4b0adc25b5e}{\texorpdfstring{$\sim$}{\string~}\+Pooled\+Allocator}} ()
+\begin{DoxyCompactList}\small\item\em Destructor. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{classnanoflann_1_1PooledAllocator_a43c877d5e6004a65ee49584dbc29bcc9}{free\+\_\+all}} ()
+\begin{DoxyCompactList}\small\item\em Frees all allocated memory chunks. \end{DoxyCompactList}\item 
+void \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{classnanoflann_1_1PooledAllocator_a70e9ae9508a1aa2f81ffb851116378aa}{malloc}} (const size\+\_\+t req\+\_\+size)
+\begin{DoxyCompactList}\small\item\em Returns a pointer to a piece of new memory of the given size in bytes allocated from the pool. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T$>$ }\\T \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{classnanoflann_1_1PooledAllocator_a96148cc236b63b0416cd4cfb9fb57325}{allocate}} (const size\+\_\+t count=1)
+\begin{DoxyCompactList}\small\item\em Allocates (using this pool) a generic type T. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+Size \doxymbox{\hyperlink{classnanoflann_1_1PooledAllocator_a738180fd27be69129876271b5ac20f43}{used\+Memory}} = 0
+\item 
+Size \doxymbox{\hyperlink{classnanoflann_1_1PooledAllocator_a733a428738269c0a6d099dd975aa20a0}{wasted\+Memory}} = 0
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Pooled storage allocator. 
+
+The following routines allow for the efficient allocation of storage in small chunks from a specified pool. Rather than allowing each structure to be freed individually, an entire pool of storage is freed at once. This method has two advantages over just using \doxylink{classnanoflann_1_1PooledAllocator_a70e9ae9508a1aa2f81ffb851116378aa}{malloc()} and free(). First, it is far more efficient for allocating small objects, as there is no overhead for remembering all the information needed to free each object or consolidating fragmented memory. Second, the decision about how long to keep an object is made at the time of allocation, and there is no need to track down all the objects to free them. 
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l00886}{886}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+
+
+\label{doc-constructors}
+\Hypertarget{classnanoflann_1_1PooledAllocator_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classnanoflann_1_1PooledAllocator_ad193b067b17cd5015f4d5bf3e9573fc7}\index{nanoflann::PooledAllocator@{nanoflann::PooledAllocator}!PooledAllocator@{PooledAllocator}}
+\index{PooledAllocator@{PooledAllocator}!nanoflann::PooledAllocator@{nanoflann::PooledAllocator}}
+\doxysubsubsection{\texorpdfstring{PooledAllocator()}{PooledAllocator()}}
+{\footnotesize\ttfamily \label{classnanoflann_1_1PooledAllocator_ad193b067b17cd5015f4d5bf3e9573fc7} 
+nanoflann::\+\+Pooled\+Allocator::\+\+Pooled\+Allocator (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Default constructor. 
+
+Initializes a new pool. 
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l00918}{918}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+\Hypertarget{classnanoflann_1_1PooledAllocator_a39c53213bc49d0f08fb8e4b0adc25b5e}\index{nanoflann::PooledAllocator@{nanoflann::PooledAllocator}!````~PooledAllocator@{\texorpdfstring{$\sim$}{\string~}PooledAllocator}}
+\index{````~PooledAllocator@{\texorpdfstring{$\sim$}{\string~}PooledAllocator}!nanoflann::PooledAllocator@{nanoflann::PooledAllocator}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}PooledAllocator()}{\string~PooledAllocator()}}
+{\footnotesize\ttfamily \label{classnanoflann_1_1PooledAllocator_a39c53213bc49d0f08fb8e4b0adc25b5e} 
+nanoflann::\+\+Pooled\+Allocator::\+\texorpdfstring{$\sim$}{\string~}\+Pooled\+Allocator (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Destructor. 
+
+Frees all the memory allocated in this pool. 
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l00923}{923}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+
+
+References \doxymbox{\hyperlink{nanoflann_8hpp_source_l00926}{free\+\_\+all()}}.
+
+
+
+\label{doc-func-members}
+\Hypertarget{classnanoflann_1_1PooledAllocator_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classnanoflann_1_1PooledAllocator_a96148cc236b63b0416cd4cfb9fb57325}\index{nanoflann::PooledAllocator@{nanoflann::PooledAllocator}!allocate@{allocate}}
+\index{allocate@{allocate}!nanoflann::PooledAllocator@{nanoflann::PooledAllocator}}
+\doxysubsubsection{\texorpdfstring{allocate()}{allocate()}}
+{\footnotesize\ttfamily \label{classnanoflann_1_1PooledAllocator_a96148cc236b63b0416cd4cfb9fb57325} 
+template$<$typename T$>$ \\
+T \texorpdfstring{$\ast$}{*} nanoflann::\+\+Pooled\+Allocator::\+allocate (\begin{DoxyParamCaption}\item[{const size\+\_\+t}]{count}{ = {\ttfamily 1}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Allocates (using this pool) a generic type T. 
+
+Params:\+ count = number of instances to allocate. Returns:\+ pointer (of type T\texorpdfstring{$\ast$}{*}) to memory buffer 
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l00991}{991}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+
+
+References \doxymbox{\hyperlink{nanoflann_8hpp_source_l00942}{malloc()}}.
+
+\Hypertarget{classnanoflann_1_1PooledAllocator_a43c877d5e6004a65ee49584dbc29bcc9}\index{nanoflann::PooledAllocator@{nanoflann::PooledAllocator}!free\_all@{free\_all}}
+\index{free\_all@{free\_all}!nanoflann::PooledAllocator@{nanoflann::PooledAllocator}}
+\doxysubsubsection{\texorpdfstring{free\_all()}{free\_all()}}
+{\footnotesize\ttfamily \label{classnanoflann_1_1PooledAllocator_a43c877d5e6004a65ee49584dbc29bcc9} 
+void nanoflann::\+\+Pooled\+Allocator::\+free\+\_\+all (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Frees all allocated memory chunks. 
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l00926}{926}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{nanoflann_8hpp_source_l00923}{\texorpdfstring{$\sim$}{\string~}\+Pooled\+Allocator()}}.
+
+\Hypertarget{classnanoflann_1_1PooledAllocator_a70e9ae9508a1aa2f81ffb851116378aa}\index{nanoflann::PooledAllocator@{nanoflann::PooledAllocator}!malloc@{malloc}}
+\index{malloc@{malloc}!nanoflann::PooledAllocator@{nanoflann::PooledAllocator}}
+\doxysubsubsection{\texorpdfstring{malloc()}{malloc()}}
+{\footnotesize\ttfamily \label{classnanoflann_1_1PooledAllocator_a70e9ae9508a1aa2f81ffb851116378aa} 
+void \texorpdfstring{$\ast$}{*} nanoflann::\+\+Pooled\+Allocator::\+malloc (\begin{DoxyParamCaption}\item[{const size\+\_\+t}]{req\+\_\+size}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Returns a pointer to a piece of new memory of the given size in bytes allocated from the pool. 
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l00942}{942}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+
+
+References \doxymbox{\hyperlink{nanoflann_8hpp_source_l00942}{malloc()}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{nanoflann_8hpp_source_l00991}{allocate()}}, and \doxymbox{\hyperlink{nanoflann_8hpp_source_l00942}{malloc()}}.
+
+
+
+\label{doc-variable-members}
+\Hypertarget{classnanoflann_1_1PooledAllocator_doc-variable-members}
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classnanoflann_1_1PooledAllocator_a738180fd27be69129876271b5ac20f43}\index{nanoflann::PooledAllocator@{nanoflann::PooledAllocator}!usedMemory@{usedMemory}}
+\index{usedMemory@{usedMemory}!nanoflann::PooledAllocator@{nanoflann::PooledAllocator}}
+\doxysubsubsection{\texorpdfstring{usedMemory}{usedMemory}}
+{\footnotesize\ttfamily \label{classnanoflann_1_1PooledAllocator_a738180fd27be69129876271b5ac20f43} 
+Size nanoflann::\+\+Pooled\+Allocator::\+used\+Memory = 0}
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l00912}{912}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+\Hypertarget{classnanoflann_1_1PooledAllocator_a733a428738269c0a6d099dd975aa20a0}\index{nanoflann::PooledAllocator@{nanoflann::PooledAllocator}!wastedMemory@{wastedMemory}}
+\index{wastedMemory@{wastedMemory}!nanoflann::PooledAllocator@{nanoflann::PooledAllocator}}
+\doxysubsubsection{\texorpdfstring{wastedMemory}{wastedMemory}}
+{\footnotesize\ttfamily \label{classnanoflann_1_1PooledAllocator_a733a428738269c0a6d099dd975aa20a0} 
+Size nanoflann::\+\+Pooled\+Allocator::\+wasted\+Memory = 0}
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l00913}{913}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+
+
+The documentation for this class was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+include/\+third\+\_\+party/\+nanoflann/\+nanoflann.\+hpp\end{DoxyCompactItemize}

@@ -1,0 +1,148 @@
+\doxysection{nanoflann::\+KDTree\+Base\+Class\texorpdfstring{$<$}{<} Derived, Distance, Dataset\+Adaptor, DIM, index\+\_\+t \texorpdfstring{$>$}{>}::\+Node Struct Reference}
+\hypertarget{structnanoflann_1_1KDTreeBaseClass_1_1Node}{}\label{structnanoflann_1_1KDTreeBaseClass_1_1Node}\index{nanoflann::KDTreeBaseClass$<$ Derived, Distance, DatasetAdaptor, DIM, index\_t $>$::Node@{nanoflann::KDTreeBaseClass$<$ Derived, Distance, DatasetAdaptor, DIM, index\_t $>$::Node}}
+
+
+Collaboration diagram for nanoflann::\+KDTree\+Base\+Class\texorpdfstring{$<$}{<} Derived, Distance, Dataset\+Adaptor, DIM, index\+\_\+t \texorpdfstring{$>$}{>}::\+Node:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{structnanoflann_1_1KDTreeBaseClass_1_1Node__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structnanoflann_1_1KDTreeBaseClass_1_1Node_a6cd3f4570cff2b3790d70f672042bb34}\label{structnanoflann_1_1KDTreeBaseClass_1_1Node_a6cd3f4570cff2b3790d70f672042bb34} 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+union \{\\
+\>struct {\bfseries leaf} \{\\
+\>\>Offset \doxymbox{\hyperlink{structnanoflann_1_1KDTreeBaseClass_1_1Node_ab363a5dc812ae858cd491b5827cb89c7}{left}}\\
+\>\>Offset \doxymbox{\hyperlink{structnanoflann_1_1KDTreeBaseClass_1_1Node_a5b040a325cdf2c4d419ce54badb9c27b}{right}}\\
+\>\>\>{\em Indices of points in leaf node. }\\
+\>\} {\bfseries lr}\\
+\>struct {\bfseries nonleaf} \{\\
+\>\>Dimension \doxymbox{\hyperlink{structnanoflann_1_1KDTreeBaseClass_1_1Node_a6e1f2b7287da6c6eefa51262a9a945f5}{divfeat}}\\
+\>\>\>{\em Dimension used for subdivision. The values used for subdivision. }\\
+\>\>DistanceType \doxymbox{\hyperlink{structnanoflann_1_1KDTreeBaseClass_1_1Node_a1fa44e6dcbb64427610efa7b85b652fe}{divlow}}\\
+\>\>DistanceType \doxymbox{\hyperlink{structnanoflann_1_1KDTreeBaseClass_1_1Node_aa90e14f141e9b9e3ccac8d37a0f6d76d}{divhigh}}\\
+\>\} {\bfseries sub}\\
+\} {\bfseries node\_type}\\
+
+\end{tabbing}\begin{DoxyCompactList}\small\item\em Union used because a node can be either a LEAF node or a non-\/leaf node, so both data fields are never used simultaneously. \end{DoxyCompactList}\item 
+\doxymbox{\hyperlink{structnanoflann_1_1KDTreeBaseClass_1_1Node}{Node}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{structnanoflann_1_1KDTreeBaseClass_1_1Node_a97f23bf89b28c51c35eba0912fb63d94}{child1}} = nullptr
+\begin{DoxyCompactList}\small\item\em Child nodes (both=nullptr mean its a leaf node). \end{DoxyCompactList}\item 
+\doxymbox{\hyperlink{structnanoflann_1_1KDTreeBaseClass_1_1Node}{Node}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{structnanoflann_1_1KDTreeBaseClass_1_1Node_a43167d1f83994cb74ab597c68d89261d}{child2}} = nullptr
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$class Derived, typename Distance, class Dataset\+Adaptor, int32\+\_\+t DIM = -\/1, typename index\+\_\+t = uint32\+\_\+t$>$\newline
+struct nanoflann::\+\+KDTree\+Base\+Class$<$ Derived, Distance, Dataset\+Adaptor, DIM, index\+\_\+t $>$::\+\+Node}
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l01073}{1073}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+
+
+\label{doc-variable-members}
+\Hypertarget{structnanoflann_1_1KDTreeBaseClass_1_1Node_doc-variable-members}
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structnanoflann_1_1KDTreeBaseClass_1_1Node_a97f23bf89b28c51c35eba0912fb63d94}\index{nanoflann::KDTreeBaseClass$<$ Derived, Distance, DatasetAdaptor, DIM, index\_t $>$::Node@{nanoflann::KDTreeBaseClass$<$ Derived, Distance, DatasetAdaptor, DIM, index\_t $>$::Node}!child1@{child1}}
+\index{child1@{child1}!nanoflann::KDTreeBaseClass$<$ Derived, Distance, DatasetAdaptor, DIM, index\_t $>$::Node@{nanoflann::KDTreeBaseClass$<$ Derived, Distance, DatasetAdaptor, DIM, index\_t $>$::Node}}
+\doxysubsubsection{\texorpdfstring{child1}{child1}}
+{\footnotesize\ttfamily \label{structnanoflann_1_1KDTreeBaseClass_1_1Node_a97f23bf89b28c51c35eba0912fb63d94} 
+template$<$class Derived, typename Distance, class Dataset\+Adaptor, int32\+\_\+t DIM = -\/1, typename index\+\_\+t = uint32\+\_\+t$>$ \\
+\doxymbox{\hyperlink{structnanoflann_1_1KDTreeBaseClass_1_1Node}{Node}}\texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{classnanoflann_1_1KDTreeBaseClass}{nanoflann::\+\+KDTree\+Base\+Class}}$<$ Derived, Distance, Dataset\+Adaptor, DIM, index\+\_\+t $>$::\+\+Node::\+child1 = nullptr}
+
+
+
+Child nodes (both=nullptr mean its a leaf node). 
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l01092}{1092}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{nanoflann_8hpp_source_l01184}{nanoflann::\+\+KDTree\+Base\+Class$<$ Derived, Distance, Dataset\+Adaptor, DIM, index\+\_\+t $>$::\+divide\+Tree()}}, and \doxymbox{\hyperlink{nanoflann_8hpp_source_l01259}{nanoflann::\+\+KDTree\+Base\+Class$<$ Derived, Distance, Dataset\+Adaptor, DIM, index\+\_\+t $>$::\+divide\+Tree\+Concurrent()}}.
+
+\Hypertarget{structnanoflann_1_1KDTreeBaseClass_1_1Node_a43167d1f83994cb74ab597c68d89261d}\index{nanoflann::KDTreeBaseClass$<$ Derived, Distance, DatasetAdaptor, DIM, index\_t $>$::Node@{nanoflann::KDTreeBaseClass$<$ Derived, Distance, DatasetAdaptor, DIM, index\_t $>$::Node}!child2@{child2}}
+\index{child2@{child2}!nanoflann::KDTreeBaseClass$<$ Derived, Distance, DatasetAdaptor, DIM, index\_t $>$::Node@{nanoflann::KDTreeBaseClass$<$ Derived, Distance, DatasetAdaptor, DIM, index\_t $>$::Node}}
+\doxysubsubsection{\texorpdfstring{child2}{child2}}
+{\footnotesize\ttfamily \label{structnanoflann_1_1KDTreeBaseClass_1_1Node_a43167d1f83994cb74ab597c68d89261d} 
+template$<$class Derived, typename Distance, class Dataset\+Adaptor, int32\+\_\+t DIM = -\/1, typename index\+\_\+t = uint32\+\_\+t$>$ \\
+\doxymbox{\hyperlink{structnanoflann_1_1KDTreeBaseClass_1_1Node}{Node}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{classnanoflann_1_1KDTreeBaseClass}{nanoflann::\+\+KDTree\+Base\+Class}}$<$ Derived, Distance, Dataset\+Adaptor, DIM, index\+\_\+t $>$::\+\+Node::\+child2 = nullptr}
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l01092}{1092}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+\Hypertarget{structnanoflann_1_1KDTreeBaseClass_1_1Node_a6e1f2b7287da6c6eefa51262a9a945f5}\index{nanoflann::KDTreeBaseClass$<$ Derived, Distance, DatasetAdaptor, DIM, index\_t $>$::Node@{nanoflann::KDTreeBaseClass$<$ Derived, Distance, DatasetAdaptor, DIM, index\_t $>$::Node}!divfeat@{divfeat}}
+\index{divfeat@{divfeat}!nanoflann::KDTreeBaseClass$<$ Derived, Distance, DatasetAdaptor, DIM, index\_t $>$::Node@{nanoflann::KDTreeBaseClass$<$ Derived, Distance, DatasetAdaptor, DIM, index\_t $>$::Node}}
+\doxysubsubsection{\texorpdfstring{divfeat}{divfeat}}
+{\footnotesize\ttfamily \label{structnanoflann_1_1KDTreeBaseClass_1_1Node_a6e1f2b7287da6c6eefa51262a9a945f5} 
+template$<$class Derived, typename Distance, class Dataset\+Adaptor, int32\+\_\+t DIM = -\/1, typename index\+\_\+t = uint32\+\_\+t$>$ \\
+Dimension \doxymbox{\hyperlink{classnanoflann_1_1KDTreeBaseClass}{nanoflann::\+\+KDTree\+Base\+Class}}$<$ Derived, Distance, Dataset\+Adaptor, DIM, index\+\_\+t $>$::\+\+Node::\+divfeat}
+
+
+
+Dimension used for subdivision. The values used for subdivision. 
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l01085}{1085}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+\Hypertarget{structnanoflann_1_1KDTreeBaseClass_1_1Node_aa90e14f141e9b9e3ccac8d37a0f6d76d}\index{nanoflann::KDTreeBaseClass$<$ Derived, Distance, DatasetAdaptor, DIM, index\_t $>$::Node@{nanoflann::KDTreeBaseClass$<$ Derived, Distance, DatasetAdaptor, DIM, index\_t $>$::Node}!divhigh@{divhigh}}
+\index{divhigh@{divhigh}!nanoflann::KDTreeBaseClass$<$ Derived, Distance, DatasetAdaptor, DIM, index\_t $>$::Node@{nanoflann::KDTreeBaseClass$<$ Derived, Distance, DatasetAdaptor, DIM, index\_t $>$::Node}}
+\doxysubsubsection{\texorpdfstring{divhigh}{divhigh}}
+{\footnotesize\ttfamily \label{structnanoflann_1_1KDTreeBaseClass_1_1Node_aa90e14f141e9b9e3ccac8d37a0f6d76d} 
+template$<$class Derived, typename Distance, class Dataset\+Adaptor, int32\+\_\+t DIM = -\/1, typename index\+\_\+t = uint32\+\_\+t$>$ \\
+Distance\+Type \doxymbox{\hyperlink{classnanoflann_1_1KDTreeBaseClass}{nanoflann::\+\+KDTree\+Base\+Class}}$<$ Derived, Distance, Dataset\+Adaptor, DIM, index\+\_\+t $>$::\+\+Node::\+divhigh}
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l01087}{1087}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+\Hypertarget{structnanoflann_1_1KDTreeBaseClass_1_1Node_a1fa44e6dcbb64427610efa7b85b652fe}\index{nanoflann::KDTreeBaseClass$<$ Derived, Distance, DatasetAdaptor, DIM, index\_t $>$::Node@{nanoflann::KDTreeBaseClass$<$ Derived, Distance, DatasetAdaptor, DIM, index\_t $>$::Node}!divlow@{divlow}}
+\index{divlow@{divlow}!nanoflann::KDTreeBaseClass$<$ Derived, Distance, DatasetAdaptor, DIM, index\_t $>$::Node@{nanoflann::KDTreeBaseClass$<$ Derived, Distance, DatasetAdaptor, DIM, index\_t $>$::Node}}
+\doxysubsubsection{\texorpdfstring{divlow}{divlow}}
+{\footnotesize\ttfamily \label{structnanoflann_1_1KDTreeBaseClass_1_1Node_a1fa44e6dcbb64427610efa7b85b652fe} 
+template$<$class Derived, typename Distance, class Dataset\+Adaptor, int32\+\_\+t DIM = -\/1, typename index\+\_\+t = uint32\+\_\+t$>$ \\
+Distance\+Type \doxymbox{\hyperlink{classnanoflann_1_1KDTreeBaseClass}{nanoflann::\+\+KDTree\+Base\+Class}}$<$ Derived, Distance, Dataset\+Adaptor, DIM, index\+\_\+t $>$::\+\+Node::\+divlow}
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l01087}{1087}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+\Hypertarget{structnanoflann_1_1KDTreeBaseClass_1_1Node_ab363a5dc812ae858cd491b5827cb89c7}\index{nanoflann::KDTreeBaseClass$<$ Derived, Distance, DatasetAdaptor, DIM, index\_t $>$::Node@{nanoflann::KDTreeBaseClass$<$ Derived, Distance, DatasetAdaptor, DIM, index\_t $>$::Node}!left@{left}}
+\index{left@{left}!nanoflann::KDTreeBaseClass$<$ Derived, Distance, DatasetAdaptor, DIM, index\_t $>$::Node@{nanoflann::KDTreeBaseClass$<$ Derived, Distance, DatasetAdaptor, DIM, index\_t $>$::Node}}
+\doxysubsubsection{\texorpdfstring{left}{left}}
+{\footnotesize\ttfamily \label{structnanoflann_1_1KDTreeBaseClass_1_1Node_ab363a5dc812ae858cd491b5827cb89c7} 
+template$<$class Derived, typename Distance, class Dataset\+Adaptor, int32\+\_\+t DIM = -\/1, typename index\+\_\+t = uint32\+\_\+t$>$ \\
+Offset \doxymbox{\hyperlink{classnanoflann_1_1KDTreeBaseClass}{nanoflann::\+\+KDTree\+Base\+Class}}$<$ Derived, Distance, Dataset\+Adaptor, DIM, index\+\_\+t $>$::\+\+Node::\+left}
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l01081}{1081}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+\Hypertarget{structnanoflann_1_1KDTreeBaseClass_1_1Node_a5b040a325cdf2c4d419ce54badb9c27b}\index{nanoflann::KDTreeBaseClass$<$ Derived, Distance, DatasetAdaptor, DIM, index\_t $>$::Node@{nanoflann::KDTreeBaseClass$<$ Derived, Distance, DatasetAdaptor, DIM, index\_t $>$::Node}!right@{right}}
+\index{right@{right}!nanoflann::KDTreeBaseClass$<$ Derived, Distance, DatasetAdaptor, DIM, index\_t $>$::Node@{nanoflann::KDTreeBaseClass$<$ Derived, Distance, DatasetAdaptor, DIM, index\_t $>$::Node}}
+\doxysubsubsection{\texorpdfstring{right}{right}}
+{\footnotesize\ttfamily \label{structnanoflann_1_1KDTreeBaseClass_1_1Node_a5b040a325cdf2c4d419ce54badb9c27b} 
+template$<$class Derived, typename Distance, class Dataset\+Adaptor, int32\+\_\+t DIM = -\/1, typename index\+\_\+t = uint32\+\_\+t$>$ \\
+Offset \doxymbox{\hyperlink{classnanoflann_1_1KDTreeBaseClass}{nanoflann::\+\+KDTree\+Base\+Class}}$<$ Derived, Distance, Dataset\+Adaptor, DIM, index\+\_\+t $>$::\+\+Node::\+right}
+
+
+
+Indices of points in leaf node. 
+
+
+
+Definition at line \doxymbox{\hyperlink{nanoflann_8hpp_source_l01081}{1081}} of file \doxymbox{\hyperlink{nanoflann_8hpp_source}{nanoflann.\+hpp}}.
+
+
+
+The documentation for this struct was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+include/\+third\+\_\+party/\+nanoflann/\+nanoflann.\+hpp\end{DoxyCompactItemize}

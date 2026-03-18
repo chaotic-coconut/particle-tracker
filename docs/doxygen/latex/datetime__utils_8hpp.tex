@@ -1,0 +1,52 @@
+\doxysection{include/\+particle\+\_\+tracker/\+detail/\+datetime\+\_\+utils.hpp File Reference}
+\hypertarget{datetime__utils_8hpp}{}\label{datetime__utils_8hpp}\index{include/particle\_tracker/detail/datetime\_utils.hpp@{include/particle\_tracker/detail/datetime\_utils.hpp}}
+
+
+Small date and date-\/range utilities (civil calendar, Gregorian rules).  
+
+
+{\ttfamily \+\#include $<$iostream$>$}\newline
+{\ttfamily \+\#include $<$stdexcept$>$}\newline
+{\ttfamily \+\#include $<$cstdint$>$}\newline
+Include dependency graph for datetime\+\_\+utils.\+hpp:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=273pt]{datetime__utils_8hpp__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{datetime__utils_8hpp__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \doxymbox{\hyperlink{classDate}{Date}}
+\begin{DoxyCompactList}\small\item\em Represents a calendar date (day/\+month/\+year) in the Gregorian calendar. \end{DoxyCompactList}\item 
+class \doxymbox{\hyperlink{classDateRange}{Date\+Range}}
+\begin{DoxyCompactList}\small\item\em Inclusive date range \+[start\+Date . \end{DoxyCompactList}\item 
+struct \doxymbox{\hyperlink{structDateRange_1_1iterator}{Date\+Range::\+iterator}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Small date and date-\/range utilities (civil calendar, Gregorian rules). 
+
+This header provides:\+
+\begin{DoxyItemize}
+\item \doxylink{classDate}{Date} :\+ a simple civil date (day, month, year) with basic arithmetic.
+\item \doxylink{classDateRange}{Date\+Range} :\+ an inclusive range \+[start..end]\+ with an iterator and length().
+\end{DoxyItemize}\hypertarget{datetime__utils_8hpp_autotoc_md0}{}\doxysubsubsection{\texorpdfstring{Notes /\+ assumptions}{Notes /\+ assumptions}}\label{datetime__utils_8hpp_autotoc_md0}
+
+\begin{DoxyItemize}
+\item Uses proleptic Gregorian calendar rules (leap years:\+ divisible by 4, except centuries not divisible by 400).
+\item No timezone logic. This is pure calendar arithmetic.
+\item days\+Since/\+hours\+Since/\+seconds\+Since are computed via an O(1) day-\/number conversion (not by looping day-\/by-\/day). 
+\end{DoxyItemize}
+
+Definition in file \doxymbox{\hyperlink{datetime__utils_8hpp_source}{datetime\+\_\+utils.\+hpp}}.
+

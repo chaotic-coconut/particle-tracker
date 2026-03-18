@@ -1,0 +1,117 @@
+\doxysection{fixed\+\_\+point\+\_\+core.\+hpp}
+\hypertarget{fixed__point__core_8hpp_source}{}\label{fixed__point__core_8hpp_source}\index{include/particle\_tracker/fixed\_point/fixed\_point\_core.hpp@{include/particle\_tracker/fixed\_point/fixed\_point\_core.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00001}00001\ \textcolor{comment}{//\ fixed\_point\_core.hpp}}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00002}00002\ \textcolor{comment}{//\ Core\ math\ +\ quantization\ +\ packed\ structs\ +\ encode/decode.}}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00003}00003\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00004}00004\ \textcolor{preprocessor}{\#include\ <cstdint>}}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00005}00005\ \textcolor{preprocessor}{\#include\ <cmath>}}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00006}00006\ \textcolor{preprocessor}{\#include\ <array>}}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00007}00007\ \textcolor{preprocessor}{\#include\ <limits>}}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00008}00008\ \textcolor{preprocessor}{\#include\ <numbers>}\ \ \ \ \ \ \textcolor{comment}{//\ std::numbers::pi\_v}}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00009}00009\ }
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00010}00010\ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ constants\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00011}00011\ \textcolor{comment}{//\ Keep\ a\ single\ source\ of\ truth\ for\ scaling\ across\ PKD1/PKD2\ and\ seed\ loaders.}}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00012}00012\ \textcolor{keyword}{inline}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{double}\ \ \ fp\_pi\ \ \ \ \ \ \ \ \ \ \ \ \ =\ std::numbers::pi\_v<double>;}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00013}00013\ \textcolor{keyword}{inline}\ \textcolor{keyword}{constexpr}\ uint32\_t\ fp\_ticks\_per\_rad\ \ =\ 1'000'000u;\ \ \ \ \ \textcolor{comment}{//\ ticks\ per\ radian}}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00014}00014\ \textcolor{keyword}{inline}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{double}\ \ \ dbl\_ticks\_per\_rad\ \ =\ 1'000'000.;\ \ \ \ \textcolor{comment}{//\ ticks\ per\ radian\ (double)}}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00015}00015\ \textcolor{keyword}{inline}\ \textcolor{keyword}{constexpr}\ uint64\_t\ fp\_ticks\_per\_sec\ \ \ =\ 1u;\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ seconds\ per\ tick\ (PKD1)}}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00016}00016\ }
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00017}00017\ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ angle\ utils\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00018}00018\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{double}\ wrap\_lon(\textcolor{keywordtype}{double}\ r)}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00019}00019\ \{}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00020}00020\ \ \ \ \ r\ =\ std::fmod(r,2.*fp\_pi);}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00021}00021\ \ \ \ \ \textcolor{keywordflow}{if}\ (r<=-\/fp\_pi)\ r+=2.*fp\_pi;}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00022}00022\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (r>fp\_pi)\ r-\/=2.*fp\_pi;}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00023}00023\ \ \ \ \ \textcolor{keywordflow}{return}\ r;}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00024}00024\ \}}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00025}00025\ }
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00026}00026\ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ quantization\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00027}00027\ \textcolor{comment}{//\ Position:\ ticks\ =\ radians\ *\ fp\_ticks\_per\_rad}}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00028}00028\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Real>}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00029}00029\ \textcolor{keyword}{inline}\ int32\_t\ quant\_coord(Real\ rad)}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00030}00030\ \{}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00031}00031\ \ \ \ \ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{double}\ v\ =\ std::llround(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{long}\ \textcolor{keywordtype}{double}\textcolor{keyword}{>}(rad)\ *\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{long}\ \textcolor{keywordtype}{double}\textcolor{keyword}{>}(fp\_ticks\_per\_rad));}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00032}00032\ \ \ \ \ \textcolor{keywordflow}{if}\ (v>std::numeric\_limits<int32\_t>::max())\ v\ =\ std::numeric\_limits<int32\_t>::max();}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00033}00033\ \ \ \ \ \textcolor{keywordflow}{if}\ (v<std::numeric\_limits<int32\_t>::min())\ v\ =\ std::numeric\_limits<int32\_t>::min();}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00034}00034\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}int32\_t\textcolor{keyword}{>}(v);}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00035}00035\ \}}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00036}00036\ }
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00037}00037\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Real>}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00038}00038\ \textcolor{keyword}{inline}\ Real\ dequant\_coord(int32\_t\ q)}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00039}00039\ \{}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00040}00040\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}Real\textcolor{keyword}{>}(q)\ /\ \textcolor{keyword}{static\_cast<}Real\textcolor{keyword}{>}(fp\_ticks\_per\_rad);}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00041}00041\ \}}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00042}00042\ }
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00043}00043\ \textcolor{comment}{//\ Time:\ 1\ tick\ =\ 1\ second\ by\ default\ (PKD1\ helpers)}}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00044}00044\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Real>}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00045}00045\ \textcolor{keyword}{inline}\ int64\_t\ quant\_time(Real\ seconds)}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00046}00046\ \{}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00047}00047\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}int64\_t\textcolor{keyword}{>}(std::llround(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{long}\ \textcolor{keywordtype}{double}\textcolor{keyword}{>}(seconds)));}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00048}00048\ \}}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00049}00049\ }
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00050}00050\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Real>}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00051}00051\ \textcolor{keyword}{inline}\ Real\ dequant\_time(int64\_t\ ticks)}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00052}00052\ \{}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00053}00053\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}Real\textcolor{keyword}{>}(ticks);}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00054}00054\ \}}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00055}00055\ }
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00056}00056\ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ packed\ record\ (PKD1)\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00057}00057\ \textcolor{preprocessor}{\#pragma\ pack(push,1)}}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00058}\doxymbox{\hyperlink{structPackedParticle}{00058}}\ \textcolor{keyword}{struct\ }\doxymbox{\hyperlink{structPackedParticle}{PackedParticle}}}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00059}00059\ \{}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00060}00060\ \ \ \ \ int32\_t\ lon0\_q;\ \ \textcolor{comment}{//\ ticks\ (micro-\/rad)}}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00061}00061\ \ \ \ \ int32\_t\ lat0\_q;\ \ \textcolor{comment}{//\ ticks}}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00062}00062\ \ \ \ \ int32\_t\ lon1\_q;\ \ \textcolor{comment}{//\ ticks}}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00063}00063\ \ \ \ \ int32\_t\ lat1\_q;\ \ \textcolor{comment}{//\ ticks}}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00064}00064\ \ \ \ \ int64\_t\ t0\_s;\ \ \ \ \textcolor{comment}{//\ seconds\ since\ reference}}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00065}00065\ \ \ \ \ int64\_t\ t1\_s;\ \ \ \ \textcolor{comment}{//\ seconds\ since\ reference}}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00066}00066\ \ \ \ \ uint8\_t\ flags;}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00067}00067\ \};}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00068}00068\ \textcolor{preprocessor}{\#pragma\ pack(pop)}}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00069}00069\ }
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00070}00070\ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ PKD1\ file\ header\ (struct\ only)\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00071}\doxymbox{\hyperlink{structFileHeaderPKD1}{00071}}\ \textcolor{keyword}{struct\ }\doxymbox{\hyperlink{structFileHeaderPKD1}{FileHeaderPKD1}}}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00072}00072\ \{}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00073}00073\ \ \ \ \ std::array<char,8>\ magic\ =\ \{\textcolor{charliteral}{'P'},\textcolor{charliteral}{'K'},\textcolor{charliteral}{'D'},\textcolor{charliteral}{'1'},0,0,0,0\};}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00074}00074\ \ \ \ \ uint32\_t\ version\ \ \ =\ 1;}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00075}00075\ \ \ \ \ uint32\_t\ pos\_scale\ =\ fp\_ticks\_per\_rad;\ \ \textcolor{comment}{//\ ticks\ per\ rad}}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00076}00076\ \ \ \ \ uint64\_t\ time\_tick\ =\ fp\_ticks\_per\_sec;\ \ \textcolor{comment}{//\ seconds\ per\ tick}}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00077}00077\ \ \ \ \ uint64\_t\ reserved0\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00078}00078\ \ \ \ \ uint64\_t\ reserved1\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00079}00079\ \};}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00080}00080\ }
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00081}00081\ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ encode/decode\ one\ record\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00082}00082\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ PosT,\textcolor{keyword}{typename}\ TimeT>}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00083}00083\ \textcolor{keyword}{inline}\ \doxymbox{\hyperlink{structPackedParticle}{PackedParticle}}\ encode\_record(PosT\ lon0,\ PosT\ lat0,\ TimeT\ t0,}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00084}00084\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PosT\ lon1,\ PosT\ lat1,\ TimeT\ t1,}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00085}00085\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ flags\ =\ 0)}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00086}00086\ \{}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00087}00087\ \ \ \ \ \doxymbox{\hyperlink{structPackedParticle}{PackedParticle}}\ r\{\};}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00088}00088\ \ \ \ \ r.lon0\_q\ =\ quant\_coord(wrap\_lon(lon0));}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00089}00089\ \ \ \ \ r.lat0\_q\ =\ quant\_coord(lat0);}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00090}00090\ \ \ \ \ r.lon1\_q\ =\ quant\_coord(wrap\_lon(lon1));}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00091}00091\ \ \ \ \ r.lat1\_q\ =\ quant\_coord(lat1);}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00092}00092\ \ \ \ \ r.t0\_s\ \ \ =\ quant\_time(t0);}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00093}00093\ \ \ \ \ r.t1\_s\ \ \ =\ quant\_time(t1);}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00094}00094\ \ \ \ \ r.flags\ \ =\ flags;}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00095}00095\ \ \ \ \ \textcolor{keywordflow}{return}\ r;}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00096}00096\ \}}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00097}00097\ }
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00098}00098\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ PosT,\textcolor{keyword}{typename}\ TimeT>}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00099}00099\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ decode\_record(\textcolor{keyword}{const}\ \doxymbox{\hyperlink{structPackedParticle}{PackedParticle}}\&\ r,}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00100}00100\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PosT\&\ lon0,\ PosT\&\ lat0,\ TimeT\&\ t0,}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00101}00101\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PosT\&\ lon1,\ PosT\&\ lat1,\ TimeT\&\ t1,}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00102}00102\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\&\ flags)}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00103}00103\ \{}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00104}00104\ \ \ \ \ lon0\ =\ dequant\_coord<PosT>(r.lon0\_q);}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00105}00105\ \ \ \ \ lat0\ =\ dequant\_coord<PosT>(r.lat0\_q);}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00106}00106\ \ \ \ \ lon1\ =\ dequant\_coord<PosT>(r.lon1\_q);}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00107}00107\ \ \ \ \ lat1\ =\ dequant\_coord<PosT>(r.lat1\_q);}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00108}00108\ \ \ \ \ t0\ \ \ =\ dequant\_time<TimeT>(r.t0\_s);}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00109}00109\ \ \ \ \ t1\ \ \ =\ dequant\_time<TimeT>(r.t1\_s);}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00110}00110\ \ \ \ \ flags\ =\ r.flags;}
+\DoxyCodeLine{\Hypertarget{fixed__point__core_8hpp_source_l00111}00111\ \}}
+
+\end{DoxyCode}

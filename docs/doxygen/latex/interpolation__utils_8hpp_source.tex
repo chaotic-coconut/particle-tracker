@@ -1,0 +1,674 @@
+\doxysection{interpolation\+\_\+utils.\+hpp}
+\hypertarget{interpolation__utils_8hpp_source}{}\label{interpolation__utils_8hpp_source}\index{include/particle\_tracker/interpolation\_utils.hpp@{include/particle\_tracker/interpolation\_utils.hpp}}
+\doxymbox{\hyperlink{interpolation__utils_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00001}00001\ \textcolor{preprocessor}{\#pragma\ once}\textcolor{preprocessor}{}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00041}00041\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00042}00042\ \textcolor{preprocessor}{\#include\ <array>}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00043}00043\ \textcolor{preprocessor}{\#include\ <cmath>}\ \ \ \textcolor{comment}{//\ std::cos,\ std::exp}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00044}00044\ \textcolor{preprocessor}{\#include\ <cstddef>}\ \textcolor{comment}{//\ std::size\_t}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00045}00045\ \textcolor{preprocessor}{\#include\ <map>}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00046}00046\ \textcolor{preprocessor}{\#include\ <numbers>}\ \ \ \textcolor{comment}{//\ std::numbers::pi\_v}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00047}00047\ \textcolor{preprocessor}{\#include\ <stdexcept>}\ \textcolor{comment}{//\ std::runtime\_error,\ std::out\_of\_range}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00048}00048\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00049}00049\ \textcolor{preprocessor}{\#include\ <type\_traits>}\ \textcolor{comment}{//\ std::false\_type}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00050}00050\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00051}00051\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00052}00052\ \textcolor{preprocessor}{\#include\ <\doxymbox{\hyperlink{geography__utils_8hpp}{particle\_tracker/geography\_utils.hpp}}>}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00053}00053\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00054}00054\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00055}00055\ \textcolor{comment}{//\ User-\/configurable\ feature\ switches}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00056}00056\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00057}00057\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00065}00065\ \textcolor{preprocessor}{\#ifndef\ PARTICLE\_TRACKER\_HAS\_NANOFLANN}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00066}\doxymbox{\hyperlink{interpolation__utils_8hpp_a34e9dc80820374139ca1d853a290a930}{00066}}\ \textcolor{preprocessor}{\#define\ PARTICLE\_TRACKER\_HAS\_NANOFLANN\ 1}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00067}00067\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00068}00068\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00069}00069\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00070}00070\ \textcolor{comment}{//\ Boost\ spline\ selection\ (new\ vs\ old\ header\ layouts)}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00071}00071\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00072}00072\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00073}00073\ \textcolor{comment}{//\ Newer\ Boost\ provides\ interpolators::cardinal\_cubic\_b\_spline.}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00074}00074\ \textcolor{comment}{//\ Older\ Boost\ provides\ cubic\_b\_spline.}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00075}00075\ \textcolor{comment}{//\ We\ detect\ availability\ by\ header\ presence\ and\ define\ consistent\ macros.}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00076}00076\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00077}00077\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00078}00078\ \textcolor{preprocessor}{\#if\ \_\_has\_include(<boost/math/interpolators/cardinal\_cubic\_b\_spline.hpp>)}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00079}00079\ \textcolor{preprocessor}{\#include\ <boost/math/interpolators/cardinal\_cubic\_b\_spline.hpp>}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00080}00080\ \textcolor{preprocessor}{\#define\ PARTICLE\_TRACKER\_HAS\_BOOST\_CARDINAL\_CUBIC\_B\_SPLINE\ 1}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00081}00081\ \textcolor{preprocessor}{\#define\ PARTICLE\_TRACKER\_HAS\_BOOST\_CUBIC\_B\_SPLINE\ 0}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00082}00082\ \textcolor{preprocessor}{\#elif\ \_\_has\_include(<boost/math/interpolators/cubic\_b\_spline.hpp>)}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00083}00083\ \textcolor{preprocessor}{\#include\ <boost/math/interpolators/cubic\_b\_spline.hpp>}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00084}00084\ \textcolor{preprocessor}{\#define\ PARTICLE\_TRACKER\_HAS\_BOOST\_CARDINAL\_CUBIC\_B\_SPLINE\ 0}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00085}00085\ \textcolor{preprocessor}{\#define\ PARTICLE\_TRACKER\_HAS\_BOOST\_CUBIC\_B\_SPLINE\ 1}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00086}00086\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00087}00087\ \textcolor{preprocessor}{\#error\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00088}00088\ \textcolor{preprocessor}{\ \ \ \ "{}particle\_tracker:\ Boost\ spline\ header\ not\ found.\ Need\ either\ <boost/math/interpolators/cardinal\_cubic\_b\_spline.hpp>\ or\ <boost/math/interpolators/cubic\_b\_spline.hpp>."{}}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00089}00089\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00090}00090\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00091}00091\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00092}00092\ \textcolor{comment}{//\ nanoflann\ detection\ and\ include\ (only\ if\ enabled)}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00093}00093\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00094}00094\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00095}00095\ \textcolor{comment}{//\ Supported\ include\ layouts:}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00096}00096\ \textcolor{comment}{//\ \ -\/\ <nanoflann.hpp>\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (system\ installs)}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00097}00097\ \textcolor{comment}{//\ \ -\/\ <nanoflann/nanoflann.hpp>\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (some\ packagers)}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00098}00098\ \textcolor{comment}{//\ \ -\/\ <third\_party/nanoflann/nanoflann.hpp>\ (vendored\ under\ include/third\_party)}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00099}00099\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00100}00100\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00101}00101\ \textcolor{preprocessor}{\#if\ PARTICLE\_TRACKER\_HAS\_NANOFLANN}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00102}00102\ \textcolor{preprocessor}{\#if\ \_\_has\_include(<nanoflann.hpp>)}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00103}00103\ \textcolor{preprocessor}{\#include\ <nanoflann.hpp>}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00104}00104\ \textcolor{preprocessor}{\#elif\ \_\_has\_include(<nanoflann/nanoflann.hpp>)}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00105}00105\ \textcolor{preprocessor}{\#include\ <nanoflann/nanoflann.hpp>}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00106}00106\ \textcolor{preprocessor}{\#elif\ \_\_has\_include(<third\_party/nanoflann/nanoflann.hpp>)}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00107}00107\ \textcolor{preprocessor}{\#include\ <third\_party/nanoflann/nanoflann.hpp>}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00108}00108\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00109}00109\ \textcolor{preprocessor}{\#error\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00110}00110\ \textcolor{preprocessor}{\ \ \ \ "{}particle\_tracker:\ nanoflann\ enabled\ (PARTICLE\_TRACKER\_HAS\_NANOFLANN=1)\ but\ nanoflann\ header\ not\ found.\ Install\ nanoflann\ or\ vendor\ it\ under\ include/third\_party/nanoflann\ and\ include\ it\ as\ <third\_party/nanoflann/nanoflann.hpp>."{}}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00111}00111\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00112}00112\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00113}00113\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00114}00114\ \textcolor{keyword}{namespace\ }particle\_tracker\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00115}00115\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00116}00116\ \textcolor{preprocessor}{\#if\ PARTICLE\_TRACKER\_HAS\_NANOFLANN}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00117}00117\ \textcolor{keyword}{namespace\ }nf\ =\ nanoflann;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00118}00118\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00119}00119\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00120}00120\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00121}00121\ \textcolor{comment}{//\ Constants\ and\ helpers}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00122}00122\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00123}00123\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00125}\doxymbox{\hyperlink{interpolation__utils_8hpp_a10c261012940fc076254f392610a7cf7}{00125}}\ \textcolor{keyword}{inline}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{double}\ \doxymbox{\hyperlink{interpolation__utils_8hpp_a10c261012940fc076254f392610a7cf7}{pt\_pi}}\ =\ std::numbers::pi\_v<double>;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00127}\doxymbox{\hyperlink{interpolation__utils_8hpp_abfe8363f844f56fdb956998d7bad0d63}{00127}}\ \textcolor{keyword}{inline}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{double}\ \doxymbox{\hyperlink{interpolation__utils_8hpp_abfe8363f844f56fdb956998d7bad0d63}{pt\_two\_pi}}\ =\ 2.\ *\ \doxymbox{\hyperlink{interpolation__utils_8hpp_a10c261012940fc076254f392610a7cf7}{pt\_pi}};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00128}00128\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00137}\doxymbox{\hyperlink{interpolation__utils_8hpp_a136b718333060b8bfdc7ae9219c6f656}{00137}}\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>\ \textcolor{keyword}{inline}\ T\ \doxymbox{\hyperlink{interpolation__utils_8hpp_a136b718333060b8bfdc7ae9219c6f656}{pt\_wrap\_lon}}(T\ lon)\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00138}00138\ \ \ \textcolor{comment}{//\ Use\ pt\_pi\ constants\ but\ cast\ to\ T\ so\ comparisons\ behave\ correctly.}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00139}00139\ \ \ \textcolor{keyword}{const}\ T\ pi\ =\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(\doxymbox{\hyperlink{interpolation__utils_8hpp_a10c261012940fc076254f392610a7cf7}{pt\_pi}});}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00140}00140\ \ \ \textcolor{keyword}{const}\ T\ two\_pi\ =\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(\doxymbox{\hyperlink{interpolation__utils_8hpp_abfe8363f844f56fdb956998d7bad0d63}{pt\_two\_pi}});}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00141}00141\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00142}00142\ \ \ \textcolor{keywordflow}{while}\ (lon\ <=\ -\/pi)}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00143}00143\ \ \ \ \ lon\ +=\ two\_pi;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00144}00144\ \ \ \textcolor{keywordflow}{while}\ (lon\ >\ pi)}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00145}00145\ \ \ \ \ lon\ -\/=\ two\_pi;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00146}00146\ \ \ \textcolor{keywordflow}{return}\ lon;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00147}00147\ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00148}00148\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00153}\doxymbox{\hyperlink{interpolation__utils_8hpp_a0d833449b7f72cc49846a914f8e12df4}{00153}}\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ DataType>\ \textcolor{keyword}{using\ }\doxymbox{\hyperlink{interpolation__utils_8hpp_a0d833449b7f72cc49846a914f8e12df4}{point}}\ =\ std::array<DataType,\ 2>;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00154}00154\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00161}\doxymbox{\hyperlink{interpolation__utils_8hpp_a90d297931b5622acd8866dc811a899ad}{00161}}\ \textcolor{keyword}{inline}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{double}\ \doxymbox{\hyperlink{interpolation__utils_8hpp_a90d297931b5622acd8866dc811a899ad}{dtt}}\ =\ 10800.0;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00162}00162\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00163}00163\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00164}00164\ \textcolor{comment}{//\ TimeSpline}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00165}00165\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00166}00166\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00188}\doxymbox{\hyperlink{classparticle__tracker_1_1TimeSpline}{00188}}\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ DataType,\ \textcolor{keyword}{typename}\ TimeType\ =\ \textcolor{keywordtype}{double}>\ \textcolor{keyword}{class\ }TimeSpline\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00189}00189\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00191}\doxymbox{\hyperlink{classparticle__tracker_1_1TimeSpline_af32ed06f62d0532da2aec720fc60dc45}{00191}}\ \ \ std::vector<DataType>\ \doxymbox{\hyperlink{classparticle__tracker_1_1TimeSpline_af32ed06f62d0532da2aec720fc60dc45}{values}};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00192}00192\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00193}00193\ \textcolor{preprocessor}{\#if\ PARTICLE\_TRACKER\_HAS\_BOOST\_CUBIC\_B\_SPLINE}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00195}00195\ \ \ boost::math::cubic\_b\_spline<DataType>\ spline;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00196}00196\ \textcolor{preprocessor}{\#elif\ PARTICLE\_TRACKER\_HAS\_BOOST\_CARDINAL\_CUBIC\_B\_SPLINE}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00198}00198\ \ \ boost::math::interpolators::cardinal\_cubic\_b\_spline<DataType>\ spline;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00199}00199\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00200}00200\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00201}00201\ \ \ TimeSpline()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00202}00202\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00210}\doxymbox{\hyperlink{classparticle__tracker_1_1TimeSpline_ae574238335fc8a23f4ec7e55ecf0c252}{00210}}\ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{classparticle__tracker_1_1TimeSpline_ae574238335fc8a23f4ec7e55ecf0c252}{createSpline}}(TimeType\ start\_time,\ TimeType\ time\_step)\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00211}00211\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{classparticle__tracker_1_1TimeSpline_af32ed06f62d0532da2aec720fc60dc45}{values}}.empty())}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00212}00212\ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}particle\_tracker::TimeSpline:\ no\ data\ to\ "{}}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00213}00213\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}create\ spline\ (values\ is\ empty)."{}});}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00214}00214\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00215}00215\ \textcolor{preprocessor}{\#if\ PARTICLE\_TRACKER\_HAS\_BOOST\_CUBIC\_B\_SPLINE}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00216}00216\ \ \ \ \ \textcolor{comment}{//\ Old\ Boost\ API\ accepts\ pointer\ +\ size\ +\ (t0,\ dt)}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00217}00217\ \ \ \ \ spline\ =\ boost::math::cubic\_b\_spline<DataType>(}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00218}00218\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classparticle__tracker_1_1TimeSpline_af32ed06f62d0532da2aec720fc60dc45}{values}}.data(),\ \doxymbox{\hyperlink{classparticle__tracker_1_1TimeSpline_af32ed06f62d0532da2aec720fc60dc45}{values}}.size(),\ \textcolor{keyword}{static\_cast<}DataType\textcolor{keyword}{>}(start\_time),}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00219}00219\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_cast<}DataType\textcolor{keyword}{>}(time\_step));}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00220}00220\ \textcolor{preprocessor}{\#elif\ PARTICLE\_TRACKER\_HAS\_BOOST\_CARDINAL\_CUBIC\_B\_SPLINE}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00221}00221\ \ \ \ \ \textcolor{comment}{//\ This\ Boost\ version\ accepts\ pointer\ +\ size\ +\ (t0,\ dt)}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00222}00222\ \ \ \ \ spline\ =\ boost::math::interpolators::cardinal\_cubic\_b\_spline<DataType>(}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00223}00223\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classparticle__tracker_1_1TimeSpline_af32ed06f62d0532da2aec720fc60dc45}{values}}.data(),\ \doxymbox{\hyperlink{classparticle__tracker_1_1TimeSpline_af32ed06f62d0532da2aec720fc60dc45}{values}}.size(),\ \textcolor{keyword}{static\_cast<}DataType\textcolor{keyword}{>}(start\_time),}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00224}00224\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_cast<}DataType\textcolor{keyword}{>}(time\_step));}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00225}00225\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00226}00226\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00227}00227\ \};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00228}00228\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00229}00229\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00230}00230\ \textcolor{comment}{//\ nanoflann\ dataset\ adaptor\ +\ distance\ adaptor\ +\ KDTree\ alias}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00231}00231\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00232}00232\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00233}00233\ \textcolor{preprocessor}{\#if\ PARTICLE\_TRACKER\_HAS\_NANOFLANN}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00234}00234\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00249}\doxymbox{\hyperlink{structparticle__tracker_1_1PointCloud}{00249}}\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ DataType>\ \textcolor{keyword}{struct\ }\doxymbox{\hyperlink{structparticle__tracker_1_1PointCloud}{PointCloud}}\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00251}\doxymbox{\hyperlink{structparticle__tracker_1_1PointCloud_a8da8ec63e65b254e6f9b8844ee03abd3}{00251}}\ \ \ std::vector<DataType>\ \doxymbox{\hyperlink{structparticle__tracker_1_1PointCloud_a8da8ec63e65b254e6f9b8844ee03abd3}{pts}};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00252}00252\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00254}\doxymbox{\hyperlink{structparticle__tracker_1_1PointCloud_a02db5a78394a500b5a2569cbdcfd00bc}{00254}}\ \ \ \textcolor{keyword}{inline}\ std::size\_t\ \doxymbox{\hyperlink{structparticle__tracker_1_1PointCloud_a02db5a78394a500b5a2569cbdcfd00bc}{kdtree\_get\_point\_count}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{structparticle__tracker_1_1PointCloud_a8da8ec63e65b254e6f9b8844ee03abd3}{pts}}.size()\ /\ 2;\ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00255}00255\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00262}\doxymbox{\hyperlink{structparticle__tracker_1_1PointCloud_ae57350b7cd78d31db96020310369005a}{00262}}\ \ \ \textcolor{keyword}{inline}\ DataType\ \doxymbox{\hyperlink{structparticle__tracker_1_1PointCloud_ae57350b7cd78d31db96020310369005a}{kdtree\_get\_pt}}(\textcolor{keyword}{const}\ std::size\_t\ idx,}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00263}00263\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::size\_t\ dim)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00264}00264\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{structparticle__tracker_1_1PointCloud_a8da8ec63e65b254e6f9b8844ee03abd3}{pts}}[2\ *\ idx\ +\ dim];}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00265}00265\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00266}00266\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00268}\doxymbox{\hyperlink{structparticle__tracker_1_1PointCloud_a24d83a02831b5267f1bd1799b6030693}{00268}}\ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{const}\ DataType\ *\doxymbox{\hyperlink{structparticle__tracker_1_1PointCloud_a24d83a02831b5267f1bd1799b6030693}{data}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{structparticle__tracker_1_1PointCloud_a8da8ec63e65b254e6f9b8844ee03abd3}{pts}}.data();\ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00269}00269\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00274}\doxymbox{\hyperlink{structparticle__tracker_1_1PointCloud_ab1696451a12c09c3388a7e2dd3ee5406}{00274}}\ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{class}\ BBOX>\ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{structparticle__tracker_1_1PointCloud_ab1696451a12c09c3388a7e2dd3ee5406}{kdtree\_get\_bbox}}(BBOX\ \&)\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};\ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00275}00275\ \};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00276}00276\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00297}00297\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ DataType,\ \textcolor{keyword}{class}\ DatasetAdaptor>}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00298}\doxymbox{\hyperlink{structparticle__tracker_1_1LonLatDistanceAdaptor}{00298}}\ \textcolor{keyword}{struct\ }LonLatDistanceAdaptor\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00299}00299\ \ \ \textcolor{keyword}{typedef}\ DataType\ ElementType;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00300}00300\ \ \ \textcolor{keyword}{typedef}\ DataType\ DistanceType;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00301}00301\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00302}00302\ \ \ \textcolor{keyword}{const}\ DatasetAdaptor\ \&data;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00303}00303\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00304}00304\ \ \ \textcolor{keyword}{explicit}\ LonLatDistanceAdaptor(\textcolor{keyword}{const}\ DatasetAdaptor\ \&data\_)\ :\ data(data\_)\ \{\}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00305}00305\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00307}\doxymbox{\hyperlink{structparticle__tracker_1_1LonLatDistanceAdaptor_a5dcf90c19ad1b8bbc96bfeb4d235f257}{00307}}\ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{const}\ DataType\ *\doxymbox{\hyperlink{structparticle__tracker_1_1LonLatDistanceAdaptor_a5dcf90c19ad1b8bbc96bfeb4d235f257}{getPoint}}(std::size\_t\ idx)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00308}00308\ \ \ \ \ \textcolor{keywordflow}{return}\ \&data.pts[2\ *\ idx];}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00309}00309\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00310}00310\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00316}\doxymbox{\hyperlink{structparticle__tracker_1_1LonLatDistanceAdaptor_a6f7711043d053c5cc596797e23878cc0}{00316}}\ \ \ \textcolor{keyword}{inline}\ DistanceType\ \doxymbox{\hyperlink{structparticle__tracker_1_1LonLatDistanceAdaptor_a6f7711043d053c5cc596797e23878cc0}{evalMetric}}(\textcolor{keyword}{const}\ DataType\ *a,\ \textcolor{keyword}{const}\ DataType\ *b,}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00317}00317\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::size\_t\ \textcolor{comment}{/*size*/})\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00318}00318\ \ \ \ \ DataType\ dlon\ =\ a[0]\ -\/\ b[0];}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00319}00319\ \ \ \ \ \textcolor{keywordflow}{if}\ (dlon\ <\ -\/\textcolor{keyword}{static\_cast<}DataType\textcolor{keyword}{>}(\doxymbox{\hyperlink{interpolation__utils_8hpp_a10c261012940fc076254f392610a7cf7}{pt\_pi}}))}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00320}00320\ \ \ \ \ \ \ dlon\ +=\ \textcolor{keyword}{static\_cast<}DataType\textcolor{keyword}{>}(\doxymbox{\hyperlink{interpolation__utils_8hpp_abfe8363f844f56fdb956998d7bad0d63}{pt\_two\_pi}});}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00321}00321\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (dlon\ >\ \textcolor{keyword}{static\_cast<}DataType\textcolor{keyword}{>}(\doxymbox{\hyperlink{interpolation__utils_8hpp_a10c261012940fc076254f392610a7cf7}{pt\_pi}}))}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00322}00322\ \ \ \ \ \ \ dlon\ -\/=\ \textcolor{keyword}{static\_cast<}DataType\textcolor{keyword}{>}(\doxymbox{\hyperlink{interpolation__utils_8hpp_abfe8363f844f56fdb956998d7bad0d63}{pt\_two\_pi}});}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00323}00323\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00324}00324\ \ \ \ \ DataType\ dlat\ =\ a[1]\ -\/\ b[1];}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00325}00325\ \ \ \ \ DataType\ avgLat\ =\ (a[1]\ +\ b[1])\ *\ \textcolor{keyword}{static\_cast<}DataType\textcolor{keyword}{>}(0.5);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00326}00326\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00327}00327\ \ \ \ \ DataType\ scaled\_dlon\ =\ dlon\ *\ std::cos(avgLat);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00328}00328\ \ \ \ \ \textcolor{keywordflow}{return}\ scaled\_dlon\ *\ scaled\_dlon\ +\ dlat\ *\ dlat;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00329}00329\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00330}00330\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00335}\doxymbox{\hyperlink{structparticle__tracker_1_1LonLatDistanceAdaptor_a58b3e454402062a21b3725b0334ac5e0}{00335}}\ \ \ \textcolor{keyword}{inline}\ DistanceType\ \doxymbox{\hyperlink{structparticle__tracker_1_1LonLatDistanceAdaptor_a58b3e454402062a21b3725b0334ac5e0}{evalMetric}}(\textcolor{keyword}{const}\ DataType\ *a,\ std::size\_t\ idx\_b,}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00336}00336\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::size\_t\ size)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00337}00337\ \ \ \ \ \textcolor{keyword}{const}\ DataType\ *b\ =\ \doxymbox{\hyperlink{structparticle__tracker_1_1LonLatDistanceAdaptor_a5dcf90c19ad1b8bbc96bfeb4d235f257}{getPoint}}(idx\_b);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00338}00338\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{structparticle__tracker_1_1LonLatDistanceAdaptor_a6f7711043d053c5cc596797e23878cc0}{evalMetric}}(a,\ b,\ size);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00339}00339\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00340}00340\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00349}00349\ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ IndexType>}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00350}\doxymbox{\hyperlink{structparticle__tracker_1_1LonLatDistanceAdaptor_a1341a8d11f4c44856c978bc86e1766f3}{00350}}\ \ \ \textcolor{keyword}{inline}\ DistanceType\ \doxymbox{\hyperlink{structparticle__tracker_1_1LonLatDistanceAdaptor_a1341a8d11f4c44856c978bc86e1766f3}{accum\_dist}}(\textcolor{keyword}{const}\ T\ a,\ \textcolor{keyword}{const}\ T\ b,\ IndexType\ dim)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00351}00351\ \ \ \ \ DistanceType\ diff\ =\ \textcolor{keyword}{static\_cast<}DistanceType\textcolor{keyword}{>}(a\ -\/\ b);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00352}00352\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00353}00353\ \ \ \ \ \textcolor{keywordflow}{if}\ (dim\ ==\ 0)\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00354}00354\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (diff\ <\ -\/\textcolor{keyword}{static\_cast<}DistanceType\textcolor{keyword}{>}(\doxymbox{\hyperlink{interpolation__utils_8hpp_a10c261012940fc076254f392610a7cf7}{pt\_pi}}))}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00355}00355\ \ \ \ \ \ \ \ \ diff\ +=\ \textcolor{keyword}{static\_cast<}DistanceType\textcolor{keyword}{>}(\doxymbox{\hyperlink{interpolation__utils_8hpp_abfe8363f844f56fdb956998d7bad0d63}{pt\_two\_pi}});}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00356}00356\ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (diff\ >\ \textcolor{keyword}{static\_cast<}DistanceType\textcolor{keyword}{>}(\doxymbox{\hyperlink{interpolation__utils_8hpp_a10c261012940fc076254f392610a7cf7}{pt\_pi}}))}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00357}00357\ \ \ \ \ \ \ \ \ diff\ -\/=\ \textcolor{keyword}{static\_cast<}DistanceType\textcolor{keyword}{>}(\doxymbox{\hyperlink{interpolation__utils_8hpp_abfe8363f844f56fdb956998d7bad0d63}{pt\_two\_pi}});}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00358}00358\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00359}00359\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00360}00360\ \ \ \ \ \textcolor{keywordflow}{return}\ diff\ *\ diff;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00361}00361\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00362}00362\ \};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00363}00363\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00367}00367\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ DataType>}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00368}\doxymbox{\hyperlink{interpolation__utils_8hpp_adb23c22c8f78daf6587652bf18e33cad}{00368}}\ \textcolor{keyword}{using\ }\doxymbox{\hyperlink{interpolation__utils_8hpp_adb23c22c8f78daf6587652bf18e33cad}{KDTree}}\ =\ nf::KDTreeSingleIndexAdaptor<}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00369}00369\ \ \ \ \ \doxymbox{\hyperlink{structparticle__tracker_1_1LonLatDistanceAdaptor}{LonLatDistanceAdaptor<DataType,\ PointCloud<DataType>}}>,\ \doxymbox{\hyperlink{structparticle__tracker_1_1PointCloud}{PointCloud<DataType>}},}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00370}00370\ \ \ \ \ 2>;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00371}00371\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00372}00372\ \textcolor{preprocessor}{\#else\ }\textcolor{comment}{//\ PARTICLE\_TRACKER\_HAS\_NANOFLANN\ ==\ 0}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00373}00373\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00374}00374\ \textcolor{comment}{//\ Provide\ "{}poison\ pill"{}\ templates\ that\ fail\ loudly\ if\ instantiated.}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00375}00375\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00376}00376\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}...>\ \textcolor{keyword}{struct\ }pt\_dependent\_false\ :\ std::false\_type\ \{\};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00377}00377\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00384}00384\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ DataType>\ \textcolor{keyword}{struct\ }KDTree\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00385}00385\ \ \ \textcolor{keyword}{static\_assert}(pt\_dependent\_false<DataType>::value,}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00386}00386\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}particle\_tracker:\ KDTree\ is\ unavailable\ because\ "{}}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00387}00387\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}PARTICLE\_TRACKER\_HAS\_NANOFLANN=0.\ "{}}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00388}00388\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Enable\ nanoflann\ support\ or\ avoid\ KD-\/tree\ dependent\ APIs."{}});}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00389}00389\ \};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00390}00390\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00391}00391\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ PARTICLE\_TRACKER\_HAS\_NANOFLANN}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00392}00392\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00393}00393\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00394}00394\ \textcolor{comment}{//\ Neighbor\ and\ NeighborsData}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00395}00395\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00396}00396\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00417}\doxymbox{\hyperlink{structNeighbor}{00417}}\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ DataType>\ \textcolor{keyword}{struct\ }Neighbor\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00418}00418\ \ \ std::size\_t\ ind\{\};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00419}00419\ \ \ DataType\ dist\{\};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00420}00420\ \ \ DataType\ weight\{\};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00421}00421\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00422}00422\ \ \ Neighbor(std::size\_t\ index\ =\ 0,\ DataType\ distance\ =\ DataType\{\},}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00423}00423\ \ \ \ \ \ \ \ \ \ \ \ DataType\ node\_weight\ =\ DataType\{\})}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00424}00424\ \ \ \ \ \ \ :\ ind(index),\ dist(distance),\ weight(node\_weight)\ \{\}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00425}00425\ \};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00426}00426\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00427}00427\ \textcolor{preprocessor}{\#if\ PARTICLE\_TRACKER\_HAS\_NANOFLANN}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00428}00428\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00450}\doxymbox{\hyperlink{classNeighborsData}{00450}}\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ DataType,\ \textcolor{keyword}{typename}\ TimeType\ =\ \textcolor{keywordtype}{double}>\ \textcolor{keyword}{class\ }NeighborsData\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00451}00451\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00452}00452\ \ \ \textcolor{keyword}{const}\ \doxymbox{\hyperlink{interpolation__utils_8hpp_adb23c22c8f78daf6587652bf18e33cad}{KDTree<DataType>}}\ \&index;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00453}00453\ \ \ \textcolor{keyword}{const}\ std::vector<DataType>\ \&xx\_sparse\{\};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00454}00454\ \ \ \textcolor{keyword}{const}\ std::vector<DataType>\ \&yy\_sparse\{\};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00455}00455\ \ \ \textcolor{keyword}{const}\ DataType\ rad2\{\};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00456}00456\ \ \ \textcolor{keyword}{const}\ DataType\ shape\{\};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00457}00457\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00458}00458\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00459}00459\ \ \ NeighborsData(\textcolor{keyword}{const}\ \doxymbox{\hyperlink{interpolation__utils_8hpp_adb23c22c8f78daf6587652bf18e33cad}{KDTree<DataType>}}\ \&idx,\ \textcolor{keyword}{const}\ std::vector<DataType>\ \&xxs,}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00460}00460\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<DataType>\ \&yys,\ DataType\ r2,}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00461}00461\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DataType\ shape\_param)}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00462}00462\ \ \ \ \ \ \ :\ index(idx),\ xx\_sparse(xxs),\ yy\_sparse(yys),\ rad2(r2),}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00463}00463\ \ \ \ \ \ \ \ \ shape(shape\_param)\ \{\}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00464}00464\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00476}\doxymbox{\hyperlink{classparticle__tracker_1_1NeighborsData_a9c835659cba1b4b06e702f99c419f4de}{00476}}\ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{classparticle__tracker_1_1NeighborsData_a9c835659cba1b4b06e702f99c419f4de}{computeNeighbors}}(std::vector<\doxymbox{\hyperlink{structparticle__tracker_1_1Neighbor}{Neighbor<DataType>}}>\ \&neighbors,\ DataType\ x,}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00477}00477\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DataType\ y)\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00478}00478\ \ \ \ \ x\ =\ \doxymbox{\hyperlink{interpolation__utils_8hpp_a136b718333060b8bfdc7ae9219c6f656}{pt\_wrap\_lon}}(x);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00479}00479\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00480}00480\ \ \ \ \ nf::SearchParameters\ searchparams;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00481}00481\ \ \ \ \ searchparams.sorted\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00482}00482\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00483}00483\ \ \ \ \ std::vector<nf::ResultItem<unsigned\ int,\ DataType>>\ indices\_dists;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00484}00484\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00485}00485\ \ \ \ \ neighbors.clear();}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00486}00486\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00487}00487\ \ \ \ \ \doxymbox{\hyperlink{interpolation__utils_8hpp_a0d833449b7f72cc49846a914f8e12df4}{point<DataType>}}\ query\_point\ =\ \{x,\ y\};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00488}00488\ \ \ \ \ index.radiusSearch(query\_point.data(),\ rad2,\ indices\_dists,\ searchparams);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00489}00489\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00490}00490\ \ \ \ \ neighbors.reserve(indices\_dists.size());}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00491}00491\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00492}00492\ \ \ \ \ \textcolor{keyword}{const}\ DataType\ lon\_q\ =\ \doxymbox{\hyperlink{interpolation__utils_8hpp_a136b718333060b8bfdc7ae9219c6f656}{pt\_wrap\_lon}}(query\_point[0]);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00493}00493\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00494}00494\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&result\ :\ indices\_dists)\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00495}00495\ \ \ \ \ \ \ \doxymbox{\hyperlink{structparticle__tracker_1_1Neighbor}{Neighbor<DataType>}}\ nbr;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00496}00496\ \ \ \ \ \ \ nbr.ind\ =\ result.first;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00497}00497\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00498}00498\ \ \ \ \ \ \ \textcolor{keyword}{const}\ DataType\ lon\_i\ =\ \doxymbox{\hyperlink{interpolation__utils_8hpp_a136b718333060b8bfdc7ae9219c6f656}{pt\_wrap\_lon}}(xx\_sparse.at(nbr.ind));}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00499}00499\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00500}00500\ \ \ \ \ \ \ nbr.dist\ =\ \doxymbox{\hyperlink{geography__utils_8hpp_abea7847440ba0c60abea144b827f95c9}{GCD}}(lon\_q,\ query\_point[1],\ lon\_i,\ yy\_sparse.at(nbr.ind));}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00501}00501\ \ \ \ \ \ \ nbr.weight\ =\ std::exp(-\/nbr.dist\ *\ nbr.dist\ /\ shape);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00502}00502\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00503}00503\ \ \ \ \ \ \ neighbors.push\_back(nbr);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00504}00504\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00505}00505\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00506}00506\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00515}\doxymbox{\hyperlink{classparticle__tracker_1_1NeighborsData_a9ec6be55a9069562e007040429ef0c9e}{00515}}\ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{classparticle__tracker_1_1NeighborsData_a9ec6be55a9069562e007040429ef0c9e}{updateNeighborWeights}}(std::vector<\doxymbox{\hyperlink{structparticle__tracker_1_1Neighbor}{Neighbor<DataType>}}>\ \&neighbors,}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00516}00516\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DataType\ x,\ DataType\ y)\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00517}00517\ \ \ \ \ x\ =\ \doxymbox{\hyperlink{interpolation__utils_8hpp_a136b718333060b8bfdc7ae9219c6f656}{pt\_wrap\_lon}}(x);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00518}00518\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00519}00519\ \ \ \ \ \doxymbox{\hyperlink{interpolation__utils_8hpp_a0d833449b7f72cc49846a914f8e12df4}{point<DataType>}}\ query\_point\ =\ \{x,\ y\};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00520}00520\ \ \ \ \ \textcolor{keyword}{const}\ DataType\ lon\_q\ =\ \doxymbox{\hyperlink{interpolation__utils_8hpp_a136b718333060b8bfdc7ae9219c6f656}{pt\_wrap\_lon}}(query\_point[0]);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00521}00521\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00522}00522\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \&nbr\ :\ neighbors)\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00523}00523\ \ \ \ \ \ \ \textcolor{keyword}{const}\ DataType\ lon\_i\ =\ \doxymbox{\hyperlink{interpolation__utils_8hpp_a136b718333060b8bfdc7ae9219c6f656}{pt\_wrap\_lon}}(xx\_sparse.at(nbr.ind));}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00524}00524\ \ \ \ \ \ \ nbr.dist\ =\ \doxymbox{\hyperlink{geography__utils_8hpp_abea7847440ba0c60abea144b827f95c9}{GCD}}(lon\_q,\ query\_point[1],\ lon\_i,\ yy\_sparse.at(nbr.ind));}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00525}00525\ \ \ \ \ \ \ nbr.weight\ =\ std::exp(-\/nbr.dist\ *\ nbr.dist\ /\ shape);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00526}00526\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00527}00527\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00528}00528\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00539}\doxymbox{\hyperlink{classparticle__tracker_1_1NeighborsData_a69428278a20e7957647bd4433710ce13}{00539}}\ \ \ std::map<std::string,\ DataType>\ \doxymbox{\hyperlink{classparticle__tracker_1_1NeighborsData_a69428278a20e7957647bd4433710ce13}{interpolateVariables}}(}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00540}00540\ \ \ \ \ \ \ TimeType\ t,\ \textcolor{keyword}{const}\ std::vector<\doxymbox{\hyperlink{structparticle__tracker_1_1Neighbor}{Neighbor<DataType>}}>\ \&neighbors,}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00541}00541\ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::map<std::string,\ std::vector<\doxymbox{\hyperlink{classparticle__tracker_1_1TimeSpline}{TimeSpline<DataType,\ TimeType>}}>>}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00542}00542\ \ \ \ \ \ \ \ \ \ \ \&variable\_splines,}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00543}00543\ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<std::string>\ \&variable\_names)\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00544}00544\ \ \ \ \ std::map<std::string,\ DataType>\ out;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00545}00545\ \ \ \ \ DataType\ den\ =\ \textcolor{keyword}{static\_cast<}DataType\textcolor{keyword}{>}(0);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00546}00546\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00547}00547\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&var\_name\ :\ variable\_names)}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00548}00548\ \ \ \ \ \ \ out[var\_name]\ =\ \textcolor{keyword}{static\_cast<}DataType\textcolor{keyword}{>}(0);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00549}00549\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00550}00550\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&nbr\ :\ neighbors)\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00551}00551\ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&var\_name\ :\ variable\_names)\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00552}00552\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&splines\ =\ variable\_splines.at(var\_name);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00553}00553\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00554}00554\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (nbr.ind\ >=\ splines.size())\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00555}00555\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::out\_of\_range(\textcolor{stringliteral}{"{}particle\_tracker::NeighborsData:\ index\ "{}}\ +}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00556}00556\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::to\_string(nbr.ind)\ +}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00557}00557\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}\ out\ of\ bounds\ for\ variable\ '"{}}\ +\ var\_name\ +}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00558}00558\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}'."{}});}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00559}00559\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00560}00560\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00561}00561\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ DataType\ v\ =\ splines[nbr.ind].spline(t);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00562}00562\ \ \ \ \ \ \ \ \ out[var\_name]\ +=\ nbr.weight\ *\ v;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00563}00563\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00564}00564\ \ \ \ \ \ \ den\ +=\ nbr.weight;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00565}00565\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00566}00566\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00567}00567\ \ \ \ \ \textcolor{keywordflow}{if}\ (den\ >\ \textcolor{keyword}{static\_cast<}DataType\textcolor{keyword}{>}(1e-\/8))\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00568}00568\ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&var\_name\ :\ variable\_names)}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00569}00569\ \ \ \ \ \ \ \ \ out[var\_name]\ /=\ den;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00570}00570\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00571}00571\ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&var\_name\ :\ variable\_names)}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00572}00572\ \ \ \ \ \ \ \ \ out[var\_name]\ =\ \textcolor{keyword}{static\_cast<}DataType\textcolor{keyword}{>}(0);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00573}00573\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00574}00574\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00575}00575\ \ \ \ \ \textcolor{keywordflow}{return}\ out;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00576}00576\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00577}00577\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00581}\doxymbox{\hyperlink{classparticle__tracker_1_1NeighborsData_ad415366a2285eaa667ec33e25214058c}{00581}}\ \ \ std::map<std::string,\ DataType>\ \doxymbox{\hyperlink{classparticle__tracker_1_1NeighborsData_ad415366a2285eaa667ec33e25214058c}{calculateVariables}}(}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00582}00582\ \ \ \ \ \ \ TimeType\ t,\ std::vector<\doxymbox{\hyperlink{structparticle__tracker_1_1Neighbor}{Neighbor<DataType>}}>\ \&neighbors,}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00583}00583\ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::map<std::string,\ std::vector<\doxymbox{\hyperlink{classparticle__tracker_1_1TimeSpline}{TimeSpline<DataType,\ TimeType>}}>>}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00584}00584\ \ \ \ \ \ \ \ \ \ \ \&variable\_splines,}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00585}00585\ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<std::string>\ \&variable\_names,\ DataType\ x,\ DataType\ y)\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00586}00586\ \ \ \ \ \doxymbox{\hyperlink{classparticle__tracker_1_1NeighborsData_a9c835659cba1b4b06e702f99c419f4de}{computeNeighbors}}(neighbors,\ x,\ y);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00587}00587\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{classparticle__tracker_1_1NeighborsData_a69428278a20e7957647bd4433710ce13}{interpolateVariables}}(t,\ neighbors,\ variable\_splines,\ variable\_names);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00588}00588\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00589}00589\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00593}\doxymbox{\hyperlink{classparticle__tracker_1_1NeighborsData_aa258b33d6ebb7fafda0b9047a93066d0}{00593}}\ \ \ std::map<std::string,\ DataType>\ \doxymbox{\hyperlink{classparticle__tracker_1_1NeighborsData_aa258b33d6ebb7fafda0b9047a93066d0}{calculateVariablesUpdate}}(}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00594}00594\ \ \ \ \ \ \ TimeType\ t,\ std::vector<\doxymbox{\hyperlink{structparticle__tracker_1_1Neighbor}{Neighbor<DataType>}}>\ \&neighbors,}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00595}00595\ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::map<std::string,\ std::vector<\doxymbox{\hyperlink{classparticle__tracker_1_1TimeSpline}{TimeSpline<DataType,\ TimeType>}}>>}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00596}00596\ \ \ \ \ \ \ \ \ \ \ \&variable\_splines,}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00597}00597\ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<std::string>\ \&variable\_names,\ DataType\ x,\ DataType\ y)\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00598}00598\ \ \ \ \ \doxymbox{\hyperlink{classparticle__tracker_1_1NeighborsData_a9ec6be55a9069562e007040429ef0c9e}{updateNeighborWeights}}(neighbors,\ x,\ y);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00599}00599\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{classparticle__tracker_1_1NeighborsData_a69428278a20e7957647bd4433710ce13}{interpolateVariables}}(t,\ neighbors,\ variable\_splines,\ variable\_names);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00600}00600\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00601}00601\ \};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00602}00602\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00603}00603\ \textcolor{preprocessor}{\#else\ }\textcolor{comment}{//\ PARTICLE\_TRACKER\_HAS\_NANOFLANN\ ==\ 0}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00604}00604\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00605}00605\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ DataType,\ \textcolor{keyword}{typename}\ TimeType\ =\ \textcolor{keywordtype}{double}>\ \textcolor{keyword}{class\ }\doxymbox{\hyperlink{classNeighborsData}{NeighborsData}}\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00606}00606\ \ \ \textcolor{keyword}{static\_assert}(pt\_dependent\_false<DataType,\ TimeType>::value,}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00607}00607\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}particle\_tracker::NeighborsData\ is\ unavailable\ because\ "{}}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00608}00608\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}PARTICLE\_TRACKER\_HAS\_NANOFLANN=0.\ "{}}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00609}00609\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Enable\ nanoflann\ support\ or\ avoid\ KD-\/tree\ dependent\ APIs."{}});}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00610}00610\ \};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00611}00611\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00612}00612\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ PARTICLE\_TRACKER\_HAS\_NANOFLANN}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00613}00613\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00614}00614\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00615}00615\ \textcolor{comment}{//\ Experimental\ derivative\ estimator:\ NeighborPrime,\ NeighborWithNeighbors,}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00616}00616\ \textcolor{comment}{//\ VariableDerivatives}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00617}00617\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00618}00618\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00638}\doxymbox{\hyperlink{structparticle__tracker_1_1NeighborPrime}{00638}}\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ DataType>\ \textcolor{keyword}{struct\ }NeighborPrime\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00639}00639\ \ \ std::size\_t\ ind\_prime\{\};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00640}00640\ \ \ std::array<DataType,\ 3>\ dist\_prime\{\};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00641}00641\ \ \ DataType\ weight\_prime\{\};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00642}00642\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00643}00643\ \ \ NeighborPrime(std::size\_t\ index\_prime\ =\ 0,}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00644}00644\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::array<DataType,\ 3>\ distance\_prime\ =\ \{DataType\{\},}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00645}00645\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DataType\{\},}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00646}00646\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DataType\{\}\},}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00647}00647\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DataType\ node\_weight\_prime\ =\ DataType\{\})}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00648}00648\ \ \ \ \ \ \ :\ ind\_prime(index\_prime),\ dist\_prime(distance\_prime),}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00649}00649\ \ \ \ \ \ \ \ \ weight\_prime(node\_weight\_prime)\ \{\}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00650}00650\ \};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00651}00651\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00658}\doxymbox{\hyperlink{structparticle__tracker_1_1NeighborWithNeighbors}{00658}}\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ DataType>\ \textcolor{keyword}{struct\ }NeighborWithNeighbors\ :\ Neighbor<DataType>\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00659}00659\ \ \ std::vector<NeighborPrime<DataType>>\ neighbors\_prime;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00660}00660\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00661}00661\ \ \ NeighborWithNeighbors()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00662}00662\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00663}00663\ \ \ NeighborWithNeighbors(std::size\_t\ index,\ DataType\ distance,}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00664}00664\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DataType\ node\_weight,}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00665}00665\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<\doxymbox{\hyperlink{structparticle__tracker_1_1NeighborPrime}{NeighborPrime<DataType>}}>\ \&nbr\_prime)}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00666}00666\ \ \ \ \ \ \ :\ Neighbor<DataType>(index,\ distance,\ node\_weight),}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00667}00667\ \ \ \ \ \ \ \ \ neighbors\_prime(nbr\_prime)\ \{\}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00668}00668\ \};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00669}00669\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00677}\doxymbox{\hyperlink{structparticle__tracker_1_1VariableDerivatives}{00677}}\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ DataType>\ \textcolor{keyword}{struct\ }\doxymbox{\hyperlink{structparticle__tracker_1_1VariableDerivatives}{VariableDerivatives}}\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00678}00678\ \ \ DataType\ value\{\};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00679}00679\ \ \ DataType\ time\_derivative\{\};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00680}00680\ \ \ DataType\ spatial\_derivative\_x\{\};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00681}00681\ \ \ DataType\ spatial\_derivative\_y\{\};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00682}00682\ \};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00683}00683\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00684}00684\ \textcolor{preprocessor}{\#if\ PARTICLE\_TRACKER\_HAS\_NANOFLANN}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00685}00685\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00717}00717\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ DataType,\ \textcolor{keyword}{typename}\ TimeType\ =\ \textcolor{keywordtype}{double}>}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00718}\doxymbox{\hyperlink{classparticle__tracker_1_1NeighborWithNeighborsData}{00718}}\ \textcolor{keyword}{class\ }NeighborWithNeighborsData\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00719}00719\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00720}00720\ \ \ \textcolor{keyword}{const}\ \doxymbox{\hyperlink{interpolation__utils_8hpp_adb23c22c8f78daf6587652bf18e33cad}{KDTree<DataType>}}\ \&index;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00721}00721\ \ \ \textcolor{keyword}{const}\ std::vector<DataType>\ \&xx\_sparse\{\};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00722}00722\ \ \ \textcolor{keyword}{const}\ std::vector<DataType>\ \&yy\_sparse\{\};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00723}00723\ \ \ \textcolor{keyword}{const}\ DataType\ rad2\{\};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00724}00724\ \ \ \textcolor{keyword}{const}\ DataType\ shape\{\};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00725}00725\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00726}00726\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00727}00727\ \ \ NeighborWithNeighborsData(\textcolor{keyword}{const}\ \doxymbox{\hyperlink{interpolation__utils_8hpp_adb23c22c8f78daf6587652bf18e33cad}{KDTree<DataType>}}\ \&idx,}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00728}00728\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<DataType>\ \&xxs,}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00729}00729\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<DataType>\ \&yys,\ DataType\ r2,}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00730}00730\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DataType\ shape\_param)}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00731}00731\ \ \ \ \ \ \ :\ index(idx),\ xx\_sparse(xxs),\ yy\_sparse(yys),\ rad2(r2),}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00732}00732\ \ \ \ \ \ \ \ \ shape(shape\_param)\ \{\}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00733}00733\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00741}\doxymbox{\hyperlink{classparticle__tracker_1_1NeighborWithNeighborsData_a6a74bf97ff2316190d00ba8760ef0049}{00741}}\ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{classparticle__tracker_1_1NeighborWithNeighborsData_a6a74bf97ff2316190d00ba8760ef0049}{computeNeighbors}}(std::vector<\doxymbox{\hyperlink{structparticle__tracker_1_1NeighborWithNeighbors}{NeighborWithNeighbors<DataType>}}>\ \&neighbors,}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00742}00742\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DataType\ x,\ DataType\ y)\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00743}00743\ \ \ \ \ x\ =\ \doxymbox{\hyperlink{interpolation__utils_8hpp_a136b718333060b8bfdc7ae9219c6f656}{pt\_wrap\_lon}}(x);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00744}00744\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00745}00745\ \ \ \ \ \doxymbox{\hyperlink{interpolation__utils_8hpp_a0d833449b7f72cc49846a914f8e12df4}{point<DataType>}}\ query\_point\ =\ \{x,\ y\};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00746}00746\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00747}00747\ \ \ \ \ nf::SearchParameters\ searchparams;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00748}00748\ \ \ \ \ searchparams.sorted\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00749}00749\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00750}00750\ \ \ \ \ std::vector<nf::ResultItem<unsigned\ int,\ DataType>>\ indices\_dists;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00751}00751\ \ \ \ \ index.radiusSearch(query\_point.data(),\ rad2,\ indices\_dists,\ searchparams);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00752}00752\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00753}00753\ \ \ \ \ neighbors.clear();}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00754}00754\ \ \ \ \ neighbors.reserve(indices\_dists.size());}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00755}00755\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00756}00756\ \ \ \ \ \textcolor{keyword}{const}\ DataType\ lon\_q\ =\ \doxymbox{\hyperlink{interpolation__utils_8hpp_a136b718333060b8bfdc7ae9219c6f656}{pt\_wrap\_lon}}(query\_point[0]);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00757}00757\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00758}00758\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&result\ :\ indices\_dists)\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00759}00759\ \ \ \ \ \ \ \doxymbox{\hyperlink{structparticle__tracker_1_1NeighborWithNeighbors}{NeighborWithNeighbors<DataType>}}\ nbr;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00760}00760\ \ \ \ \ \ \ nbr.ind\ =\ result.first;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00761}00761\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00762}00762\ \ \ \ \ \ \ \textcolor{keyword}{const}\ DataType\ lon\_i\ =\ \doxymbox{\hyperlink{interpolation__utils_8hpp_a136b718333060b8bfdc7ae9219c6f656}{pt\_wrap\_lon}}(xx\_sparse.at(nbr.ind));}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00763}00763\ \ \ \ \ \ \ \textcolor{keyword}{const}\ DataType\ lat\_i\ =\ yy\_sparse.at(nbr.ind);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00764}00764\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00765}00765\ \ \ \ \ \ \ \textcolor{comment}{//\ True\ great-\/circle\ distance\ query\ -\/>\ primary\ neighbor\ (for\ primary}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00766}00766\ \ \ \ \ \ \ \textcolor{comment}{//\ weights).}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00767}00767\ \ \ \ \ \ \ nbr.dist\ =\ \doxymbox{\hyperlink{geography__utils_8hpp_abea7847440ba0c60abea144b827f95c9}{GCD}}(lon\_q,\ query\_point[1],\ lon\_i,\ lat\_i);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00768}00768\ \ \ \ \ \ \ nbr.weight\ =\ std::exp(-\/nbr.dist\ *\ nbr.dist\ /\ shape);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00769}00769\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00770}00770\ \ \ \ \ \ \ \textcolor{comment}{//\ Secondary\ search\ is\ centered\ at\ the\ primary\ grid\ node.}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00771}00771\ \ \ \ \ \ \ \doxymbox{\hyperlink{interpolation__utils_8hpp_a0d833449b7f72cc49846a914f8e12df4}{point<DataType>}}\ query\_point\_prime\ =\ \{lon\_i,\ lat\_i\};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00772}00772\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00773}00773\ \ \ \ \ \ \ std::vector<nf::ResultItem<unsigned\ int,\ DataType>>\ indices\_dists\_prime;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00774}00774\ \ \ \ \ \ \ index.radiusSearch(query\_point\_prime.data(),\ rad2,\ indices\_dists\_prime,}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00775}00775\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ searchparams);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00776}00776\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00777}00777\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (indices\_dists\_prime.empty())\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00778}00778\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Loud\ behavior:\ do\ not\ keep\ a\ primary\ neighbor\ with\ no\ secondary}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00779}00779\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ neighborhood\ because\ derivative\ estimation\ would\ be\ undefined/noisy.}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00780}00780\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00781}00781\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00782}00782\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00783}00783\ \ \ \ \ \ \ nbr.neighbors\_prime.clear();}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00784}00784\ \ \ \ \ \ \ nbr.neighbors\_prime.reserve(indices\_dists\_prime.size());}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00785}00785\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00786}00786\ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&result\_prime\ :\ indices\_dists\_prime)\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00787}00787\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{structparticle__tracker_1_1NeighborPrime}{NeighborPrime<DataType>}}\ nbr\_prime;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00788}00788\ \ \ \ \ \ \ \ \ nbr\_prime.ind\_prime\ =\ result\_prime.first;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00789}00789\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00790}00790\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (nbr\_prime.ind\_prime\ >=\ xx\_sparse.size()\ ||}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00791}00791\ \ \ \ \ \ \ \ \ \ \ \ \ nbr\_prime.ind\_prime\ >=\ yy\_sparse.size())\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00792}00792\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::out\_of\_range(}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00793}00793\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}particle\_tracker::NeighborWithNeighborsData:\ index\ "{}}\ +}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00794}00794\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::to\_string(nbr\_prime.ind\_prime)\ +}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00795}00795\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}\ out\ of\ bounds\ in\ computeNeighbors\ (secondary)."{}});}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00796}00796\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00797}00797\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00798}00798\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ DataType\ lon\_j\ =\ \doxymbox{\hyperlink{interpolation__utils_8hpp_a136b718333060b8bfdc7ae9219c6f656}{pt\_wrap\_lon}}(xx\_sparse.at(nbr\_prime.ind\_prime));}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00799}00799\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ DataType\ lat\_j\ =\ yy\_sparse.at(nbr\_prime.ind\_prime);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00800}00800\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00801}00801\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ dist\_prime\ =\ [d,\ ddx,\ ddy]\ from\ GCD\_deriv\ implementation.}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00802}00802\ \ \ \ \ \ \ \ \ nbr\_prime.dist\_prime\ =}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00803}00803\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{geography__utils_8hpp_abaad9f894463984f3aad42e60f563172}{GCD\_deriv}}(query\_point\_prime[0],\ query\_point\_prime[1],\ lon\_j,\ lat\_j);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00804}00804\ \ \ \ \ \ \ \ \ nbr\_prime.weight\_prime\ =\ std::exp(-\/nbr\_prime.dist\_prime[0]\ *}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00805}00805\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ nbr\_prime.dist\_prime[0]\ /\ shape);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00806}00806\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00807}00807\ \ \ \ \ \ \ \ \ nbr.neighbors\_prime.push\_back(nbr\_prime);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00808}00808\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00809}00809\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00810}00810\ \ \ \ \ \ \ neighbors.push\_back(nbr);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00811}00811\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00812}00812\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00813}00813\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00820}00820\ \ \ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00821}\doxymbox{\hyperlink{classparticle__tracker_1_1NeighborWithNeighborsData_aa547fe704f2bb3bb686f019afc1d5e22}{00821}}\ \ \ \doxymbox{\hyperlink{classparticle__tracker_1_1NeighborWithNeighborsData_aa547fe704f2bb3bb686f019afc1d5e22}{updateNeighborWeights}}(std::vector<\doxymbox{\hyperlink{structparticle__tracker_1_1NeighborWithNeighbors}{NeighborWithNeighbors<DataType>}}>\ \&neighbors,}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00822}00822\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DataType\ x,\ DataType\ y)\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00823}00823\ \ \ \ \ x\ =\ \doxymbox{\hyperlink{interpolation__utils_8hpp_a136b718333060b8bfdc7ae9219c6f656}{pt\_wrap\_lon}}(x);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00824}00824\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00825}00825\ \ \ \ \ \doxymbox{\hyperlink{interpolation__utils_8hpp_a0d833449b7f72cc49846a914f8e12df4}{point<DataType>}}\ query\_point\ =\ \{x,\ y\};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00826}00826\ \ \ \ \ \textcolor{keyword}{const}\ DataType\ lon\_q\ =\ \doxymbox{\hyperlink{interpolation__utils_8hpp_a136b718333060b8bfdc7ae9219c6f656}{pt\_wrap\_lon}}(query\_point[0]);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00827}00827\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00828}00828\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \&nbr\ :\ neighbors)\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00829}00829\ \ \ \ \ \ \ \textcolor{keyword}{const}\ DataType\ lon\_i\ =\ \doxymbox{\hyperlink{interpolation__utils_8hpp_a136b718333060b8bfdc7ae9219c6f656}{pt\_wrap\_lon}}(xx\_sparse.at(nbr.ind));}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00830}00830\ \ \ \ \ \ \ nbr.dist\ =\ \doxymbox{\hyperlink{geography__utils_8hpp_abea7847440ba0c60abea144b827f95c9}{GCD}}(lon\_q,\ query\_point[1],\ lon\_i,\ yy\_sparse.at(nbr.ind));}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00831}00831\ \ \ \ \ \ \ nbr.weight\ =\ std::exp(-\/nbr.dist\ *\ nbr.dist\ /\ shape);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00832}00832\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00833}00833\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00834}00834\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00848}\doxymbox{\hyperlink{classparticle__tracker_1_1NeighborWithNeighborsData_a0b9762b9cc2e372ec87c054b79db3c13}{00848}}\ \ \ std::map<std::string,\ VariableDerivatives<DataType>>\ \doxymbox{\hyperlink{classparticle__tracker_1_1NeighborWithNeighborsData_a0b9762b9cc2e372ec87c054b79db3c13}{interpolateDerivatives}}(}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00849}00849\ \ \ \ \ \ \ TimeType\ t,\ \textcolor{keyword}{const}\ std::vector<\doxymbox{\hyperlink{structparticle__tracker_1_1NeighborWithNeighbors}{NeighborWithNeighbors<DataType>}}>\ \&neighbors,}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00850}00850\ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::map<std::string,\ std::vector<\doxymbox{\hyperlink{classparticle__tracker_1_1TimeSpline}{TimeSpline<DataType,\ TimeType>}}>>}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00851}00851\ \ \ \ \ \ \ \ \ \ \ \&variable\_splines,}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00852}00852\ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<std::string>\ \&variable\_names,\ DataType\ shape)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00853}00853\ \ \ \ \ \textcolor{comment}{//\ Primary\ accumulators}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00854}00854\ \ \ \ \ std::map<std::string,\ DataType>\ value\_acc;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00855}00855\ \ \ \ \ std::map<std::string,\ DataType>\ dt\_acc;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00856}00856\ \ \ \ \ std::map<std::string,\ DataType>\ dx\_acc;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00857}00857\ \ \ \ \ std::map<std::string,\ DataType>\ dy\_acc;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00858}00858\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00859}00859\ \ \ \ \ DataType\ den\ =\ \textcolor{keyword}{static\_cast<}DataType\textcolor{keyword}{>}(0);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00860}00860\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00861}00861\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&name\ :\ variable\_names)\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00862}00862\ \ \ \ \ \ \ value\_acc[name]\ =\ \textcolor{keyword}{static\_cast<}DataType\textcolor{keyword}{>}(0);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00863}00863\ \ \ \ \ \ \ dt\_acc[name]\ =\ \textcolor{keyword}{static\_cast<}DataType\textcolor{keyword}{>}(0);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00864}00864\ \ \ \ \ \ \ dx\_acc[name]\ =\ \textcolor{keyword}{static\_cast<}DataType\textcolor{keyword}{>}(0);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00865}00865\ \ \ \ \ \ \ dy\_acc[name]\ =\ \textcolor{keyword}{static\_cast<}DataType\textcolor{keyword}{>}(0);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00866}00866\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00867}00867\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00868}00868\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&nbr\ :\ neighbors)\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00869}00869\ \ \ \ \ \ \ \textcolor{keyword}{const}\ DataType\ w\ =\ nbr.weight;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00870}00870\ \ \ \ \ \ \ den\ +=\ w;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00871}00871\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00872}00872\ \ \ \ \ \ \ \textcolor{comment}{//\ Value\ +\ time\ derivative\ from\ splines\ at\ primary\ neighbor\ grid\ nodes}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00873}00873\ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&name\ :\ variable\_names)\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00874}00874\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&splines\ =\ variable\_splines.at(name);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00875}00875\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00876}00876\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (nbr.ind\ >=\ splines.size())\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00877}00877\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::out\_of\_range(}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00878}00878\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}particle\_tracker::NeighborWithNeighborsData:\ index\ "{}}\ +}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00879}00879\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::to\_string(nbr.ind)\ +\ \textcolor{stringliteral}{"{}\ out\ of\ bounds\ for\ variable\ '"{}}\ +\ name\ +}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00880}00880\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}'."{}});}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00881}00881\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00882}00882\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00883}00883\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ DataType\ v\ =\ splines[nbr.ind].spline(t);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00884}00884\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ DataType\ dv\ =\ splines[nbr.ind].spline.prime(t);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00885}00885\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00886}00886\ \ \ \ \ \ \ \ \ value\_acc[name]\ +=\ w\ *\ v;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00887}00887\ \ \ \ \ \ \ \ \ dt\_acc[name]\ +=\ w\ *\ dv;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00888}00888\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00889}00889\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00890}00890\ \ \ \ \ \ \ \textcolor{comment}{//\ Per-\/primary-\/neighbor\ spatial\ derivative\ accumulators\ (heuristic)}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00891}00891\ \ \ \ \ \ \ DataType\ den\_prime\ =\ \textcolor{keyword}{static\_cast<}DataType\textcolor{keyword}{>}(0);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00892}00892\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00893}00893\ \ \ \ \ \ \ std::map<std::string,\ DataType>\ dx\_prime;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00894}00894\ \ \ \ \ \ \ std::map<std::string,\ DataType>\ dy\_prime;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00895}00895\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00896}00896\ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&name\ :\ variable\_names)\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00897}00897\ \ \ \ \ \ \ \ \ dx\_prime[name]\ =\ \textcolor{keyword}{static\_cast<}DataType\textcolor{keyword}{>}(0);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00898}00898\ \ \ \ \ \ \ \ \ dy\_prime[name]\ =\ \textcolor{keyword}{static\_cast<}DataType\textcolor{keyword}{>}(0);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00899}00899\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00900}00900\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00901}00901\ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&nbr\_prime\ :\ nbr.neighbors\_prime)\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00902}00902\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Skip\ self-\/pairs\ (no\ geometric\ meaning\ for\ dv)}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00903}00903\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (nbr\_prime.ind\_prime\ ==\ nbr.ind)}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00904}00904\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00905}00905\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00906}00906\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ DataType\ d\ =\ nbr\_prime.dist\_prime[0];}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00907}00907\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ DataType\ ddx\ =\ nbr\_prime.dist\_prime[1];}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00908}00908\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ DataType\ ddy\ =\ nbr\_prime.dist\_prime[2];}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00909}00909\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00910}00910\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ IMPORTANT:\ den\_prime\ must\ be\ independent\ of\ number\ of\ variables}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00911}00911\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ requested.}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00912}00912\ \ \ \ \ \ \ \ \ den\_prime\ +=\ nbr\_prime.weight\_prime;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00913}00913\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00914}00914\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&name\ :\ variable\_names)\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00915}00915\ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&splines\ =\ variable\_splines.at(name);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00916}00916\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00917}00917\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (nbr\_prime.ind\_prime\ >=\ splines.size())\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00918}00918\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::out\_of\_range(}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00919}00919\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}particle\_tracker::NeighborWithNeighborsData:\ index\ "{}}\ +}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00920}00920\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::to\_string(nbr\_prime.ind\_prime)\ +}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00921}00921\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}\ out\ of\ bounds\ for\ variable\ '"{}}\ +\ name\ +\ \textcolor{stringliteral}{"{}'\ (secondary)."{}});}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00922}00922\ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00923}00923\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00924}00924\ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ DataType\ v\_i\ =\ splines[nbr.ind].spline(t);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00925}00925\ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ DataType\ v\_j\ =\ splines[nbr\_prime.ind\_prime].spline(t);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00926}00926\ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ DataType\ dv\ =\ v\_j\ -\/\ v\_i;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00927}00927\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00928}00928\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Heuristic\ estimator\ building\ block:}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00929}00929\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ weight'\ *\ (d\ *\ d(d)/dx\ *\ dv),\ and\ analogously\ for\ y.}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00930}00930\ \ \ \ \ \ \ \ \ \ \ dx\_prime[name]\ +=\ nbr\_prime.weight\_prime\ *\ (d\ *\ ddx\ *\ dv);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00931}00931\ \ \ \ \ \ \ \ \ \ \ dy\_prime[name]\ +=\ nbr\_prime.weight\_prime\ *\ (d\ *\ ddy\ *\ dv);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00932}00932\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00933}00933\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00934}00934\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00935}00935\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (den\_prime\ >\ \textcolor{keyword}{static\_cast<}DataType\textcolor{keyword}{>}(1e-\/16))\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00936}00936\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&name\ :\ variable\_names)\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00937}00937\ \ \ \ \ \ \ \ \ \ \ dx\_acc[name]\ +=\ w\ *\ (dx\_prime[name]\ /\ den\_prime);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00938}00938\ \ \ \ \ \ \ \ \ \ \ dy\_acc[name]\ +=\ w\ *\ (dy\_prime[name]\ /\ den\_prime);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00939}00939\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00940}00940\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00941}00941\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00942}00942\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00943}00943\ \ \ \ \ std::map<std::string,\ VariableDerivatives<DataType>>\ out;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00944}00944\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00945}00945\ \ \ \ \ \textcolor{keywordflow}{if}\ (den\ >\ \textcolor{keyword}{static\_cast<}DataType\textcolor{keyword}{>}(1e-\/16))\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00946}00946\ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&name\ :\ variable\_names)\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00947}00947\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{structparticle__tracker_1_1VariableDerivatives}{VariableDerivatives<DataType>}}\ vd;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00948}00948\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00949}00949\ \ \ \ \ \ \ \ \ vd.value\ =\ value\_acc[name]\ /\ den;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00950}00950\ \ \ \ \ \ \ \ \ vd.time\_derivative\ =\ dt\_acc[name]\ /\ den;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00951}00951\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00952}00952\ \ \ \ \ \ \ \ \ vd.spatial\_derivative\_x\ =}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00953}00953\ \ \ \ \ \ \ \ \ \ \ \ \ (\textcolor{keyword}{static\_cast<}DataType\textcolor{keyword}{>}(2)\ /\ shape)\ *\ (dx\_acc[name]\ /\ den);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00954}00954\ \ \ \ \ \ \ \ \ vd.spatial\_derivative\_y\ =}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00955}00955\ \ \ \ \ \ \ \ \ \ \ \ \ (\textcolor{keyword}{static\_cast<}DataType\textcolor{keyword}{>}(2)\ /\ shape)\ *\ (dy\_acc[name]\ /\ den);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00956}00956\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00957}00957\ \ \ \ \ \ \ \ \ out[name]\ =\ vd;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00958}00958\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00959}00959\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00960}00960\ \ \ \ \ \ \ \textcolor{comment}{//\ No\ usable\ primary\ weights\ -\/>\ return\ zeros.}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00961}00961\ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&name\ :\ variable\_names)}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00962}00962\ \ \ \ \ \ \ \ \ out[name]\ =\ \doxymbox{\hyperlink{structparticle__tracker_1_1VariableDerivatives}{VariableDerivatives<DataType>}}\{\};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00963}00963\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00964}00964\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00965}00965\ \ \ \ \ \textcolor{keywordflow}{return}\ out;}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00966}00966\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00967}00967\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00971}\doxymbox{\hyperlink{classparticle__tracker_1_1NeighborWithNeighborsData_a27ffb706e74569448b1bcee94093bf4f}{00971}}\ \ \ std::map<std::string,\ VariableDerivatives<DataType>>\ \doxymbox{\hyperlink{classparticle__tracker_1_1NeighborWithNeighborsData_a27ffb706e74569448b1bcee94093bf4f}{calculateDerivatives}}(}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00972}00972\ \ \ \ \ \ \ TimeType\ t,\ std::vector<\doxymbox{\hyperlink{structparticle__tracker_1_1NeighborWithNeighbors}{NeighborWithNeighbors<DataType>}}>\ \&neighbors,}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00973}00973\ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::map<std::string,\ std::vector<\doxymbox{\hyperlink{classparticle__tracker_1_1TimeSpline}{TimeSpline<DataType,\ TimeType>}}>>}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00974}00974\ \ \ \ \ \ \ \ \ \ \ \&variable\_splines,}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00975}00975\ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<std::string>\ \&variable\_names,\ DataType\ x,\ DataType\ y,}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00976}00976\ \ \ \ \ \ \ DataType\ shape)\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00977}00977\ \ \ \ \ \doxymbox{\hyperlink{classparticle__tracker_1_1NeighborWithNeighborsData_a6a74bf97ff2316190d00ba8760ef0049}{computeNeighbors}}(neighbors,\ x,\ y);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00978}00978\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{classparticle__tracker_1_1NeighborWithNeighborsData_a0b9762b9cc2e372ec87c054b79db3c13}{interpolateDerivatives}}(t,\ neighbors,\ variable\_splines,}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00979}00979\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ variable\_names,\ shape);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00980}00980\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00981}00981\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00985}00985\ \ \ std::map<std::string,\ VariableDerivatives<DataType>>}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00986}\doxymbox{\hyperlink{classparticle__tracker_1_1NeighborWithNeighborsData_a0c6949f9ff2312c29cccd82264e7088d}{00986}}\ \ \ \doxymbox{\hyperlink{classparticle__tracker_1_1NeighborWithNeighborsData_a0c6949f9ff2312c29cccd82264e7088d}{calculateDerivativesUpdate}}(}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00987}00987\ \ \ \ \ \ \ TimeType\ t,\ std::vector<\doxymbox{\hyperlink{structparticle__tracker_1_1NeighborWithNeighbors}{NeighborWithNeighbors<DataType>}}>\ \&neighbors,}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00988}00988\ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::map<std::string,\ std::vector<\doxymbox{\hyperlink{classparticle__tracker_1_1TimeSpline}{TimeSpline<DataType,\ TimeType>}}>>}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00989}00989\ \ \ \ \ \ \ \ \ \ \ \&variable\_splines,}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00990}00990\ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<std::string>\ \&variable\_names,\ DataType\ x,\ DataType\ y,}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00991}00991\ \ \ \ \ \ \ DataType\ shape)\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00992}00992\ \ \ \ \ \doxymbox{\hyperlink{classparticle__tracker_1_1NeighborWithNeighborsData_aa547fe704f2bb3bb686f019afc1d5e22}{updateNeighborWeights}}(neighbors,\ x,\ y);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00993}00993\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{classparticle__tracker_1_1NeighborWithNeighborsData_a0b9762b9cc2e372ec87c054b79db3c13}{interpolateDerivatives}}(t,\ neighbors,\ variable\_splines,}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00994}00994\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ variable\_names,\ shape);}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00995}00995\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00996}00996\ \};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00997}00997\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00998}00998\ \textcolor{preprocessor}{\#else\ }\textcolor{comment}{//\ PARTICLE\_TRACKER\_HAS\_NANOFLANN\ ==\ 0}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l00999}00999\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l01000}01000\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ DataType,\ \textcolor{keyword}{typename}\ TimeType\ =\ \textcolor{keywordtype}{double}>}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l01001}01001\ \textcolor{keyword}{class\ }NeighborWithNeighborsData\ \{}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l01002}01002\ \ \ \textcolor{keyword}{static\_assert}(pt\_dependent\_false<DataType,\ TimeType>::value,}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l01003}01003\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}particle\_tracker::NeighborWithNeighborsData\ is\ unavailable\ "{}}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l01004}01004\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}because\ PARTICLE\_TRACKER\_HAS\_NANOFLANN=0.\ "{}}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l01005}01005\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Enable\ nanoflann\ support\ or\ avoid\ KD-\/tree\ dependent\ APIs."{}});}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l01006}01006\ \};}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l01007}01007\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l01008}01008\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ PARTICLE\_TRACKER\_HAS\_NANOFLANN}}
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l01009}01009\ }
+\DoxyCodeLine{\Hypertarget{interpolation__utils_8hpp_source_l01010}01010\ \}\ \textcolor{comment}{//\ namespace\ particle\_tracker}}
+
+\end{DoxyCode}

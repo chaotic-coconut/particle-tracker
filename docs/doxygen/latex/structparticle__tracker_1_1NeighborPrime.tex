@@ -1,0 +1,110 @@
+\doxysection{particle\+\_\+tracker::\+Neighbor\+Prime\texorpdfstring{$<$}{<} Data\+Type \texorpdfstring{$>$}{>} Struct Template Reference}
+\hypertarget{structparticle__tracker_1_1NeighborPrime}{}\label{structparticle__tracker_1_1NeighborPrime}\index{particle\_tracker::NeighborPrime$<$ DataType $>$@{particle\_tracker::NeighborPrime$<$ DataType $>$}}
+
+
+A "{}secondary neighbor"{} (neighbor of a primary neighbor).  
+
+
+
+
+{\ttfamily \+\#include $<$interpolation\+\_\+utils.\+hpp$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{structparticle__tracker_1_1NeighborPrime_a0d71630faf6112be143a8d713d1fa6b0}{Neighbor\+Prime}} (std::\+size\+\_\+t index\+\_\+prime=0, std::\+array$<$ Data\+Type, 3 $>$ distance\+\_\+prime=\{Data\+Type\{\}, Data\+Type\{\}, Data\+Type\{\}\}, Data\+Type node\+\_\+weight\+\_\+prime=Data\+Type\{\})
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std::\+size\+\_\+t \doxymbox{\hyperlink{structparticle__tracker_1_1NeighborPrime_aba1f5b0cb2781f4720f7237a1ce367cd}{ind\+\_\+prime}} \{\}
+\item 
+std::\+array$<$ Data\+Type, 3 $>$ \doxymbox{\hyperlink{structparticle__tracker_1_1NeighborPrime_a3c47aa8b0c605ccfa1a0d4055a890240}{dist\+\_\+prime}} \{\}
+\item 
+Data\+Type \doxymbox{\hyperlink{structparticle__tracker_1_1NeighborPrime_aff59ce1af4479d3a24a371d550b62586}{weight\+\_\+prime}} \{\}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename Data\+Type$>$\newline
+struct particle\+\_\+tracker::\+\+Neighbor\+Prime$<$ Data\+Type $>$}
+A "{}secondary neighbor"{} (neighbor of a primary neighbor). 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Data\+Type} & numeric type.\\
+\hline
+\end{DoxyTemplParams}
+Fields:\+
+\begin{DoxyItemize}
+\item ind\+\_\+prime:\+ index of the secondary grid node.
+\item dist\+\_\+prime:\+ array \+[d, ddx, ddy]\+ returned by {\ttfamily GCD\+\_\+deriv(primary, secondary)}.
+\begin{DoxyItemize}
+\item dist\+\_\+prime\+[0]\+ = d :\+ great-\/circle distance
+\item dist\+\_\+prime\+[1]\+ = ddx :\+ partial derivative of distance w.\+r.\+t. x-\/like coordinate
+\item dist\+\_\+prime\+[2]\+ = ddy :\+ partial derivative of distance w.\+r.\+t. y-\/like coordinate
+\end{DoxyItemize}
+\item weight\+\_\+prime:\+ Gaussian weight {\ttfamily exp(-\/(d\texorpdfstring{$\ast$}{*}d)/\+shape)} based on dist\+\_\+prime\+[0]\+. 
+\end{DoxyItemize}
+
+Definition at line \doxymbox{\hyperlink{interpolation__utils_8hpp_source_l00638}{638}} of file \doxymbox{\hyperlink{interpolation__utils_8hpp_source}{interpolation\+\_\+utils.\+hpp}}.
+
+
+
+\label{doc-constructors}
+\Hypertarget{structparticle__tracker_1_1NeighborPrime_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{structparticle__tracker_1_1NeighborPrime_a0d71630faf6112be143a8d713d1fa6b0}\index{particle\_tracker::NeighborPrime$<$ DataType $>$@{particle\_tracker::NeighborPrime$<$ DataType $>$}!NeighborPrime@{NeighborPrime}}
+\index{NeighborPrime@{NeighborPrime}!particle\_tracker::NeighborPrime$<$ DataType $>$@{particle\_tracker::NeighborPrime$<$ DataType $>$}}
+\doxysubsubsection{\texorpdfstring{NeighborPrime()}{NeighborPrime()}}
+{\footnotesize\ttfamily \label{structparticle__tracker_1_1NeighborPrime_a0d71630faf6112be143a8d713d1fa6b0} 
+template$<$typename Data\+Type$>$ \\
+\doxymbox{\hyperlink{structparticle__tracker_1_1NeighborPrime}{particle\+\_\+tracker::\+\+Neighbor\+Prime}}$<$ Data\+Type $>$::\+\+Neighbor\+Prime (\begin{DoxyParamCaption}\item[{std::\+size\+\_\+t}]{index\+\_\+prime}{ = {\ttfamily 0}, }\item[{std::\+array$<$ Data\+Type, 3 $>$}]{distance\+\_\+prime}{ = {\ttfamily \{DataType\{\},~DataType\{\},~DataType\{\}\}}, }\item[{Data\+Type}]{node\+\_\+weight\+\_\+prime}{ = {\ttfamily DataType\{\}}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \doxymbox{\hyperlink{interpolation__utils_8hpp_source_l00643}{643}} of file \doxymbox{\hyperlink{interpolation__utils_8hpp_source}{interpolation\+\_\+utils.\+hpp}}.
+
+
+
+\label{doc-variable-members}
+\Hypertarget{structparticle__tracker_1_1NeighborPrime_doc-variable-members}
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structparticle__tracker_1_1NeighborPrime_a3c47aa8b0c605ccfa1a0d4055a890240}\index{particle\_tracker::NeighborPrime$<$ DataType $>$@{particle\_tracker::NeighborPrime$<$ DataType $>$}!dist\_prime@{dist\_prime}}
+\index{dist\_prime@{dist\_prime}!particle\_tracker::NeighborPrime$<$ DataType $>$@{particle\_tracker::NeighborPrime$<$ DataType $>$}}
+\doxysubsubsection{\texorpdfstring{dist\_prime}{dist\_prime}}
+{\footnotesize\ttfamily \label{structparticle__tracker_1_1NeighborPrime_a3c47aa8b0c605ccfa1a0d4055a890240} 
+template$<$typename Data\+Type$>$ \\
+std::\+array$<$Data\+Type, 3$>$ \doxymbox{\hyperlink{structparticle__tracker_1_1NeighborPrime}{particle\+\_\+tracker::\+\+Neighbor\+Prime}}$<$ Data\+Type $>$::\+dist\+\_\+prime \{\}}
+
+
+
+Definition at line \doxymbox{\hyperlink{interpolation__utils_8hpp_source_l00640}{640}} of file \doxymbox{\hyperlink{interpolation__utils_8hpp_source}{interpolation\+\_\+utils.\+hpp}}.
+
+\Hypertarget{structparticle__tracker_1_1NeighborPrime_aba1f5b0cb2781f4720f7237a1ce367cd}\index{particle\_tracker::NeighborPrime$<$ DataType $>$@{particle\_tracker::NeighborPrime$<$ DataType $>$}!ind\_prime@{ind\_prime}}
+\index{ind\_prime@{ind\_prime}!particle\_tracker::NeighborPrime$<$ DataType $>$@{particle\_tracker::NeighborPrime$<$ DataType $>$}}
+\doxysubsubsection{\texorpdfstring{ind\_prime}{ind\_prime}}
+{\footnotesize\ttfamily \label{structparticle__tracker_1_1NeighborPrime_aba1f5b0cb2781f4720f7237a1ce367cd} 
+template$<$typename Data\+Type$>$ \\
+std::\+size\+\_\+t \doxymbox{\hyperlink{structparticle__tracker_1_1NeighborPrime}{particle\+\_\+tracker::\+\+Neighbor\+Prime}}$<$ Data\+Type $>$::\+ind\+\_\+prime \{\}}
+
+
+
+Definition at line \doxymbox{\hyperlink{interpolation__utils_8hpp_source_l00639}{639}} of file \doxymbox{\hyperlink{interpolation__utils_8hpp_source}{interpolation\+\_\+utils.\+hpp}}.
+
+\Hypertarget{structparticle__tracker_1_1NeighborPrime_aff59ce1af4479d3a24a371d550b62586}\index{particle\_tracker::NeighborPrime$<$ DataType $>$@{particle\_tracker::NeighborPrime$<$ DataType $>$}!weight\_prime@{weight\_prime}}
+\index{weight\_prime@{weight\_prime}!particle\_tracker::NeighborPrime$<$ DataType $>$@{particle\_tracker::NeighborPrime$<$ DataType $>$}}
+\doxysubsubsection{\texorpdfstring{weight\_prime}{weight\_prime}}
+{\footnotesize\ttfamily \label{structparticle__tracker_1_1NeighborPrime_aff59ce1af4479d3a24a371d550b62586} 
+template$<$typename Data\+Type$>$ \\
+Data\+Type \doxymbox{\hyperlink{structparticle__tracker_1_1NeighborPrime}{particle\+\_\+tracker::\+\+Neighbor\+Prime}}$<$ Data\+Type $>$::\+weight\+\_\+prime \{\}}
+
+
+
+Definition at line \doxymbox{\hyperlink{interpolation__utils_8hpp_source_l00641}{641}} of file \doxymbox{\hyperlink{interpolation__utils_8hpp_source}{interpolation\+\_\+utils.\+hpp}}.
+
+
+
+The documentation for this struct was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+include/\+particle\+\_\+tracker/\+\doxymbox{\hyperlink{interpolation__utils_8hpp}{interpolation\+\_\+utils.\+hpp}}\end{DoxyCompactItemize}
