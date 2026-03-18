@@ -1,4 +1,4 @@
-# particle-tracker
+# particle-transport-framework
 
 This repository shows the interfaces and overall structure of a C++ simulation framework
 I use for long-running numerical experiments on particle dispersal in the ocean.
