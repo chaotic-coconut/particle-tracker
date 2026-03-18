@@ -1,0 +1,14 @@
+<map id="nanoflann::KDTreeSingleIndexAdaptor&lt; Distance, DatasetAdaptor, DIM, index_t &gt;" name="nanoflann::KDTreeSingleIndexAdaptor&lt; Distance, DatasetAdaptor, DIM, index_t &gt;">
+<area shape="rect" id="Node000001" title="kd&#45;tree static index" alt="" coords="698,219,930,277"/>
+<area shape="rect" id="Node000002" href="$classnanoflann_1_1KDTreeBaseClass.html" title=" " alt="" coords="366,133,566,224"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="581,199,701,225,695,225,581,204"/>
+<area shape="rect" id="Node000003" href="$structnanoflann_1_1KDTreeBaseClass_1_1Node.html" title=" " alt="" coords="5,75,246,133"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="261,129,342,147,368,154,363,155,341,152,261,134"/>
+<area shape="poly" id="edge3_Node000003_Node000003" title=" " alt="" coords="94,58,106,51,125,48,142,50,154,56,161,64,161,75,156,74,156,66,151,60,141,55,126,53,108,56,98,62"/>
+<area shape="rect" id="Node000004" href="$structnanoflann_1_1array__or__vector.html" title=" " alt="" coords="43,157,208,200"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="223,176,368,177,363,180,224,181"/>
+<area shape="rect" id="Node000005" href="$classnanoflann_1_1PooledAllocator.html" title="Pooled storage allocator." alt="" coords="37,224,214,251"/>
+<area shape="poly" id="edge5_Node000002_Node000005" title=" " alt="" coords="228,223,341,205,368,203,363,204,342,211,229,228"/>
+<area shape="rect" id="Node000006" href="$structnanoflann_1_1KDTreeSingleIndexAdaptorParams.html" title="Parameters (see README.md)." alt="" coords="367,248,565,291"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="580,260,695,255,701,255,581,265"/>
+</map>

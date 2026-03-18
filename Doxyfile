@@ -1,0 +1,37 @@
+PROJECT_NAME           = "particle-transport-framework"
+PROJECT_BRIEF          = "C++ framework for large-scale particle transport simulation and ocean flow data processing"
+OUTPUT_DIRECTORY       = docs/doxygen
+CREATE_SUBDIRS         = NO
+
+INPUT                  = include/particle_tracker examples README.md
+FILE_PATTERNS          = *.hpp *.h *.cpp *.md
+RECURSIVE              = YES
+
+EXTRACT_ALL            = NO
+EXTRACT_PRIVATE        = NO
+EXTRACT_STATIC         = NO
+EXTRACT_LOCAL_CLASSES  = YES
+
+JAVADOC_AUTOBRIEF      = YES
+MULTILINE_CPP_IS_BRIEF = YES
+OPTIMIZE_OUTPUT_FOR_C  = NO
+OPTIMIZE_OUTPUT_JAVA   = NO
+
+GENERATE_HTML          = YES
+GENERATE_LATEX         = YES
+
+USE_MDFILE_AS_MAINPAGE = README.md
+SOURCE_BROWSER         = YES
+INLINE_SOURCES         = NO
+REFERENCED_BY_RELATION = YES
+REFERENCES_RELATION    = YES
+
+HAVE_DOT               = YES
+CALL_GRAPH             = NO
+CALLER_GRAPH           = NO
+CLASS_DIAGRAMS         = YES
+
+WARN_IF_UNDOCUMENTED   = YES
+WARN_IF_DOC_ERROR      = YES
+WARN_AS_ERROR          = NO
+QUIET                  = NO
