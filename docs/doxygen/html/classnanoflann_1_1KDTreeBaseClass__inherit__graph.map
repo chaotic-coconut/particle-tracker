@@ -1,7 +1,0 @@
-<map id="nanoflann::KDTreeBaseClass&lt; Derived, Distance, DatasetAdaptor, DIM, index_t &gt;" name="nanoflann::KDTreeBaseClass&lt; Derived, Distance, DatasetAdaptor, DIM, index_t &gt;">
-<area shape="rect" id="Node000001" title="kd&#45;tree base&#45;class" alt="" coords="5,71,246,129"/>
-<area shape="rect" id="Node000002" href="$classnanoflann_1_1KDTreeSingleIndexAdaptor.html" title=" " alt="" coords="294,5,527,96"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="261,74,296,70,291,72,262,79"/>
-<area shape="rect" id="Node000003" href="$classnanoflann_1_1KDTreeSingleIndexDynamicAdaptor__.html" title=" " alt="" coords="296,120,524,179"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="261,121,298,129,293,130,261,126"/>
-</map>

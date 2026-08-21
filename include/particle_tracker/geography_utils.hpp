@@ -6,7 +6,7 @@
  * This header provides:
  * - A generic clamp helper.
  * - Great-circle distance (central angle) on a sphere.
- * - Great-circle distance and partial derivatives w.r.t. the *first* point.
+ * - Great-circle distance and a squared-distance kernel-gradient term.
  * - A simple "inverse transform" that applies a local tangent-plane offset (x,y in meters)
  *   to a reference lon/lat and returns the new lon/lat.
  *
@@ -15,7 +15,7 @@
  * - Great-circle distance returned by GCD / GCD_deriv is the **central angle** (radians),
  *   i.e. arc length is `R * angle`.
  *
- * ## Error policy / "don't ruin the simulation"
+ * ## Numerical robustness
  * - clamp() is used to keep floating-point roundoff from violating the domain constraints
  *   of trig inverse operations.
  * - GCD_deriv() does **not** throw. If the derivative is mathematically undefined or numerically
@@ -103,23 +103,28 @@ inline DataType GCD(const DataType& lon1, const DataType& lat1,
 }
 
 /**
- * @brief Great-circle distance (central angle) and its partial derivatives w.r.t. the first point.
+ * @brief Great-circle distance and the local gradient of `-d^2/2`.
  *
  * @tparam DataType floating-point type
  * @param lon1 longitude of point 1 (radians)
  * @param lat1 latitude  of point 1 (radians)
  * @param lon2 longitude of point 2 (radians)
  * @param lat2 latitude  of point 2 (radians)
- * @return array { d, dd_dlon1, dd_dlat1 }
+ * @return array { d, kernel_grad_east, kernel_grad_north }
  *
  * Where:
- * - d           : central angle distance (radians)
- * - dd_dlon1    : partial derivative of d w.r.t. lon1
- * - dd_dlat1    : partial derivative of d w.r.t. lat1
+ * - d                 : central-angle distance (radians)
+ * - kernel_grad_east  : `-d * grad(d)` in the local east direction
+ * - kernel_grad_north : `-d * grad(d)` in the local north direction
+ *
+ * The east/north components use a local orthonormal tangent basis. In
+ * particular, the east component includes the `1/cos(lat1)` metric factor;
+ * it is not the coordinate derivative with respect to longitude.
  *
  * ### Degenerate case handling (d ~ 0)
  * The analytic expressions contain division by sin(d). When the two points coincide (or are
- * extremely close), sin(d) -> 0 and the derivatives are undefined / numerically unstable.
+ * extremely close), the direction of grad(d) is undefined. The product
+ * `-d*grad(d)` nevertheless tends to zero.
  *
  * Policy:
  * - Return {d, 0, 0} (safe "no directional information" fallback).
@@ -128,9 +133,8 @@ inline DataType GCD(const DataType& lon1, const DataType& lat1,
  *     - disable:   PARTICLE_TRACKER_GCD_DERIV_WARN=0
  *     - always:    PARTICLE_TRACKER_GCD_DERIV_WARN_ALWAYS=1 (not recommended for HPC)
  *
- * Notes:
- * - These derivatives are for the central angle d, not arc length R*d.
- * - If you need derivatives of arc length, multiply dd_dlon1 and dd_dlat1 by Earth radius.
+ * This quantity is the geometric factor in the derivative of a Gaussian
+ * weight: `grad(exp(-d^2/shape)) = (2/shape) * weight * grad(-d^2/2)`.
  */
 template<typename DataType>
 inline std::array<DataType, 3> GCD_deriv(const DataType& lon1, const DataType& lat1,
@@ -175,16 +179,16 @@ inline std::array<DataType, 3> GCD_deriv(const DataType& lon1, const DataType& l
         return {d, static_cast<DataType>(0), static_cast<DataType>(0)};
     }
 
-    // Partial derivative w.r.t. lon1.
-    // Note: lon enters through cos(lon1-lon2); derivative uses sin(lon2-lon1).
-    DataType dd_dlon1 = d * std::cos(lat2) * std::sin(lon2 - lon1) / sn;
+    // East component of grad(-d^2/2) in the local orthonormal tangent basis.
+    DataType kernel_grad_east =
+        d * std::cos(lat2) * std::sin(lon2 - lon1) / sn;
 
-    // Partial derivative w.r.t. lat1.
-    DataType dd_dlat1 =
+    // North component of grad(-d^2/2).
+    DataType kernel_grad_north =
         d * (std::cos(lat1) * std::sin(lat2) -
              std::sin(lat1) * std::cos(lat2) * std::cos(lon2 - lon1)) / sn;
 
-    return {d, dd_dlon1, dd_dlat1};
+    return {d, kernel_grad_east, kernel_grad_north};
 }
 
 //------------------------------------------------------------------------------
@@ -243,4 +247,3 @@ inline void inverseTransform(const DataType& x, const DataType& y, DataType& lon
 }
 
 } // namespace particle_tracker
-

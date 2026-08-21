@@ -1,9 +1,7 @@
 /********************************************************************
  *  fixed_point_pkd2.hpp — per-trajectory compressed storage (PKD-2)
  *  Requires: fixed_point_core.hpp
- *  Define ONE of:
- *      PK_IO_USE_ZSTD  (link with -lzstd)
- *      PK_IO_USE_ZLIB  (link with -lz)
+ *  Define PK_IO_USE_ZLIB and link with zlib.
  ********************************************************************/
 
 // NOTE ON PKD2 BLOCK SIZE LIMITS
@@ -13,8 +11,6 @@
 //
 //   * Each individual trajectory block must be < 4 GiB uncompressed.
 //   * Each individual trajectory block must be < 4 GiB compressed.
-//
-// This limit applies regardless of codec (zstd or zlib).
 //
 // Additionally, the zlib single-shot APIs used here (compress2/uncompress)
 // take sizes as uLong/uLongf (platform-dependent). On some platforms
@@ -35,26 +31,16 @@
 #include <unordered_map>
 #include <vector>
 
-#if !defined(PK_IO_USE_ZSTD) && !defined(PK_IO_USE_ZLIB)
-#error                                                                         \
-    "Define either PK_IO_USE_ZSTD or PK_IO_USE_ZLIB before including fixed_point_pkd2.hpp"
-#endif
-#if defined(PK_IO_USE_ZSTD) && defined(PK_IO_USE_ZLIB)
-#error "Define only ONE of PK_IO_USE_ZSTD or PK_IO_USE_ZLIB, not both"
-#endif
-
 #ifdef PK_IO_USE_ZSTD
-#include <zstd.h>
+#error "PK_IO_USE_ZSTD is unsupported; PKD2 files use zlib compression"
 #endif
-#ifdef PK_IO_USE_ZLIB
+#ifndef PK_IO_USE_ZLIB
+#error "Define PK_IO_USE_ZLIB before including fixed_point_pkd2.hpp"
+#else
 #include <zlib.h>
 #endif
 
-#if defined(PK_IO_USE_ZSTD)
-constexpr int kDefaultLevel = 3;
-#elif defined(PK_IO_USE_ZLIB)
-constexpr int kDefaultLevel = 6;
-#endif
+inline constexpr int kDefaultLevel = 6;
 
 namespace pkd2 {
 
@@ -271,30 +257,6 @@ private:
     // compress to memory
     uint32_t comp_sz = 0;
 
-#ifdef PK_IO_USE_ZSTD
-    {
-      const size_t bound = ZSTD_compressBound(raw_bytes);
-
-      // Still must fit PKD2's uint32_t TOC fields.
-      if (bound > static_cast<size_t>(std::numeric_limits<uint32_t>::max()))
-        throw std::runtime_error(
-            "pkd2: zstd compressBound exceeds 4GiB (format limit)");
-
-      comp_.resize(bound);
-
-      const size_t z =
-          ZSTD_compress(comp_.data(), bound, raw_.data(), raw_bytes, lvl_);
-      if (ZSTD_isError(z))
-        throw std::runtime_error(std::string("ZSTD_compress: ") +
-                                 ZSTD_getErrorName(z));
-
-      if (z > static_cast<size_t>(std::numeric_limits<uint32_t>::max()))
-        throw std::runtime_error(
-            "pkd2: compressed block exceeds 4GiB (format limit)");
-
-      comp_sz = static_cast<uint32_t>(z);
-    }
-#elif defined(PK_IO_USE_ZLIB)
     {
       // zlib APIs here take uLong/uLongf (platform-dependent width).
       if (raw_bytes > static_cast<size_t>(std::numeric_limits<uLong>::max()))
@@ -323,7 +285,6 @@ private:
 
       comp_sz = static_cast<uint32_t>(z);
     }
-#endif
 
     // write to file, remember offset
     long off = std::ftell(f_);
@@ -399,18 +360,11 @@ public:
 
     // decompress
     raw_.resize(te.raw_size);
-#ifdef PK_IO_USE_ZSTD
-    size_t out =
-        ZSTD_decompress(raw_.data(), raw_.size(), comp_.data(), comp_.size());
-    if (ZSTD_isError(out) || out != raw_.size())
-      throw std::runtime_error("ZSTD_decompress failed");
-#elif defined(PK_IO_USE_ZLIB)
     uLongf out = static_cast<uLongf>(raw_.size());
     int rc = uncompress(raw_.data(), &out, comp_.data(),
                         static_cast<uLong>(comp_.size()));
     if (rc != Z_OK || out != raw_.size())
       throw std::runtime_error("uncompress failed");
-#endif
     // parse block
     if (raw_.size() < sizeof(BlockHeader))
       throw std::runtime_error("pkd2: raw too small");

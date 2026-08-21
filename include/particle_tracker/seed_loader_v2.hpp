@@ -13,8 +13,11 @@
 
 #include <zlib.h>
 
-#if !defined(PK_IO_USE_ZSTD) && !defined(PK_IO_USE_ZLIB)
-#  define PK_IO_USE_ZLIB
+#ifdef PK_IO_USE_ZSTD
+#  error "PK_IO_USE_ZSTD is unsupported; PKD2 files use zlib compression."
+#endif
+#ifndef PK_IO_USE_ZLIB
+#  error "Define PK_IO_USE_ZLIB before including seed_loader_v2.hpp."
 #endif
 #include "particle_tracker/fixed_point/fixed_point_core.hpp"   // wrap_lon(), pi
 #include "particle_tracker/fixed_point/fixed_point_pkd2.hpp"   // pkd2::{Header,TocEntry,BlockHeader}

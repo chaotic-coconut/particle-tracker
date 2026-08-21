@@ -1,7 +1,0 @@
-<map id="particle_tracker::MonthData" name="particle_tracker::MonthData">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,141,188,168"/>
-<area shape="rect" id="Node000002" href="$classDate.html" title="Represents a calendar date (day/month/year) in the Gregorian calendar." alt="" coords="12,13,61,40"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="51,52,93,140,88,141,47,56"/>
-<area shape="rect" id="Node000003" href="$structparticle__tracker_1_1Grid.html" title=" " alt="" coords="85,5,228,48"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="150,61,142,91,129,119,111,143,107,139,125,116,137,89,147,65"/>
-</map>
