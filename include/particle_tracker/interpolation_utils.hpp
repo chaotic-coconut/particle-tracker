@@ -624,13 +624,11 @@ template <typename DataType, typename TimeType = double> class NeighborsData {
  *
  * Fields:
  * - @ref ind_prime: index of the secondary grid node.
- * - @ref dist_prime: array [d, ddx, ddy] returned by @c GCD_deriv(primary,
+ * - @ref dist_prime: array [d, gx, gy] returned by @c GCD_deriv(primary,
  * secondary).
  *   - dist_prime[0] = d    : great-circle distance
- *   - dist_prime[1] = ddx  : partial derivative of distance w.r.t. x-like
- * coordinate
- *   - dist_prime[2] = ddy  : partial derivative of distance w.r.t. y-like
- * coordinate
+ *   - dist_prime[1] = gx   : east component of `grad(-d^2/2)`
+ *   - dist_prime[2] = gy   : north component of `grad(-d^2/2)`
  * - @ref weight_prime: Gaussian weight `exp(-(d*d)/shape)` based on
  * dist_prime[0].
  *
@@ -699,7 +697,7 @@ template <typename DataType> struct VariableDerivatives {
  * - For each primary neighbor i:
  *   - For each secondary neighbor j:
  *     - dv = v_j - v_i
- *     - accumulate using weight_prime * (d * ddx * dv) and (d * ddy * dv)
+ *     - accumulate using weight_prime * (gx * dv) and (gy * dv)
  * - Normalize per-primary-neighbor by sum of weight_prime (den_prime)
  * - Average over primary neighbors with primary weights
  * - Apply final scaling factor (2/shape)
@@ -798,9 +796,16 @@ public:
         const DataType lon_j = pt_wrap_lon(xx_sparse.at(nbr_prime.ind_prime));
         const DataType lat_j = yy_sparse.at(nbr_prime.ind_prime);
 
-        // dist_prime = [d, ddx, ddy] from GCD_deriv implementation.
-        nbr_prime.dist_prime =
-            GCD_deriv(query_point_prime[0], query_point_prime[1], lon_j, lat_j);
+        // The primary node is part of its own radius search. Avoid calling
+        // GCD_deriv for that directionless self-pair.
+        if (nbr_prime.ind_prime == nbr.ind) {
+          nbr_prime.dist_prime = {static_cast<DataType>(0),
+                                  static_cast<DataType>(0),
+                                  static_cast<DataType>(0)};
+        } else {
+          nbr_prime.dist_prime = GCD_deriv(query_point_prime[0],
+                                           query_point_prime[1], lon_j, lat_j);
+        }
         nbr_prime.weight_prime = std::exp(-nbr_prime.dist_prime[0] *
                                           nbr_prime.dist_prime[0] / shape);
 
@@ -903,9 +908,8 @@ public:
         if (nbr_prime.ind_prime == nbr.ind)
           continue;
 
-        const DataType d = nbr_prime.dist_prime[0];
-        const DataType ddx = nbr_prime.dist_prime[1];
-        const DataType ddy = nbr_prime.dist_prime[2];
+        const DataType gx = nbr_prime.dist_prime[1];
+        const DataType gy = nbr_prime.dist_prime[2];
 
         // IMPORTANT: den_prime must be independent of number of variables
         // requested.
@@ -925,10 +929,10 @@ public:
           const DataType v_j = splines[nbr_prime.ind_prime].spline(t);
           const DataType dv = v_j - v_i;
 
-          // Heuristic estimator building block:
-          // weight' * (d * d(d)/dx * dv), and analogously for y.
-          dx_prime[name] += nbr_prime.weight_prime * (d * ddx * dv);
-          dy_prime[name] += nbr_prime.weight_prime * (d * ddy * dv);
+          // GCD_deriv already returns grad(-d^2/2); multiplying by d again
+          // would introduce an erroneous extra distance factor.
+          dx_prime[name] += nbr_prime.weight_prime * (gx * dv);
+          dy_prime[name] += nbr_prime.weight_prime * (gy * dv);
         }
       }
 
