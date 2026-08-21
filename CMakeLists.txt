@@ -4,20 +4,22 @@ if(POLICY CMP0167)
   cmake_policy(SET CMP0167 NEW)
 endif()
 
-project(particle_tracker LANGUAGES CXX)
+project(particle_transport_framework LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-option(PK_USE_ZLIB "Use zlib backend" ON)
-option(PK_USE_ZSTD "Use zstd backend" OFF)
-
-if(PK_USE_ZLIB AND PK_USE_ZSTD)
-  message(FATAL_ERROR "Choose only one of PK_USE_ZLIB or PK_USE_ZSTD")
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+  set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
+  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
+    Debug Release RelWithDebInfo MinSizeRel)
 endif()
 
+option(PARTICLE_TRACKER_BUILD_EXAMPLES "Build the simulation executables" ON)
+
 add_library(particle_tracker INTERFACE)
+add_library(particle_transport_framework::particle_tracker ALIAS particle_tracker)
 
 target_include_directories(particle_tracker
   INTERFACE
@@ -26,23 +28,15 @@ target_include_directories(particle_tracker
 )
 
 target_compile_features(particle_tracker INTERFACE cxx_std_20)
-
-if(PK_USE_ZLIB)
-  target_compile_definitions(particle_tracker INTERFACE PK_IO_USE_ZLIB)
-elseif(PK_USE_ZSTD)
-  target_compile_definitions(particle_tracker INTERFACE PK_IO_USE_ZSTD)
-endif()
+target_compile_definitions(particle_tracker INTERFACE PK_IO_USE_ZLIB)
 
 # ---- Dependencies ----
 find_package(ZLIB REQUIRED)
-
-find_package(TBB QUIET)
-if(NOT TBB_FOUND)
-  message(STATUS "TBB package not found; will try raw -ltbb fallback")
+find_package(TBB REQUIRED)
+if(NOT TARGET TBB::tbb)
+  message(FATAL_ERROR "TBB was found, but the TBB::tbb target is unavailable")
 endif()
-
 find_package(Boost REQUIRED CONFIG)
-target_link_libraries(particle_tracker INTERFACE Boost::boost)
 
 find_package(PkgConfig QUIET)
 find_package(netCDF QUIET)
@@ -101,31 +95,31 @@ if(PK_NETCDF_INCLUDE_DIRS)
   message(STATUS "netCDF include dirs: ${PK_NETCDF_INCLUDE_DIRS}")
 endif()
 
-# ---- Helper to link common deps ----
-function(link_common_deps tgt)
-  target_link_libraries(${tgt}
-    PRIVATE
-      particle_tracker
-      ZLIB::ZLIB
-      Boost::boost
-      ${PK_NETCDF_C_LIB}
-      ${PK_NETCDF_CXX_LIB}
-  )
+target_link_libraries(particle_tracker
+  INTERFACE
+    ZLIB::ZLIB
+    TBB::tbb
+    Boost::boost
+    ${PK_NETCDF_C_LIB}
+    ${PK_NETCDF_CXX_LIB}
+)
 
-  if(PK_NETCDF_INCLUDE_DIRS)
-    target_include_directories(${tgt} PRIVATE ${PK_NETCDF_INCLUDE_DIRS})
-  endif()
-
-  if(TBB_FOUND)
-    target_link_libraries(${tgt} PRIVATE TBB::tbb)
-  else()
-    target_link_libraries(${tgt} PRIVATE tbb)
-  endif()
-endfunction()
+if(PK_NETCDF_INCLUDE_DIRS)
+  target_include_directories(particle_tracker INTERFACE ${PK_NETCDF_INCLUDE_DIRS})
+endif()
 
 # ---- Examples ----
-add_executable(hpc_particles examples/hpc_particles.cpp)
-link_common_deps(hpc_particles)
+if(PARTICLE_TRACKER_BUILD_EXAMPLES)
+  add_executable(hpc_particles examples/hpc_particles.cpp)
+  target_link_libraries(hpc_particles
+    PRIVATE particle_transport_framework::particle_tracker)
 
-add_executable(hpc_trajectories examples/hpc_trajectories.cpp)
-link_common_deps(hpc_trajectories)
+  add_executable(hpc_trajectories examples/hpc_trajectories.cpp)
+  target_link_libraries(hpc_trajectories
+    PRIVATE particle_transport_framework::particle_tracker)
+endif()
+
+include(CTest)
+if(BUILD_TESTING)
+  add_subdirectory(tests)
+endif()

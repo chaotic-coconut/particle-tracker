@@ -4,11 +4,15 @@ on:
   push:
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   build-linux:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Install deps
         run: |
@@ -17,11 +21,16 @@ jobs:
             cmake ninja-build g++ \
             zlib1g-dev libtbb-dev \
             libnetcdf-dev libnetcdf-c++4-dev \
-            libboost-all-dev
+            libboost-dev
 
       - name: Configure
-        run: cmake -S . -B build -G Ninja -DPK_USE_ZLIB=ON -DPK_USE_ZSTD=OFF
+        run: >-
+          cmake -S . -B build -G Ninja
+          -DCMAKE_BUILD_TYPE=Release
+          -DBUILD_TESTING=ON
 
       - name: Build
-        run: cmake --build build -j 2
+        run: cmake --build build --parallel 2
 
+      - name: Test
+        run: ctest --test-dir build --build-config Release --output-on-failure
