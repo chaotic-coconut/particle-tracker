@@ -1,33 +1,76 @@
-# particle-transport-framework
+# Particle Transport Framework
 
-C++ framework for large-scale particle transport simulation and ocean flow data processing.
+This repository contains the C++20 particle-transport code I developed for
+simulations in time-dependent ocean velocity fields. It reads gridded NetCDF
+data, interpolates the velocity field in space and time, advances particles on
+a spherical Earth, and writes compact trajectory records.
 
-The framework is designed for long-running simulations based on gridded environmental velocity fields (e.g., HYCOM NetCDF data), with emphasis on performance, modular architecture, and reproducibility.
+The public drivers reflect the structure of the production calculations. They
+are not standalone examples: running them requires the original external
+NetCDF datasets and the corresponding variable names and file patterns.
 
-It provides building blocks for constructing simulation pipelines that operate on structured flow fields and track particle trajectories over time in complex spatial domains.
+## Main components
 
-## Features
+- NetCDF C++4 input for HYCOM-style gridded fields
+- cubic spline interpolation in time
+- 2D longitude/latitude kd-tree searches with nanoflann
+- Gaussian spatial weighting based on great-circle distance
+- explicit Euler particle updates in a local east/north tangent plane
+- spherical azimuthal-equidistant conversion back to longitude/latitude
+- shared-memory parallel particle propagation with Intel oneAPI TBB
+- two-month rolling field buffers
+- fixed-point trajectory records compressed with zlib
 
-- Modular architecture for simulation workflows and data processing pipelines  
-- Efficient handling and reorganization of gridded flow data (NetCDF, HYCOM)  
-- Spatial indexing using kd-trees (nanoflann) for fast nearest-neighbor queries  
-- Local geometric transformations and coordinate handling  
-- Interpolation and reconstruction of physical fields (Gaussian weighting, spline-based methods)  
-- Parallel processing using Intel TBB for efficient handling of large datasets and simulation workloads
-- Support for long-duration simulations and repeated runs
+## Production workload represented by the code
 
-## Tech Stack
+`examples/hpc_particles.cpp` is configured for 2,800,000 released particles per
+day and a maximum lifetime of 730 days. That is about 1.02 billion release
+events per 365-day model year. Coastal seed positions are generated once and
+reused for each release day. Completed particles are written and removed from
+memory while two adjacent months of velocity fields remain loaded.
 
-- C++
-- CMake
-- Boost
-- NetCDF
-- Intel TBB
-- Linux
+These numbers describe the workload for which the driver was written, not a
+benchmark. The repository does not contain the input data, production logs,
+batch scripts, or downstream ensemble-analysis workflow.
 
-## Status
+## Build
 
-The repository exposes the core structure and interfaces of the framework.  
-Implementation is being actively cleaned, modularized, and documented.
+The code requires CMake 3.20 or newer, a C++20 compiler, Boost, NetCDF C and
+C++4, Intel oneAPI TBB, and zlib. On Ubuntu:
 
+```sh
+sudo apt-get install cmake ninja-build g++ zlib1g-dev libtbb-dev \
+  libnetcdf-dev libnetcdf-c++4-dev libboost-dev
+```
 
+Configure, build, and run the tests:
+
+```sh
+cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON
+cmake --build build --parallel
+ctest --test-dir build --output-on-failure
+```
+
+The build produces two executables:
+
+- `hpc_particles` releases daily particle ensembles and stores compressed
+  start/end records for landed particles.
+- `hpc_trajectories` reconstructs position and velocity time series from seed
+  records.
+
+Running either executable without arguments prints its expected command-line
+arguments.
+
+## Tests
+
+The CTest suite covers geographic transformations, great-circle calculations,
+the `GCD_deriv` kernel-gradient convention and scaling, calendar edge cases,
+fixed-point packing, gzip append/read behaviour, PKD2 position round trips, and
+small deterministic interpolation cases.
+
+These are regression and numerical sanity checks. They do not replace
+validation with the original ocean fields or a production-scale run.
+
+## License
+
+BSD-3-Clause. See [LICENSE](LICENSE).
