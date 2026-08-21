@@ -1,5 +1,5 @@
 // fixed_point_io_codec.hpp
-// PKD1 "record-stream" compressed helpers (zstd or gzip/zlib).
+// PKD1 "record-stream" compressed helpers (gzip/zlib).
 // Requires pk_config.hpp to be included first (or compile flags defined).
 
 // NOTE ON SIZE LIMITS AND FORMAT CONSTRAINTS
@@ -11,14 +11,6 @@
 //   - This implementation hard-fails on overflow instead of silently
 //     truncating and corrupting the stream.
 //   - Supporting >4 GiB would require explicit chunked deflate + rolling CRC.
-//
-// * zstd path:
-//   - Zstd compression/decompression APIs use `size_t` and are not subject
-//     to the 4 GiB zlib limitation.
-//   - Zstd skippable frame headers store payload size as uint32_t by format;
-//     this is safe here because FileHeaderPKD1 is small.
-//   - Decompression accumulates the full output in memory; no hard size
-//     limit is enforced for corrupted or untrusted inputs.
 
 #pragma once
 #include <vector>
@@ -34,148 +26,9 @@
 #include "fixed_point_core.hpp"
 #include "fixed_point_pkd1_io.hpp" // for write_all/read_all + FileHeaderPKD1
 
-#ifdef PK_IO_USE_ZSTD
-    #include <zstd.h>     // link with -lzstd
-#endif
-#ifdef PK_IO_USE_ZLIB
-    #include <zlib.h>     // link with -lz
-#endif
-
-// -------------------- ZSTD implementation --------------------
-#ifdef PK_IO_USE_ZSTD
-
-inline void write_records_zstd(const std::string& path,
-                               const std::vector<PackedParticle>& rec,
-                               std::uint64_t released_count,
-                               int level = 3,
-                               bool append = false)
-{
-    if (!append)
-    {
-        std::ofstream os(path, std::ios::binary | std::ios::out | std::ios::trunc);
-        if (!os) throw std::runtime_error("write_records_zstd: cannot open " + path);
-
-        FileHeaderPKD1 h{};
-        h.reserved0 = released_count;
-        h.reserved1 = static_cast<uint64_t>(rec.size());
-
-        // skippable frame magic (0x184D2A50..57)
-        const uint32_t magic = 0x184D2A50u;
-        const uint32_t size  = static_cast<uint32_t>(sizeof(FileHeaderPKD1));
-        os.write(reinterpret_cast<const char*>(&magic), 4);
-        os.write(reinterpret_cast<const char*>(&size),  4);
-        write_header(os, h);
-        os.flush();
-    }
-    else
-    {
-        // bump reserved1 inside skippable frame at file start
-        std::fstream hs(path, std::ios::binary | std::ios::in | std::ios::out);
-        if (!hs) throw std::runtime_error("write_records_zstd: cannot reopen for header " + path);
-
-        uint32_t magic = 0, size = 0;
-        hs.read(reinterpret_cast<char*>(&magic), 4);
-        hs.read(reinterpret_cast<char*>(&size),  4);
-        if ((magic & 0xFFFFFFF0u) != 0x184D2A50u || size < sizeof(FileHeaderPKD1))
-            throw std::runtime_error("write_records_zstd: no skippable header found");
-
-        FileHeaderPKD1 h = read_header(hs);
-        h.reserved1 += static_cast<uint64_t>(rec.size());
-
-        hs.seekp(8, std::ios::beg); // after magic+size
-        write_header(hs, h);
-        hs.flush();
-    }
-
-    if (rec.empty()) return;
-
-    std::ofstream os(path, std::ios::binary | std::ios::out | std::ios::app);
-    if (!os) throw std::runtime_error("write_records_zstd: cannot open for append " + path);
-
-    const size_t src_bytes = rec.size() * sizeof(PackedParticle);
-    const size_t bound     = ZSTD_compressBound(src_bytes);
-    std::vector<char> cbuf(bound);
-
-    const size_t rc = ZSTD_compress(cbuf.data(), bound, rec.data(), src_bytes, level);
-    if (ZSTD_isError(rc))
-        throw std::runtime_error("write_records_zstd: " + std::string(ZSTD_getErrorName(rc)));
-
-    write_all(os, cbuf.data(), rc);
-}
-
-inline std::vector<PackedParticle> read_records_zstd(const std::string& path)
-{
-    std::ifstream is(path, std::ios::binary);
-    if (!is) throw std::runtime_error("read_records_zstd: cannot open " + path);
-
-    std::streampos start = is.tellg();
-    uint32_t magic = 0, size = 0;
-    is.read(reinterpret_cast<char*>(&magic), 4);
-    is.read(reinterpret_cast<char*>(&size),  4);
-
-    if (is && ((magic & 0xFFFFFFF0u) == 0x184D2A50u))
-    {
-        if (size < sizeof(FileHeaderPKD1))
-            throw std::runtime_error("read_records_zstd: skippable too small");
-        FileHeaderPKD1 h{};
-        read_all(is, &h);
-        if (h.magic[0] != 'P' || h.magic[1] != 'K' || h.magic[2] != 'D')
-            throw std::runtime_error("read_records_zstd: bad PKD header");
-        if (size > sizeof(FileHeaderPKD1))
-            is.seekg(static_cast<std::streamoff>(size - sizeof(FileHeaderPKD1)), std::ios::cur);
-    }
-    else
-    {
-        // backward compat: old files had raw PKD1 header
-        is.clear();
-        is.seekg(start);
-        (void)read_header(is);
-    }
-
-    ZSTD_DCtx* dctx = ZSTD_createDCtx();
-    if (!dctx) throw std::runtime_error("read_records_zstd: createDCtx failed");
-
-    const size_t in_chunk  = ZSTD_DStreamInSize();
-    const size_t out_chunk = ZSTD_DStreamOutSize();
-    std::vector<char> inbuf(in_chunk), outbuf(out_chunk), raw;
-
-    ZSTD_inBuffer  in  { inbuf.data(), 0, 0 };
-    ZSTD_outBuffer out { outbuf.data(), outbuf.size(), 0 };
-
-    while (true)
-    {
-        if (in.pos == in.size)
-        {
-            is.read(inbuf.data(), static_cast<std::streamsize>(inbuf.size()));
-            in.size = static_cast<size_t>(is.gcount());
-            in.pos  = 0;
-            if (in.size == 0) break;
-        }
-
-        out.pos = 0;
-        size_t ret = ZSTD_decompressStream(dctx, &out, &in);
-        if (ZSTD_isError(ret))
-        {
-            ZSTD_freeDCtx(dctx);
-            throw std::runtime_error("read_records_zstd: " + std::string(ZSTD_getErrorName(ret)));
-        }
-        if (out.pos) raw.insert(raw.end(), outbuf.data(), outbuf.data() + out.pos);
-    }
-
-    ZSTD_freeDCtx(dctx);
-
-    if (raw.size() % sizeof(PackedParticle) != 0)
-        throw std::runtime_error("read_records_zstd: size mismatch");
-
-    std::vector<PackedParticle> rec(raw.size() / sizeof(PackedParticle));
-    std::memcpy(rec.data(), raw.data(), raw.size());
-    return rec;
-}
-
-#endif // PK_IO_USE_ZSTD
+#include <zlib.h> // link with -lz
 
 // -------------------- ZLIB/GZIP implementation --------------------
-#ifdef PK_IO_USE_ZLIB
 
 namespace gzdetail
 {
@@ -507,5 +360,3 @@ inline std::vector<PackedParticle> read_records_gzip(const std::string& path)
     std::memcpy(rec.data(), raw.data(), raw.size());
     return rec;
 }
-
-#endif // PK_IO_USE_ZLIB
