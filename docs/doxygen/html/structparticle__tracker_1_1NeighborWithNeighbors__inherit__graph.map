@@ -1,5 +1,0 @@
-<map id="particle_tracker::NeighborWithNeighbors&lt; DataType &gt;" name="particle_tracker::NeighborWithNeighbors&lt; DataType &gt;">
-<area shape="rect" id="Node000001" title="A primary Neighbor plus a list of its secondary neighbors." alt="" coords="5,96,193,139"/>
-<area shape="rect" id="Node000002" href="$structparticle__tracker_1_1Neighbor.html" title="One spatial neighbor (grid node) used in interpolation." alt="" coords="14,5,184,48"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,62,101,97,97,95,97,66"/>
-</map>

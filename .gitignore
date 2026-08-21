@@ -6,8 +6,14 @@ cmake_install.cmake
 Makefile
 compile_commands.json
 
-# Doxygen (optional)
-docs/api/latex/
+# Local build/debug output
+/dump.txt
+
+# Generated documentation
+/docs/doxygen/
+/docs/*.aux
+/docs/*.log
+/docs/doc.pdf
 
 # Editor / system
 *.swp

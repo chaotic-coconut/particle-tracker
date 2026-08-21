@@ -1,5 +1,0 @@
-<map id="nanoflann::SO3_Adaptor&lt; T, DataSource, _DistanceType, IndexType &gt;" name="nanoflann::SO3_Adaptor&lt; T, DataSource, _DistanceType, IndexType &gt;">
-<area shape="rect" id="Node000001" title="SO3 distance functor (Uses L2_Simple) Corresponding distance traits: nanoflann::metric_SO3." alt="" coords="5,136,221,195"/>
-<area shape="rect" id="Node000002" href="$structnanoflann_1_1L2__Simple__Adaptor.html" title=" " alt="" coords="27,5,199,64"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,77,116,136,110,135,111,81"/>
-</map>
