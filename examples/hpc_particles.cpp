@@ -689,7 +689,7 @@ int main(int argc, char *argv[]) try {
       E += landed_east[day];
       W += landed_west[day];
     }
-    std::cerr << "[" << formatDate(win_beg) << "–" << formatDate(win_end)
+    std::cerr << "[" << formatDate(win_beg) << "-" << formatDate(win_end)
               << "] " << "released=" << R << " landed=" << L
               << " landed east =" << E << " landed west=" << W << '\n'
               << "neverleft=" << B << " lifetime=" << N << "\n";
