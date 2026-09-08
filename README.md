@@ -53,14 +53,16 @@ cmake --build build --parallel
 ctest --test-dir build --output-on-failure
 ```
 
-The build produces two executables:
+The build produces three executables:
 
 - `hpc_particles` releases daily particle ensembles and stores compressed
   start/end records for landed particles.
 - `hpc_trajectories` reconstructs position and velocity time series from seed
   records.
+- `regular_grid_transport_daily_netcdf` releases a regular lon/lat seed grid
+  once per day and writes one self-contained NetCDF file per release day.
 
-Running either executable without arguments prints its expected command-line
+Running any executable without arguments prints its expected command-line
 arguments.
 
 ## Tests

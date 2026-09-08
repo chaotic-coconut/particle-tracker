@@ -117,6 +117,11 @@ if(PARTICLE_TRACKER_BUILD_EXAMPLES)
   add_executable(hpc_trajectories examples/hpc_trajectories.cpp)
   target_link_libraries(hpc_trajectories
     PRIVATE particle_transport_framework::particle_tracker)
+
+  add_executable(regular_grid_transport_daily_netcdf
+    examples/regular_grid_transport_daily_netcdf.cpp)
+  target_link_libraries(regular_grid_transport_daily_netcdf
+    PRIVATE particle_transport_framework::particle_tracker)
 endif()
 
 include(CTest)

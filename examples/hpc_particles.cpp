@@ -1,5 +1,4 @@
 #include "oneapi/tbb/blocked_range.h"
-#include "oneapi/tbb/global_control.h"
 #include "oneapi/tbb/parallel_for.h" // TBB parallel_for
 #include "particle_tracker/data_prep_utils.hpp" // Provides grid, time series, splines, etc.
 #include "particle_tracker/detail/datetime_utils.hpp"
