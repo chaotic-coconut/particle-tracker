@@ -1,5 +1,5 @@
 /********************************************************************
- *  fixed_point_pkd2.hpp — per-trajectory compressed storage (PKD-2)
+ *  fixed_point_pkd2.hpp  -  per-trajectory compressed storage (PKD-2)
  *  Requires: fixed_point_core.hpp
  *  Define PK_IO_USE_ZLIB and link with zlib.
  ********************************************************************/
@@ -20,7 +20,7 @@
 // streaming compression and store 64-bit sizes in the TOC.
 
 #pragma once
-#include "fixed_point_core.hpp" // fp_pi, quant_coord, wrap_lon, …
+#include "fixed_point_core.hpp" // fp_pi, quant_coord, wrap_lon, ...
 #include <cstdint>
 #include <cstdio>
 #include <cstring>

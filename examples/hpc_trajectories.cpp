@@ -58,7 +58,6 @@ using particle_tracker::splitArgs;
 using particle_tracker::TimeSpline;
 using particle_tracker::TimeType;
 
-// inline constexpr double number_pi = std::numbers::pi_v<double>;
 static const TimeType life_limit_seconds = 2 * 365 * 24 * 3600.;
 
 // ---------------- small helpers ----------------
@@ -177,7 +176,7 @@ inline void normalize_seed_times_to_t2000(std::vector<SeedInit> &seeds,
   }
 }
 
-// IMPORTANT: do NOT “fix” ordering by swapping only times.
+// IMPORTANT: do NOT "fix" ordering by swapping only times.
 // We only snap times here.
 inline void snap_seed_times_to_grid(std::vector<SeedInit> &seeds,
                                     int32_t dt_s) {

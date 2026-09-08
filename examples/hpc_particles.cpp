@@ -75,7 +75,7 @@ static std::unordered_map<DayKey, std::uint64_t>
 // Random number generator
 static thread_local std::mt19937 gen(std::random_device{}());
 
-// Helper: uniform random shift in [‑max,max]
+// Helper: uniform random shift in [-max,max]
 template <class DataType> inline DataType randomShift(DataType max) {
   std::uniform_real_distribution<DataType> dis(-max, max);
   return dis(gen);
@@ -208,7 +208,7 @@ void buildInitialPositions(std::size_t N, const MonthData &md_ref,
       std::make_unique<KDTree<DataType>>(2, initial_band_cloud, kd_params);
   kd_initial_band->buildIndex();
 
-  // Set “still-in-band” threshold once (example: 10 km)
+  // Set "still-in-band" threshold once (example: 10 km)
   DataType stay_initial_band_rad = 10000. / 6371000.;
   stay_initial_band_thresh_squared =
       stay_initial_band_rad * stay_initial_band_rad;
@@ -291,7 +291,7 @@ inline bool stillInitialBand(const point<DataType> &p) {
 }
 
 // ---------------------------------------------------------------
-// Pick which month’s data to use for absolute time t
+// Pick which month's data to use for absolute time t
 // ---------------------------------------------------------------
 inline const MonthData &pickMonth(TimeType t, const MonthData &older_m,
                                   const MonthData &newer_m) {
@@ -310,22 +310,6 @@ pickNeighbors(TimeType t, const MonthData &older_m, const MonthData &newer_m,
 // ---------------------------------------------------------------
 // Interpolate U,V using NeighborsData
 // ---------------------------------------------------------------
-// inline void interpolateUV(TimeType t,
-//                          DataType lon,DataType lat,
-//                          const std::vector<std::string>& vars,   //
-//                          {"water_u","water_v"} const MonthData& md,
-//                          NeighborsData<DataType,TimeType>& nb,
-//                          DataType& u,DataType& v)
-//{
-//    std::vector<Neighbor<DataType>> neigh;
-//    nb.computeNeighbors(neigh,lon,lat);
-//    if (neigh.empty()){u=v=0;return;}
-//
-//    auto vals=nb.interpolateVariables(t,neigh,md.spl,vars);
-//    u=vals.at(vars[0]);
-//    v=vals.at(vars[1]);
-//}
-
 inline void
 interpolateUV(TimeType t, DataType lon, DataType lat,
               const std::vector<std::string> &vars, // {"water_u","water_v"}
@@ -390,41 +374,6 @@ void propagateWindow(const Date &win_beg, const Date &win_end,
 
             bool grace_done = false;
 
-            // while (p.reason==EndReason::none && p.time>=t_beg)
-            //{
-            //     TimeType age=p.init_time-p.time;
-
-            //    if
-            //    (age>=life_time_seconds){p.reason=EndReason::lifetime;break;}
-
-            //    if (!grace_done && age>=grace_seconds)
-            //    {
-            //        if
-            //        (stillInitialBand({p.lon,p.lat})){p.reason=EndReason::neverleft;break;}
-            //        grace_done=true;
-            //    }
-
-            //    const MonthData& md=pickMonth(p.time,older_m,newer_m);
-            //    auto& nb =pickNeighbors(p.time,older_m,newer_m,nb_old,nb_new);
-
-            //    // Only beach if (past grace) OR (we’ve left the initial band)
-            //    bool allow_beach=(age>=grace_seconds) ||
-            //    !stillInitialBand({p.lon,p.lat}); if (allow_beach &&
-            //    nearLand({p.lon,p.lat},md,land_thresh_squared))
-            //    {
-            //        p.reason=EndReason::landed;
-            //        break;
-            //    }
-
-            //    DataType u,v;
-            //    interpolateUV(p.time,p.lon,p.lat,data_vars,md,nb,u,v);
-            //    DataType dx=-u*dt_sec,dy=-v*dt_sec;
-            //    inverseTransform(dx,dy,p.lon,p.lat);
-
-            //    p.time-=dt_sec;
-            //    if (p.time<t_beg) break;
-            //}
-
             const bool started_past_grace =
                 (p.init_time - p.time) >= grace_seconds;
             bool grace_counted =
@@ -462,17 +411,9 @@ void propagateWindow(const Date &win_beg, const Date &win_end,
               }
 
               // 2) (Optional) Only *mark* never-left at grace,
-              //    but don’t break here — let it keep going further back in
+              //    but don't break here  -  let it keep going further back in
               //    time.
               if (!grace_done && past_grace) {
-                // if (in_band)
-                //{
-                //     // p.reason = EndReason::neverleft; break;   // <- REMOVE
-                //     this early break
-                //     // If you want to count later, track a flag:
-                //     // p.flags |= EVER_IN_BAND_AT_GRACE;  (or keep a side map
-                //     if you can’t change Particle)
-                // }
                 grace_done = true;
               }
 
@@ -552,10 +493,6 @@ int main(int argc, char *argv[]) try {
   auto start = std::chrono::system_clock::now();
   std::time_t start_time = std::chrono::system_clock::to_time_t(start);
   std::cerr << "started computation at " << std::ctime(&start_time) << '\n';
-
-  // oneapi::tbb::global_control
-  // control(oneapi::tbb::global_control::max_allowed_parallelism,64); // Limit
-  // to XX threads
 
   /* release window ----------------------------------------------------- */
   Date start_release = parseDate(argv[1]);
@@ -759,9 +696,9 @@ int main(int argc, char *argv[]) try {
               << "neverleft=" << B << " lifetime=" << N << "\n";
 
     /* 2. advance the ring buffer by one month ---------------------------- */
-    cur_month = cur_month.addMonths(-1); // Feb → Mar → Apr …
+    cur_month = cur_month.addMonths(-1); // Feb -> Mar -> Apr ...
 
-    older ^= 1; // swap indices (0 ↔ 1)
+    older ^= 1; // swap indices (0 <-> 1)
     newer ^= 1;
 
     /* load the *new* Month+1 (two months ahead of 'older') */

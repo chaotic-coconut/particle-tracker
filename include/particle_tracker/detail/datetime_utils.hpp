@@ -275,7 +275,7 @@ class DateRange
     Date startDate,endDate;
 
 public:
-    // inclusive range [startDate … endDate]
+    // inclusive range [startDate ... endDate]
     DateRange(const Date& s,const Date& e) : startDate(s),endDate(e)
     {
         if (e<s)

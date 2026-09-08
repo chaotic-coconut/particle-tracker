@@ -214,7 +214,7 @@ inline std::array<DataType, 3> GCD_deriv(const DataType& lon1, const DataType& l
  * bearing given by (x,y).
  *
  * @note Spherical Earth model with radius EARTH_RADIUS (not WGS84 ellipsoid).
- * @note Accuracy degrades for very large offsets (hundreds–thousands of km).
+ * @note Accuracy degrades for very large offsets (hundreds-thousands of km).
  */
 template<typename DataType>
 inline void inverseTransform(const DataType& x, const DataType& y, DataType& lon, DataType& lat)

@@ -606,8 +606,8 @@ template <class DT> using spline_map = std::map<std::string, spline_vec<DT>>;
 struct MonthData // lives one month, then discarded
 {
   Date month{1, 1, 2000};     // default so MonthData() works
-  spline_map<DataType> spl_1; // sub-domain 1  (“left half”)
-  spline_map<DataType> spl_2; // sub-domain 2  (“right half”)
+  spline_map<DataType> spl_1; // sub-domain 1  ("left half")
+  spline_map<DataType> spl_2; // sub-domain 2  ("right half")
   spline_map<DataType> spl;
   Grid<DataType> grid_1, grid_2;
   std::vector<std::size_t> sea_idx_1, sea_idx_2;
@@ -652,13 +652,6 @@ inline void dumpCoastCSV(const MonthData &m, const std::string &path,
     double lat_deg = m.land_cloud.pts[i + 1] * 180. / number_pi;
     out << lon_deg << "," << lat_deg << ",land\n";
   }
-  // (optional) sea points
-  // for (size_t i=0;i+1<m.sea_cloud.pts.size();i+=2*stride)
-  //{
-  //    double lon_deg=m.sea_cloud.pts[i]  *180./pi;
-  //    double lat_deg=m.sea_cloud.pts[i+1]*180./pi;
-  //    out<<lon_deg<<","<<lat_deg<<",sea\n";
-  //}
 }
 
 inline void buildKdTrees(MonthData &m) {
@@ -777,13 +770,6 @@ inline MonthData loadOneMonth(Date month, // 2000-01-01, 2000-02-01 ...
                                formatDate(m.month) +
                                " (check masks/variables/region).");
     }
-
-    // 3) KD trees
-    // auto kd_params=nanoflann::KDTreeSingleIndexAdaptorParams(10);
-    // m.kd_sea =std::make_unique<KDTree<DataType>>(2,m.sea_cloud ,kd_params);
-    // m.kd_land=std::make_unique<KDTree<DataType>>(2,m.land_cloud,kd_params);
-    // m.kd_sea ->buildIndex();
-    // m.kd_land->buildIndex();
   };
 
   buildClouds(m);
@@ -792,7 +778,6 @@ inline MonthData loadOneMonth(Date month, // 2000-01-01, 2000-02-01 ...
 
   // ---------- 3. read time series + build splines ------------------------
   std::vector<TimeType> time_steps_1, time_steps_2;
-  // spline_map<DataType> tmp_spl_1,tmp_spl_2;
   std::map<std::string, std::vector<std::vector<DataType>>> raw_time_series_1,
       raw_time_series_2;
 
@@ -836,12 +821,11 @@ inline MonthData loadOneMonth(Date month, // 2000-01-01, 2000-02-01 ...
 }
 
 // ---------------------------------------------------------------
-// Build a NeighborsData object for one month (uses that month’s KD-sea)
+// Build a NeighborsData object for one month (uses that month's KD-sea)
 // ---------------------------------------------------------------
 inline NeighborsData<DataType, TimeType>
 makeNeighborsData(const MonthData &m, DataType search_radius_rad,
                   DataType shape_param) {
-  // const size_t N=m.sea_cloud.kdtree_get_point_count();
 
   DataType radius_squared = search_radius_rad * search_radius_rad;
   return NeighborsData<DataType, TimeType>(*m.kd_sea, m.sea_x, m.sea_y,

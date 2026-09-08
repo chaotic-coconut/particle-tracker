@@ -13,7 +13,7 @@
  * - Robust failure modes: prefer explicit warnings/errors over silent wrong behavior.
  * - Header-only.
  *
- * ## Important unit policy (do NOT “fix” units here)
+ * ## Important unit policy (do NOT "fix" units here)
  * - This loader does NOT normalize or convert lon/lat units.
  * - It only reads raw arrays and applies scale_factor/add_offset and missing-value handling.
  * - Unit conversion / longitude wrapping should happen in higher-level code where the expected
@@ -397,7 +397,7 @@ class NetCDFDataLoader
         }
         catch (...) {}
 
-        // Fallback sentinel for “data variables” (skip obvious coordinate vars)
+        // Fallback sentinel for "data variables" (skip obvious coordinate vars)
         if (!has_missing_value && var_name != "lon" && var_name != "lat" && var_name != "depth")
         {
             missing_value = static_cast<VarDataType>(-30000);
