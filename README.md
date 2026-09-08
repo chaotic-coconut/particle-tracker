@@ -1,5 +1,7 @@
 # Particle Transport Framework
 
+[![ci](https://github.com/chaotic-coconut/particle-transport-framework/actions/workflows/ci.yml/badge.svg)](https://github.com/chaotic-coconut/particle-transport-framework/actions/workflows/ci.yml)
+
 This repository contains the C++20 particle-transport code I developed for
 simulations in time-dependent ocean velocity fields. It reads gridded NetCDF
 data, interpolates the velocity field in space and time, advances particles on
