@@ -634,7 +634,7 @@ class NetCDFProcessor
             throw std::runtime_error("NetCDFProcessor: requested time slice not loaded for variable '" +
                                      var_name + "' at time=" + std::to_string(static_cast<long long>(key)));
     
-        return it->second; // returns a copy (your current API returns by value anyway)
+        return it->second; // by value; getVariableDataAtTimeRef avoids the copy
     }
 
     const std::vector<DataType>& getVariableDataAtTimeRef(const std::string& var_name, TimeType time_value) const

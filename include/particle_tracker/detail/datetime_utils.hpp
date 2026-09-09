@@ -31,8 +31,8 @@
  * Arithmetic:
  * - increment()/decrement(): +/- 1 day with proper month/year rollover.
  * - addDays(delta): returns a new Date shifted by delta days (uses repeated +/-1 steps).
- *   For large deltas you could add an optimized version, but in your simulation the heavy
- *   operations are typically in secondsSince() / daysSince(), which are O(1).
+ *   This is O(delta). A closed-form version would be faster for large deltas, but
+ *   the hot paths are secondsSince() / daysSince(), which are O(1).
  * - addMonths(delta): shifts month, clamps day to last valid day of target month.
  *
  * Comparison:
