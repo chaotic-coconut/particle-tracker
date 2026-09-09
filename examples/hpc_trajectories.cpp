@@ -268,13 +268,12 @@ struct ReconGuards {
   DataType step_slack = 3.;
 };
 
-void propagateWindow(const Date &win_beg, const Date &win_end,
+void propagateWindow(const Date &win_beg, [[maybe_unused]] const Date &win_end,
                      const MonthData &older_m, const MonthData &newer_m,
                      const std::vector<std::string> &data_vars,
                      TimeType dt_seconds, TimeType life_time_seconds,
                      pkd2::Writer &pkd_pos, pkd2::Writer &pkd_vel,
                      int32_t base_dt_s, const ReconGuards &G = ReconGuards{}) {
-  (void)win_end;
   (void)dt_seconds;
 
   if (data_vars.size() < 2)

@@ -34,3 +34,40 @@ jobs:
 
       - name: Test
         run: ctest --test-dir build --build-config Release --output-on-failure
+
+  sanitizers:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            cmake ninja-build g++ \
+            zlib1g-dev libtbb-dev \
+            libnetcdf-dev libnetcdf-c++4-dev \
+            libboost-dev
+
+      # Examples are not built here: they need input files, so ctest never runs
+      # them and building them under the sanitizers would add time without
+      # adding coverage. This job therefore covers exactly what the tests reach.
+      # The data path in data_prep_utils.hpp -- where the KD-trees hold pointers
+      # into MonthData -- has no test yet, so it is NOT covered by this job.
+      - name: Configure
+        run: >-
+          cmake -S . -B build-asan -G Ninja
+          -DCMAKE_BUILD_TYPE=RelWithDebInfo
+          -DBUILD_TESTING=ON
+          -DPARTICLE_TRACKER_BUILD_EXAMPLES=OFF
+          "-DCMAKE_CXX_FLAGS=-fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all"
+
+      - name: Build
+        run: cmake --build build-asan --parallel 2
+
+      - name: Test
+        env:
+          ASAN_OPTIONS: detect_leaks=1:abort_on_error=1
+          UBSAN_OPTIONS: print_stacktrace=1:halt_on_error=1
+        run: ctest --test-dir build-asan --output-on-failure

@@ -8,7 +8,7 @@
 
 namespace {
 
-constexpr double earth_radius_m = 6'378'000.0;
+constexpr double earth_radius_m = particle_tracker::earth_mean_radius_m;
 
 std::array<double, 2> forward_aeqd(double center_lon, double center_lat,
                                    double lon, double lat) {

@@ -85,6 +85,25 @@ struct TocEntry {
 };
 #pragma pack(pop)
 
+// The structs above are written to and read from disk verbatim, so their byte
+// layout *is* the file format. Padding would make that layout depend on the
+// compiler and ABI, so a file written by one build could be misread by another;
+// pack(1) is what rules it out. Pin both properties, so that removing the
+// pragma or changing a member fails the build rather than silently producing
+// files the readers disagree about.
+static_assert(std::has_unique_object_representations_v<Header>,
+              "pkd2::Header is serialised verbatim and must contain no padding");
+static_assert(std::has_unique_object_representations_v<BlockHeader>,
+              "pkd2::BlockHeader is serialised verbatim and must contain no "
+              "padding");
+static_assert(std::has_unique_object_representations_v<TocEntry>,
+              "pkd2::TocEntry is serialised verbatim and must contain no "
+              "padding");
+static_assert(sizeof(Header) == 52 && sizeof(BlockHeader) == 28 &&
+                  sizeof(TocEntry) == 36,
+              "these layouts are the on-disk format; changing a size breaks "
+              "existing .pkd2 files");
+
 /* --------------------------- writer -------------------------------- */
 class Writer {
 public:
@@ -95,7 +114,14 @@ public:
     f_ = std::fopen(path.c_str(), "wb+");
     if (!f_)
       throw std::runtime_error("pkd2::Writer: cannot open " + path);
-    std::memset(&hdr_, 0, sizeof(hdr_));
+    // Zero the whole object, padding included. The header is written to disk
+    // verbatim, so every byte must be determinate; memset guarantees that
+    // independently of whether the pack(1) above is in force, which
+    // value-initialisation would not. The cast to void* is what silences
+    // -Wclass-memaccess: it fires because Header carries default member
+    // initialisers, which this deliberately overwrites -- the fields below are
+    // the authoritative ones for a freshly written file.
+    std::memset(static_cast<void *>(&hdr_), 0, sizeof(hdr_));
     hdr_.magic[0] = 'P';
     hdr_.magic[1] = 'K';
     hdr_.magic[2] = 'D';
