@@ -70,7 +70,7 @@ using particle_tracker::TimeType;
 // Constants
 // -----------------------------------------------------------------------------
 
-static constexpr double EARTH_RADIUS_M = 6'371'000.0;
+static constexpr double EARTH_RADIUS_M = particle_tracker::earth_mean_radius_m;
 static constexpr double DEFAULT_SEED_STEP_DEG = 0.08;
 static constexpr double INTERP_RADIUS_DEG = 0.08;
 static constexpr double LAND_THRESH_DEG = DEFAULT_SEED_STEP_DEG;
@@ -87,22 +87,6 @@ enum class StatusCode : std::int8_t {
   start_land = 4,
   start_no_sea = 5
 };
-
-static std::string statusToString(StatusCode s) {
-  switch (s) {
-  case StatusCode::ok:
-    return "ok";
-  case StatusCode::landed:
-    return "landed";
-  case StatusCode::no_sea:
-    return "no_sea";
-  case StatusCode::start_land:
-    return "start_land";
-  case StatusCode::start_no_sea:
-    return "start_no_sea";
-  }
-  return "unknown";
-}
 
 // -----------------------------------------------------------------------------
 // Small coordinate helpers

@@ -192,6 +192,22 @@ inline std::array<DataType, 3> GCD_deriv(const DataType& lon1, const DataType& l
 }
 
 //------------------------------------------------------------------------------
+// Earth model
+//------------------------------------------------------------------------------
+
+/**
+ * @brief Conventional mean Earth radius in metres.
+ *
+ * A single value is used everywhere in this project. The mean radius is the
+ * right default for a general-purpose spherical model: the equatorial radius
+ * (6 378 137 m) is only appropriate near the equator, whereas the mean radius
+ * minimises the error over the whole sphere. 6 371 km is the usual rounded
+ * figure; the IUGG mean radius R1 is 6 371 008.8 m, a difference of 1.4 parts
+ * per million and far below the accuracy of anything computed here.
+ */
+inline constexpr double earth_mean_radius_m = 6'371'000.0;
+
+//------------------------------------------------------------------------------
 // Local tangent-plane offset -> lon/lat update
 //------------------------------------------------------------------------------
 
@@ -219,7 +235,7 @@ inline std::array<DataType, 3> GCD_deriv(const DataType& lon1, const DataType& l
 template<typename DataType>
 inline void inverseTransform(const DataType& x, const DataType& y, DataType& lon, DataType& lat)
 {
-    constexpr DataType EARTH_RADIUS = static_cast<DataType>(6378000.0);
+    constexpr DataType EARTH_RADIUS = static_cast<DataType>(earth_mean_radius_m);
 
     DataType nrm = std::sqrt(x * x + y * y);
 

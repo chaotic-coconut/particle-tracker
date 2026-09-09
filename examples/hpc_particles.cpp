@@ -208,7 +208,7 @@ void buildInitialPositions(std::size_t N, const MonthData &md_ref,
   kd_initial_band->buildIndex();
 
   // Set "still-in-band" threshold once (example: 10 km)
-  DataType stay_initial_band_rad = 10000. / 6371000.;
+  DataType stay_initial_band_rad = 10000. / particle_tracker::earth_mean_radius_m;
   stay_initial_band_thresh_squared =
       stay_initial_band_rad * stay_initial_band_rad;
 
@@ -299,7 +299,7 @@ inline const MonthData &pickMonth(TimeType t, const MonthData &older_m,
 }
 
 inline NeighborsData<DataType, TimeType> &
-pickNeighbors(TimeType t, const MonthData &older_m, const MonthData &newer_m,
+pickNeighbors(TimeType t, const MonthData &older_m,
               NeighborsData<DataType, TimeType> &nb_old,
               NeighborsData<DataType, TimeType> &nb_new) {
   Date d = dateFromSecondsSince2000(t);
@@ -330,15 +330,17 @@ interpolateUV(TimeType t, DataType lon, DataType lat,
 // ---------------------------------------------------------------------------
 // propagateWindow(): back-propagate all alive particles over [win_beg, win_end]
 // using explicit Euler, spline interpolation & kd-trees.
-// Stops on: land hit, lifetime expired, window boundary.
+// Stops on: land hit, lifetime expired, or reaching win_beg. Propagation runs
+// backwards, so win_beg is the boundary that terminates a trajectory and
+// win_end is not consulted; hpc_trajectories.cpp discards it as well. The
+// parameter is kept so the two drivers keep the same signature.
 // ---------------------------------------------------------------------------
-void propagateWindow(const Date &win_beg, const Date &win_end,
+void propagateWindow(const Date &win_beg, [[maybe_unused]] const Date &win_end,
                      const MonthData &older_m, const MonthData &newer_m,
                      const std::vector<std::string> &data_vars,
                      TimeType dt_seconds, DataType land_thresh_rad,
                      TimeType life_time_seconds) {
   const TimeType t_beg = secondsSince2000(win_beg); // inclusive (earliest)
-  // const TimeType t_end=secondsSince2000(win_end);      // inclusive (latest)
   const TimeType dt_sec = dt_seconds;
 
   DataType search_radius = static_cast<DataType>(.08 * 1.1 / 180. * number_pi);
@@ -393,7 +395,7 @@ void propagateWindow(const Date &win_beg, const Date &win_end,
 
               const MonthData &md = pickMonth(p.time, older_m, newer_m);
               auto &nb =
-                  pickNeighbors(p.time, older_m, newer_m, nb_old, nb_new);
+                  pickNeighbors(p.time, older_m, nb_old, nb_new);
 
               //[[maybe_unused]] bool in_band  =stillInitialBand({p.lon,p.lat});
               bool past_grace = (age >= grace_seconds);
@@ -585,8 +587,8 @@ int main(int argc, char *argv[]) try {
   BBox bbox{lon_min, lon_max, lat_min, lat_max};
 
   DataType sea_tol = .2 * number_pi / 180.;
-  DataType land_min = 2000. / 6371000.;
-  DataType land_max = 50000. / 6371000.;
+  DataType land_min = 2000. / particle_tracker::earth_mean_radius_m;
+  DataType land_max = 50000. / particle_tracker::earth_mean_radius_m;
   DataType jitter = .0005;
   std::size_t N_per_day = 2'800'000; // 2'000'000
 
@@ -615,7 +617,7 @@ int main(int argc, char *argv[]) try {
       spawn(day, pack, rel_time);
     }
 
-    DataType land_thresh = (0.5) * number_pi / 180.; // 5000./6371000.;
+    DataType land_thresh = (0.5) * number_pi / 180.;
     propagateWindow(win_beg, win_end, buf[older], buf[newer],
                     data_variable_names, dt_seconds, land_thresh,
                     life_time_seconds);
@@ -691,7 +693,7 @@ int main(int argc, char *argv[]) try {
     }
     std::cerr << "[" << formatDate(win_beg) << "-" << formatDate(win_end)
               << "] " << "released=" << R << " landed=" << L
-              << " landed east =" << E << " landed west=" << W << '\n'
+              << " landed east=" << E << " landed west=" << W << '\n'
               << "neverleft=" << B << " lifetime=" << N << "\n";
 
     /* 2. advance the ring buffer by one month ---------------------------- */

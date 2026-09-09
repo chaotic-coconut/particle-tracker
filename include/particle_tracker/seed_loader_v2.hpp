@@ -121,7 +121,7 @@ namespace seed_v2_detail
         const uint16_t stride = bh->stride ? bh->stride : 1;
         if (n == 0) throw std::runtime_error("PKD2: n_points==0 (invalid)");
 
-        // Strong sanity: pos_scale should match your writer
+        // Strong sanity: the file's scale must match the one this reader assumes
         if (hdr.pos_scale_ticks_per_rad != static_cast<uint32_t>(POS_TICKS_PER_RAD))
             throw std::runtime_error("PKD2: pos_scale_ticks_per_rad mismatch (file vs expected 1e6)");
 

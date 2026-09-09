@@ -813,8 +813,9 @@ inline MonthData loadOneMonth(Date month, // 2000-01-01, 2000-02-01 ...
   m.spl_2.clear(); // we moved spl_1; spl_2 was copied into m.spl
   m.spl_2 = {};    // drop its map/vector overhead
 
-  // Optional sanity check (debug builds)
-  for (auto &kv : m.spl)
+  // Optional sanity check (debug builds; the loop body is an assert, so kv is
+  // unused once NDEBUG is defined)
+  for ([[maybe_unused]] auto &kv : m.spl)
     assert(kv.second.size() == m.sea_cloud.kdtree_get_point_count());
 
   return m;

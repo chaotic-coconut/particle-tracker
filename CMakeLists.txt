@@ -18,6 +18,16 @@ endif()
 
 option(PARTICLE_TRACKER_BUILD_EXAMPLES "Build the simulation executables" ON)
 
+# Warning flags for this project's own targets only. They are deliberately not
+# put on the INTERFACE target: a consumer's warning policy is the consumer's
+# choice, and -Werror is not used because compilers differ -- GCC 13 reports
+# false positives from inside <regex> under optimisation.
+#
+# Only the compilers this project is actually built and tested with are listed.
+# The project has never been built with MSVC and does not claim to support it.
+set(PK_WARNING_FLAGS
+  $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Wall;-Wextra>)
+
 add_library(particle_tracker INTERFACE)
 add_library(particle_transport_framework::particle_tracker ALIAS particle_tracker)
 
@@ -113,15 +123,18 @@ if(PARTICLE_TRACKER_BUILD_EXAMPLES)
   add_executable(hpc_particles examples/hpc_particles.cpp)
   target_link_libraries(hpc_particles
     PRIVATE particle_transport_framework::particle_tracker)
+  target_compile_options(hpc_particles PRIVATE ${PK_WARNING_FLAGS})
 
   add_executable(hpc_trajectories examples/hpc_trajectories.cpp)
   target_link_libraries(hpc_trajectories
     PRIVATE particle_transport_framework::particle_tracker)
+  target_compile_options(hpc_trajectories PRIVATE ${PK_WARNING_FLAGS})
 
   add_executable(regular_grid_transport_daily_netcdf
     examples/regular_grid_transport_daily_netcdf.cpp)
   target_link_libraries(regular_grid_transport_daily_netcdf
     PRIVATE particle_transport_framework::particle_tracker)
+  target_compile_options(regular_grid_transport_daily_netcdf PRIVATE ${PK_WARNING_FLAGS})
 endif()
 
 include(CTest)

@@ -66,11 +66,15 @@ int main() {
 
   std::map<std::string, std::vector<TimeSpline<double>>> derivative_fields;
   auto &derivative_linear = derivative_fields["linear"];
+  auto &derivative_constant = derivative_fields["constant"];
   derivative_linear.resize(derivative_lon.size());
+  derivative_constant.resize(derivative_lon.size());
   for (std::size_t i = 0; i < derivative_lon.size(); ++i) {
     derivative_linear[i].values.assign(
         8, 4.0 + 2.0 * derivative_lon[i] - 3.0 * derivative_lat[i]);
     derivative_linear[i].createSpline(0.0, 1.0);
+    derivative_constant[i].values.assign(8, 7.25);
+    derivative_constant[i].createSpline(0.0, 1.0);
   }
 
   NeighborWithNeighbors<double> primary;
@@ -90,10 +94,20 @@ int main() {
   NeighborWithNeighborsData<double> derivative_interpolator(
       derivative_index, derivative_lon, derivative_lat, 4.1 * h * h, h * h);
   const auto derivatives = derivative_interpolator.interpolateDerivatives(
-      3.5, {primary}, derivative_fields, {"linear"}, h * h);
+      3.5, {primary}, derivative_fields, {"constant", "linear"}, h * h);
 
   require_near(derivatives.at("linear").spatial_derivative_x, 2.0, 1e-5,
                "Analytic linear-field east derivative");
   require_near(derivatives.at("linear").spatial_derivative_y, -3.0, 1e-5,
                "Analytic linear-field north derivative");
+
+  // Zeroth-order consistency: a constant field has no gradient. This is exact
+  // rather than approximate, because every difference v_j - v_i is exactly zero
+  // regardless of the stencil, so it is asserted at zero tolerance.
+  require_near(derivatives.at("constant").spatial_derivative_x, 0.0, 0.0,
+               "Constant field has zero east derivative");
+  require_near(derivatives.at("constant").spatial_derivative_y, 0.0, 0.0,
+               "Constant field has zero north derivative");
+  require_near(derivatives.at("constant").value, 7.25, 1e-12,
+               "Constant field value is reproduced by the derivative path");
 }

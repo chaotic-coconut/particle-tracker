@@ -444,8 +444,10 @@ template <typename DataType> struct Neighbor {
  *
  * ### Dateline policy
  * - Query longitude is wrapped into (-pi, pi] before search.
- * - Grid longitudes are wrapped before calling GCD() to avoid discontinuities
- *   if your GCD() implementation expects normalized longitudes.
+ * - Grid longitudes are wrapped before calling GCD(). The formula is
+ *   2*pi-periodic in the longitude difference, so this is not needed for
+ *   correctness; it keeps the difference small so that cos() is not evaluated on
+ *   a large argument, where it would lose precision.
  */
 template <typename DataType, typename TimeType = double> class NeighborsData {
 private:
